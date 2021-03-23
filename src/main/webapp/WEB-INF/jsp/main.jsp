@@ -23,6 +23,7 @@
       <fmt:message bundle="${loc}" key="local.menu.card_application" var="menu_card_application"/>
       <fmt:message bundle="${loc}" key="local.command.top_up_card" var="command_top_up_card"/>
       <fmt:message bundle="${loc}" key="local.command.make_payment" var="command_make_payment"/>
+      <fmt:message bundle="${loc}" key="local.command.close_card" var="close"/>
       <title>${title}</title>
     </head>
     <link rel="stylesheet" href="css/main/style.css" type="text/css" />
@@ -130,8 +131,8 @@
 
                 </form>
                 <form action="Controller" method="post">
-                    <input type="hidden" name="command" value=""/>
-                    <input type="submit" value="Закрыть"/>
+                    <input type="hidden" name="command" value="close_card"/>
+                    <input type="submit" value="${close}"/>
                 </form>
             </div>
         </c:if>

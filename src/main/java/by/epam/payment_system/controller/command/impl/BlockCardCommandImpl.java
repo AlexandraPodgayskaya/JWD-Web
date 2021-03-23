@@ -22,7 +22,6 @@ public class BlockCardCommandImpl implements Command {
 	private static final String PARAMETR_NUMBER_CARD = "numberCard";
 	private static final String ATTRIBUTE_INFO_MESSAGE = "infoMessage";
 	private static final String ATTRIBUTE_ERROR_MESSAGE = "errorMessageList";
-	private static final String ATTRIBUTE_PAGE = "page";
 	private static final String MESSAGE_BLOCKING_OK = "local.message.blocking_ok";
 	private static final String ERROR_BLOCKING_ERROR = "local.error.blocking_error";
 
@@ -45,7 +44,6 @@ public class BlockCardCommandImpl implements Command {
 		try {
 			cardService.blockCard(numberCard);
 			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_BLOCKING_OK);
-			session.setAttribute(ATTRIBUTE_PAGE, GO_TO_MAIN_PAGE); //может тут и не надо
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (BlockCardServiceException e) {
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_BLOCKING_ERROR));
