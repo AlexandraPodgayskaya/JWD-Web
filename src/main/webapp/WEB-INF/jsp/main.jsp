@@ -21,7 +21,8 @@
       <fmt:message bundle="${loc}" key="local.menu.profile" var="menu_profile"/>
       <fmt:message bundle="${loc}" key="local.menu.cards" var="menu_cards"/>
       <fmt:message bundle="${loc}" key="local.menu.card_application" var="menu_card_application"/>
-      <fmt:message bundle="${loc}" key="local.action.top_up_card" var="action_top_up_card"/>
+      <fmt:message bundle="${loc}" key="local.command.top_up_card" var="command_top_up_card"/>
+      <fmt:message bundle="${loc}" key="local.command.make_payment" var="command_make_payment"/>
       <title>${title}</title>
     </head>
     <link rel="stylesheet" href="css/main/style.css" type="text/css" />
@@ -93,9 +94,11 @@
                     <input type="hidden" name="command" value=""/>
                     <input type="submit" value="Журнал операций по карте"/>
                 </form>
-                <form action="payment.html" method="post">
-                    <input type="hidden" name="command" value=""/>
-                    <input type="submit" value="Сделать платёж"/>
+                <form action="Controller" method="post">
+                    <input type="hidden" name="command" value="go_to_payment_page"/>
+                    <input type="hidden" name="numberCard" value="${card.numberCard}"/>
+                    <input type="hidden" name="currency" value="${card.currency}"/>
+                    <input type="submit" value="${command_make_payment}"/>
 
                 </form>
                 <form action="transfer.html" method="post">
@@ -117,7 +120,7 @@
                     <input type="hidden" name="command" value="go_to_top_up_card_page"/>
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="hidden" name="currency" value="${card.currency}"/>
-                    <input type="submit" value="${action_top_up_card}"/>
+                    <input type="submit" value="${command_top_up_card}"/>
 
                 </form>
                 <form action="Controller" method="post">
