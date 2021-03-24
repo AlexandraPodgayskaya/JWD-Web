@@ -78,7 +78,7 @@
 
     <section>
 		<div>
-			<p><a href="Controller?command=go_to_main_page">${menu_cards}</a> > ${action_top_up_card} № ${requestScope.numberCard} </p>
+			<p><a href="Controller?command=go_to_main_page">${menu_cards}</a> > ${command_top_up_card} № ${requestScope.numberCard} </p>
 		</div>
 	
 		<div class ="transfer">

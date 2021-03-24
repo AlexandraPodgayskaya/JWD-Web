@@ -132,6 +132,7 @@
                 </form>
                 <form action="Controller" method="post">
                     <input type="hidden" name="command" value="close_card"/>
+                    <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="submit" value="${close}"/>
                 </form>
             </div>

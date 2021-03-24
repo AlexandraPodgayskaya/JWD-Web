@@ -25,7 +25,7 @@
     <fmt:message bundle="${loc}" key="local.recipient_iban" var="recipient_iban"/>
     <fmt:message bundle="${loc}" key="local.recipient_name" var="recipient_name"/>
     <fmt:message bundle="${loc}" key="local.purpose_of_payment" var="purpose_of_payment"/>
-    <fmt:message bundle="${loc}" key="local.command.make_payment" var="command_make_payment/>
+    <fmt:message bundle="${loc}" key="local.command.make_payment" var="command_make_payment"/>
     <title>${title}</title>
     <link rel="stylesheet" href="css/payment/style.css" type="text/css" />
 </head>
@@ -79,7 +79,7 @@
 
     <section>
 		<div>
-            <p><a href="Controller?command=go_to_main_page">${menu_cards}</a> > Платёж с карты № ${requestScope.numberCard} </p>
+            <p><a href="Controller?command=go_to_main_page">${menu_cards}</a> > пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ ${requestScope.numberCard} </p>
         </div>
 
 		<div class ="transfer">

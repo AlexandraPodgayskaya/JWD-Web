@@ -22,7 +22,9 @@ public class SaveAdditionalClientDataCommandImpl implements Command {
 	private static final String GO_TO_CLIENT_DATA_PAGE = "UserData?userId=";
 	private static final String GO_TO_ERROR_PAGE = "error.jsp";
 	private static final String ATTRIBUTE_ERROR_MESSAGE = "errorMessageList";
+	private static final String ATTRIBUTE_INFO_MESSAGE = "infoMessage";
 	private static final String ATTRIBUTE_PAGE = "page";
+	private static final String MESSAGE_PROFILE_SAVED = "local.message.profile_saved";
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,6 +38,7 @@ public class SaveAdditionalClientDataCommandImpl implements Command {
 		HttpSession session = request.getSession(true);
 		try {
 			additionalClientDataService.addData(additionalClientInfo);
+			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_PROFILE_SAVED);
 			session.setAttribute(ATTRIBUTE_PAGE, GO_TO_INDEX_PAGE);
 			response.sendRedirect(GO_TO_INDEX_PAGE);
 		} catch (UserInfoFormatServiceException e) {

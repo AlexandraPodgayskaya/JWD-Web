@@ -40,7 +40,7 @@
       </li>
     </ul>
     <h1>${title}</h1>
-	<a href="index.jsp">Back</a>
+    <a href="index.jsp">Back</a>
   </header>
 
   <fieldset>
