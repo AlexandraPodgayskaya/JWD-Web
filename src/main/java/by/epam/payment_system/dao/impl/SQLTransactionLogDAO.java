@@ -27,11 +27,10 @@ public class SQLTransactionLogDAO implements TransactionLogDAO {
 
 			statement.setString(1, transaction.getTransactionAccount());
 			statement.setString(2, transaction.getNumberCard());
-			statement.setInt(3, transaction.getTypeTransactionId());
+			statement.setInt(3, transaction.getTypeTransaction().getId());
 			statement.setString(4, transaction.getAmount());
 			statement.setInt(5, transaction.getCurrencyId());
-			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-			statement.setTimestamp(6, timestamp);
+			statement.setTimestamp(6, transaction.getDateTime());
 			statement.setString(7, transaction.getBankCode());
 			statement.setString(8, transaction.getSenderOrRecipientAccount());
 			statement.setString(9, transaction.getYnp());

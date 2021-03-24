@@ -1,5 +1,6 @@
 package by.epam.payment_system.service.impl;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import by.epam.payment_system.entity.Transaction;
 import by.epam.payment_system.entity.TransactionType;
 import by.epam.payment_system.service.CardService;
 import by.epam.payment_system.service.exception.BlockCardServiceException;
+import by.epam.payment_system.service.exception.CloseCardServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.TopUpCardServiceException;
 import by.epam.payment_system.service.exception.TransferDataServiceException;
@@ -106,6 +108,8 @@ public class CardServiceImpl implements CardService {
 			if (!accountDAO.updateBalance(transaction)) {
 				throw new TopUpCardServiceException("can not top up card");
 			}
+			
+			transaction.setDateTime(new Timestamp(System.currentTimeMillis()));
 
 			TransactionLogDAO transactionLogDAO = factory.getTransactionLogDAO();
 			transactionLogDAO.addTransaction(transaction);
@@ -114,4 +118,26 @@ public class CardServiceImpl implements CardService {
 			throw new ServiceException("toping up card error", e);
 		}
 	}
+
+	@Override
+	public void closeCard(String numberCard) throws ServiceException {
+		
+		if (numberCard == null) {
+			throw new CloseCardServiceException("no card number to close");
+		}
+
+		DAOFactory factory = DAOFactory.getInstance();
+		CardDAO cardDAO = factory.getCardDAO();
+
+		try {
+			if (!cardDAO.updateIsClosed(numberCard)) {
+				throw new CloseCardServiceException("card closing error");
+			}
+
+		} catch (DAOException e) {
+			throw new ServiceException("card closing error", e);
+		}
+
+	}
+
 }

@@ -89,37 +89,12 @@ header>div>form>input[type="submit"] {
 }
 
 header>div>form>input[type="submit"]:hover {
-	background: #198d98; 
+	background: #198d98;
 }
 
 
 /*  CONTENT  */
-.content {
-	
-}
-.comment {
-	z-index: auto;
-	width: 944px;
-	height: 200px;
-	background-color: #fff;
-	background-image: url("../../img/ten2.png");
-    background-repeat: no-repeat;
-    background-position-y: 141px;
-	margin: auto;
-	margin-top: 50px;
-}
-.comment img {
-	margin-top: 10px;
-	margin-left: 49%;
-}
-.comment p {
-	z-index: auto;
-	width: 500px;
-	font: italic 22px Cambria;
-	color: #404040;
-	padding: 20px 250px 20px;
-	text-align: center;
-}
+
 .content > section {
 	width: 960px;
 	max-width: 960px;
@@ -133,34 +108,51 @@ header>div>form>input[type="submit"]:hover {
 	margin-bottom: 50px;
 }
 
-.content > section img {
-	width: 203px;
-	margin-left: 40px;
-	margin-bottom: 40px;
+.content > section > div > p {
+	z-index: auto;
+	font: 18px Cambria;
+	color: #404040;
+	padding: 20px 0 20px;
+	text-align: left;
 }
+
 #picture1, #picture5, #picture9{
 	margin-left: 0;
 }
 
 
-/*  FCULTY  */
-.faculty{
+/*  transfer  */
+.transfer{
 	padding: 10px 20px;
 	margin: 15px;
-	width: 45%;
+	width: 80%;
 	border-radius: 5px;
-	border: solid 3px #1dabb8;
+	border: solid 3px #585863;
+
 }
 
-.faculty p {
-	font: normal 16px helvetica;
+.transfer p {
+	font: normal 16px Cambria;
 	line-height: 35px;
 }
 
-.faculty>form>input[type="submit"] {
+.transfer:first-child {
+	color: #585863;
+}
+
+.transfer form {
+	display: inline-block;
+}
+
+.transfer form input {
+	font: normal 16px Cambria;
+	margin-top: 10px;
+}
+
+.transfer form input[type="submit"] {
 	border:0;
 	border-radius: 3px;
-	font-weight: bold;
+	font: bold 14px Cambria;
 	margin-top: 5px;
 	padding: 5px 20px;
 	color: #fff;
@@ -170,12 +162,35 @@ header>div>form>input[type="submit"]:hover {
 	background: -webkit-linear-gradient(top,  #1dabb8 0%,#1dabb8 75%,#0c8a9b 100%); /* Chrome10-25,Safari5.1-6 */
 	background: linear-gradient(to bottom,  #1dabb8 0%,#1dabb8 75%,#0c8a9b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1dabb8', endColorstr='#1dabb8',GradientType=0 ); /* IE6-9 */
-
 }
 
-.faculty>form>input[type="submit"]:hover {
-	background: #198d98; 
+.transfer form input[type="submit"]:hover {
+	background: #198d98;
 }
+
+.transfer label, select {
+	font: normal 16px Cambria;
+	line-height: 35px;
+}
+
+/* ERROR */
+.error {
+	padding: 10px 20px;
+	margin: 15px;
+	width: 80%;
+	border-radius: 5px;
+	border: solid 3px #FF5733;
+}
+
+/* MESSAGE */
+.message {
+	padding: 10px 20px;
+	margin: 15px;
+	width: 80%;
+	border-radius: 5px;
+	border: solid 3px #07D032;
+}
+
 
 /*  FOOTER  */
 footer {
@@ -184,28 +199,4 @@ footer {
 	margin-right: 70px;
 	font-size: 10px;
 	float:right;
-}
-
-.main div {
-	margin-bottom: 5px;
-}
-
-section>form>input[type="submit"] {
-	border:0;
-	border-radius: 3px;
-	font-weight: bold;
-	margin-top: 5px;
-	padding: 5px 20px;
-	color: #fff;
-	cursor: pointer;
-	background: #1dabb8; /* Old browsers */
-	background: -moz-linear-gradient(top,  #1dabb8 0%, #1dabb8 75%, #0c8a9b 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(top,  #1dabb8 0%,#1dabb8 75%,#0c8a9b 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to bottom,  #1dabb8 0%,#1dabb8 75%,#0c8a9b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1dabb8', endColorstr='#1dabb8',GradientType=0 ); /* IE6-9 */
-
-}
-
-section>form>input[type="submit"]:hover {
-	background: #198d98;
 }

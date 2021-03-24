@@ -18,8 +18,8 @@ public class SQLCardDAO implements CardDAO {
 
 	private static final String SELECT_CARDS_SQL = "SELECT * FROM CARDS JOIN CARD_STATUSES ON CARDS.STATUS_ID=CARD_STATUSES.ID WHERE OWNER=? ";
 	private static final String SELECT_CARD_DATA_SQL = "SELECT * FROM CARDS JOIN CARD_STATUSES ON CARDS.STATUS_ID=CARD_STATUSES.ID WHERE NUMBER_CARD=? ";
-	private static final String UPDATE_BLOCKING_SQL = "UPDATE CARDS SET IS_BLOCKED=? WHERE NUMBER_CARD=? AND IS_CLOSED=FALSE";
-	private static final String SELECT_IS_BLOCKED_SQL = "SELECT IS_BLOCKED FROM CARDS WHERE OWNER=? ";
+	private static final String UPDATE_IS_BLOCKED_SQL = "UPDATE CARDS SET IS_BLOCKED=? WHERE NUMBER_CARD=? AND IS_CLOSED=FALSE";
+	private static final String UPDATE_IS_CLOSED_SQL = "UPDATE CARDS SET IS_CLOSED=TRUE WHERE NUMBER_CARD=? ";
 	private static final String PARAMETR_NUMBER_CARD = "number_card";
 	private static final String PARAMETR_ACCOUNT = "account";
 	private static final String PARAMETR_OWNER = "owner";
@@ -82,7 +82,7 @@ public class SQLCardDAO implements CardDAO {
 
 		try {
 			connection = connectionPool.takeConnection();
-			statement = connection.prepareStatement(UPDATE_BLOCKING_SQL);
+			statement = connection.prepareStatement(UPDATE_IS_BLOCKED_SQL);
 
 			statement.setBoolean(1, card.getIsBlocked());
 			statement.setString(2, card.getNumberCard());
@@ -97,40 +97,6 @@ public class SQLCardDAO implements CardDAO {
 				throw new DAOException(e);
 			}
 		}
-
-	}
-
-	public static void main(String[] args) throws DAOException {
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-
-		boolean isBlocked = false;
-		try {
-			connectionPool.init();
-			connection = connectionPool.takeConnection();
-			statement = connection.prepareStatement(SELECT_IS_BLOCKED_SQL);
-			statement.setString(1, "1515");
-			resultSet = statement.executeQuery();
-
-			System.out.println("1");
-			if (resultSet.next()) {
-				System.out.println("2");
-				isBlocked = resultSet.getBoolean(PARAMETR_IS_BLOCKED);
-			}
-
-		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			try {
-				connectionPool.closeConnection(connection, statement);
-				connectionPool.destroy();
-			} catch (ConnectionPoolException e) {
-				throw new DAOException(e);
-			}
-		}
-		System.out.println(isBlocked);
 	}
 
 	// @Nullable
@@ -171,4 +137,27 @@ public class SQLCardDAO implements CardDAO {
 		return card;
 	}
 
+	@Override
+	public boolean updateIsClosed(String numberCard) throws DAOException {
+		ConnectionPool connectionPool = ConnectionPool.getInstance();
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		try {
+			connection = connectionPool.takeConnection();
+			statement = connection.prepareStatement(UPDATE_IS_CLOSED_SQL);
+
+			statement.setString(1, numberCard);
+			return statement.executeUpdate() != 0;
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			try {
+				connectionPool.closeConnection(connection, statement);
+			} catch (ConnectionPoolException e) {
+				throw new DAOException(e);
+			}
+		}
+	}
 }

@@ -127,11 +127,22 @@ input:first-child{
 	background: #198d98; 
 }
 
-/* ---------- ERROR ---------- */
+/* ERROR */
 .error {
-	color: red;
-	margin: 10px auto;
-	font-size: 100%;
+	padding: 10px 20px;
+	margin: 15px auto;
+	width: 80%;
+	border-radius: 5px;
+	border: solid 3px #FF5733;
+}
+
+/* MESSAGE */
+.message {
+	padding: 10px 20px;
+	margin: 15px auto;
+	width: 80%;
+	border-radius: 5px;
+	border: solid 3px #07D032;
 }
 
 /* ----------- RU/EN ---------- */
