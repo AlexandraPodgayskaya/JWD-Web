@@ -39,6 +39,7 @@ public class Controller extends HttpServlet {
 		Command command;
 
 		name = request.getParameter(PARAMETER_COMMAND);
+		System.out.println(name);
 
 		if (name != null) {
 			command = provider.takeCommand(name);

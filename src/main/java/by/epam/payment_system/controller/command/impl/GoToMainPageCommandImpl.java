@@ -22,6 +22,8 @@ public class GoToMainPageCommandImpl implements Command {
 	private static final String GO_TO_ERROR_PAGE = "error.jsp";
 	private static final String ATTRIBUTE_USER_ID = "userId";
 	private static final String ATTRIBUTE_CARD_LIST = "cardList";
+	private static final String ATTRIBUTE_PAGE = "page";
+	private static final String MAIN_PAGE = "Controller?command=go_to_main_page";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,6 +43,7 @@ public class GoToMainPageCommandImpl implements Command {
 		try {
 			cardList = cardService.takeCards((Integer)session.getAttribute(ATTRIBUTE_USER_ID));
 			request.setAttribute(ATTRIBUTE_CARD_LIST, cardList);
+			session.setAttribute(ATTRIBUTE_PAGE, MAIN_PAGE);
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(GO_TO_MAIN_PAGE);
 			requestDispatcher.forward(request, response);
 		} catch (ServiceException e) {

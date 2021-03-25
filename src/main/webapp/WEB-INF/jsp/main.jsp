@@ -99,6 +99,7 @@
                     <input type="hidden" name="command" value="go_to_payment_page"/>
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="hidden" name="currency" value="${card.currency}"/>
+                     <input type="hidden" name="balance" value="${card.balance}"/>
                     <input type="submit" value="${command_make_payment}"/>
 
                 </form>
@@ -122,19 +123,11 @@
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="hidden" name="currency" value="${card.currency}"/>
                     <input type="submit" value="${command_top_up_card}"/>
-
                 </form>
-                <form action="Controller" method="post">
-                    <input type="hidden" name="command" value="blocking"/>
-                    <input type="hidden" name="numberCard" value="${card.numberCard}"/>
-                    <input type="submit" value="${block}"/>
-
-                </form>
-                <form action="Controller" method="post">
-                    <input type="hidden" name="command" value="close_card"/>
-                    <input type="hidden" name="numberCard" value="${card.numberCard}"/>
-                    <input type="submit" value="${close}"/>
-                </form>
+                
+                <button onclick="openPopup('block-card-popup', 'blockNumberCard', 'blockCardNumberHolder', '${card.numberCard}')">${block}</button>
+                <button onclick="openPopup('close-card-popup', 'closeNumberCard', 'closeCardNumberHolder', '${card.numberCard}')">${close}</button>
+                
             </div>
         </c:if>
 		<c:if test="${card.isBlocked == true}">
@@ -178,10 +171,47 @@
         <c:remove var="infoMessage"/>
     </c:if>
     
-</div>
+    <div class="popup" id="close-card-popup">
+        <div class="popup-content">
+            <p>Подтвердите свои действия, что хотите <b>закрыть</b> карту <span id="closeCardNumberHolder"></span>.</p>
+            <form action="Controller" method="post">
+                <input type="hidden" name="command" value="close_card"/>
+                <input type="hidden" id="closeNumberCard" name="numberCard" value="${card.numberCard}"/>
+                <input type="submit" value="${close}"/>
+            </form>
+            <button onclick="closePopup('close-card-popup')">Отмена</button>
+        </div>
+    </div>
 
+    <div class="popup" id="block-card-popup">
+        <div class="popup-content">
+            <p>Подтвердите свои действия, что хотите <b>заблокировать</b> карту <span id="blockCardNumberHolder"></span>.</p>
+            <form action="Controller" method="post">
+                <input type="hidden" name="command" value="blocking"/>
+                <input type="hidden" id="blockNumberCard" name="numberCard" value="${card.numberCard}"/>
+                <input type="submit" value="${block}"/>
+            </form>
+            <button onclick="closePopup('block-card-popup')">Отмена</button>
+        </div>
+    </div>
+</div>
 <mytag:copyright/>
 
+<script>
+    function openPopup(popupId, inputId, spanId, cardNumber) {
+      var popup = document.getElementById(popupId);
+      popup.style.visibility = "visible";
+	  var numberCardInput = document.getElementById(inputId);
+	  numberCardInput.setAttribute("value", cardNumber);
+	  var cardNumberHolder = document.getElementById(spanId);
+	  cardNumberHolder.innerHTML = cardNumber;
+    }
+
+    function closePopup(popupId, cardNumber) {
+      var popup = document.getElementById(popupId);
+      popup.style.visibility = "hidden";
+    }
+</script>
 
 </body>
 </html>

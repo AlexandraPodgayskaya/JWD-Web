@@ -11,6 +11,7 @@ import by.epam.payment_system.controller.command.impl.GoToPaymentPageCommandImpl
 import by.epam.payment_system.controller.command.impl.GoToTopUpCardPageCommandImpl;
 import by.epam.payment_system.controller.command.impl.LoginCommandImpl;
 import by.epam.payment_system.controller.command.impl.LogoutCommandImpl;
+import by.epam.payment_system.controller.command.impl.MakePaymentCommandImpl;
 import by.epam.payment_system.controller.command.impl.RegisterCommandImpl;
 import by.epam.payment_system.controller.command.impl.SaveAdditionalClientDataCommandImpl;
 import by.epam.payment_system.controller.command.impl.TopUpCardCommandImpl;
@@ -33,6 +34,7 @@ public class CommandProvider {
 		commands.put(CommandName.TOP_UP_CARD, new TopUpCardCommandImpl());
 		commands.put(CommandName.GO_TO_PAYMENT_PAGE, new GoToPaymentPageCommandImpl());
 		commands.put(CommandName.CLOSE_CARD, new CloseCardCommandImpl());
+		commands.put(CommandName.PAY, new MakePaymentCommandImpl());
 	
 	}
 

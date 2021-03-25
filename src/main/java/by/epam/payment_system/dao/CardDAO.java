@@ -12,5 +12,5 @@ public interface CardDAO {
 
 	Card findCardData(String numberCard) throws DAOException;
 
-	boolean updateIsClosed(String numberCard) throws DAOException;
+	boolean setClosed(String numberCard) throws DAOException;
 }

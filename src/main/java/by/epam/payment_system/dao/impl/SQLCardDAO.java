@@ -138,7 +138,7 @@ public class SQLCardDAO implements CardDAO {
 	}
 
 	@Override
-	public boolean updateIsClosed(String numberCard) throws DAOException {
+	public boolean setClosed(String numberCard) throws DAOException {
 		ConnectionPool connectionPool = ConnectionPool.getInstance();
 		Connection connection = null;
 		PreparedStatement statement = null;

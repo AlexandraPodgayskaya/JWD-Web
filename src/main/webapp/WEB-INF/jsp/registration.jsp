@@ -71,5 +71,7 @@
 	<c:remove var="infoMessage"/>
 </c:if>
 
+<mytag:copyright/>
+
 </body>
 </html>

@@ -13,8 +13,8 @@ import javax.servlet.http.HttpSession;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.entity.UserType;
-import by.epam.payment_system.service.CardService;
 import by.epam.payment_system.service.ServiceFactory;
+import by.epam.payment_system.service.TransactionService;
 import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.TopUpCardServiceException;
 import by.epam.payment_system.service.exception.TransferDataServiceException;
@@ -62,9 +62,9 @@ public class TopUpCardCommandImpl implements Command {
 		}
 
 		ServiceFactory factory = ServiceFactory.getInstance();
-		CardService cardService = factory.getCardService();
+		TransactionService transactionService = factory.getTransactionService();
 		try {
-			cardService.topUpCard(transferDetails);
+			transactionService.topUpCard(transferDetails);
 			session.setAttribute(ATTRIBUTE_PAGE, GO_TO_MAIN_PAGE);
 			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_TOP_UP_CARD_OK);
 			response.sendRedirect(GO_TO_MAIN_PAGE);

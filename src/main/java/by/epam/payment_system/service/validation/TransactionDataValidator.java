@@ -9,7 +9,7 @@ import java.util.Map;
 
 import by.epam.payment_system.entity.Currency;
 
-public class TransferDataValidator {
+public class TransactionDataValidator {
 
 	private static final String SENDER_CARD_NUMBER = "senderCardNumber";
 	private static final String SENDER_EXPIRATION_DATE = "senderExpirationDate";
@@ -22,6 +22,7 @@ public class TransferDataValidator {
 	private static final String CVV_CODE = "^[0-9]{3}$";
 	private static final String DATE_FORMAT = "MM/yy";
 	private static final String SUM = "^[0-9]{1,8}(\\.[0-9]{2})?$";
+	private static final String PASSWORD = "^[a-zA-Z0-9]{5,15}$";
 	private static final String ERROR_NUMBER_CARD = "local.error.number_card";
 	private static final String ERROR_EXPIRATION_DATE = "local.error.expiration_date";
 	private static final String ERROR_CVV_CODE = "local.error.cvv_code";
@@ -41,7 +42,7 @@ public class TransferDataValidator {
 		descriptionList.add(description);
 	}
 
-	public final boolean validation(Map<String, String> transferDetails) {
+	public final boolean topUpCardValidation(Map<String, String> transferDetails) {
 
 		if (transferDetails.get(SENDER_CARD_NUMBER) == null
 				|| !transferDetails.get(SENDER_CARD_NUMBER).matches(NUMBER_CARD)) {
@@ -89,6 +90,19 @@ public class TransferDataValidator {
 				|| !transferDetails.get(RECIPIENT_CARD_NUMBER).matches(NUMBER_CARD)) {
 			setDescriptionList(ERROR_NUMBER_CARD);
 		}
+
+		return descriptionList == null;
+	}
+
+	public final boolean passwordValidation(String password) {
+
+		if (password == null || !password.matches(PASSWORD)) {
+			return false;
+		}
+		return true;
+	}
+
+	public final boolean paymentValidation(Map<String, String> paymentDetails) {
 
 		return descriptionList == null;
 	}
