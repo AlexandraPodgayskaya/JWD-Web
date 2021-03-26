@@ -26,6 +26,8 @@
       <fmt:message bundle="${loc}" key="local.command.close_card" var="close"/>
       <fmt:message bundle="${loc}" key="local.cancel" var="cancelButton"/>
       <fmt:message bundle="${loc}" key="local.word_card" var="word_card"/>
+      <fmt:message bundle="${loc}" key="local.command.account_transaction_log" var="account_transaction_log"/>
+      <fmt:message bundle="${loc}" key="local.command.card_transaction_log" var="card_transaction_log"/>
       <title>${title}</title>
     </head>
     <link rel="stylesheet" href="css/main/style.css" type="text/css" />
@@ -87,15 +89,16 @@
                 <p>${card.numberCard}</p>
                 <p>${card.balance} ${card.currency}</p>
                 <c:if test="${card.status == 'MAIN'}">
-                    <form action="journal_account.html" method="post">
-                        <input type="hidden" name="command" value=""/>
-                        <input type="hidden" name="page" value=""/>
-                        <input type="submit" value="Журнал операций по счёту"/>
+                    <form action="Controller" method="post">
+                        <input type="hidden" name="command" value="show_account_log"/>
+                        <input type="hidden" name="numberCard" value="${card.numberCard}"/>
+                        <input type="submit" value="${account_transaction_log}"/>
                     </form>
                 </c:if>
-                <form action="journal.html" method="post">
-                    <input type="hidden" name="command" value=""/>
-                    <input type="submit" value="Журнал операций по карте"/>
+                <form action="Controller" method="post">
+                    <input type="hidden" name="command" value="show_card_log"/>
+                    <input type="hidden" name="numberCard" value="${card.numberCard}"/>
+                    <input type="submit" value="${card_transaction_log}"/>
                 </form>
                 <form action="Controller" method="post">
                     <input type="hidden" name="command" value="go_to_payment_page"/>
@@ -138,15 +141,16 @@
                 <p>${card.numberCard}</p>
                 <p>${card.balance} ${card.currency}</p>
                 <c:if test="${card.status == 'MAIN'}">
-                    <form action="journal_account.html" method="post">
-                        <input type="hidden" name="command" value=""/>
-                        <input type="hidden" name="page" value=""/>
-                        <input type="submit" value="Журнал операций по счёту"/>
+                    <form action="Controller" method="post">
+                        <input type="hidden" name="command" value="show_account_log"/>
+                        <input type="hidden" name="numberCard" value="${card.numberCard}"/>
+                        <input type="submit" value="${account_transaction_log}"/>
                     </form>
                 </c:if>
                 <form action="Controller" method="post">
-                    <input type="hidden" name="command" value=""/>
-                    <input type="submit" value="Журнал операций по карте"/>
+                    <input type="hidden" name="command" value="show_card_log"/>
+                    <input type="hidden" name="numberCard" value="${card.numberCard}"/>
+                    <input type="submit" value="${card_transaction_log}"/>
                 </form>
             </div>
 		</c:if>
