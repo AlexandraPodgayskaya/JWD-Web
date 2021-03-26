@@ -20,6 +20,12 @@ public class UserInfo implements Serializable {
 	public UserInfo() {
 
 	}
+	
+	public UserInfo(String login, String password) {
+		this.login = login;
+		this.password = password;
+	}
+
 
 	public int getId() {
 		return id;

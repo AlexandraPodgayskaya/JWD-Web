@@ -1,23 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="console" class="org.apache.log4j.ConsoleAppender">
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern"
-                   value="%d{yyyy-MM-dd HH:mm:ss} %t %5p %c{1}:%L - %m%n" />
-        </layout>
-    </appender>
-    <appender name="file" class="org.apache.log4j.FileAppender">
-        <!-- For Tomcat -->
-        <param name="file" value="E:\program_files\apache-tomcat-7.0.64\apache-tomcat-7.0.64\app_logs\logger.log" />
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern"
-                   value="%d{yyyy-MM-dd HH:mm:ss} %t %5p %c{1}:%L - %m%n" />
-        </layout>
-    </appender>
-    <root>
-        <level value="info" />
-        <appender-ref ref="file" />
-        <appender-ref ref="console" />
-    </root>
-
+	<appenders>
+		<file name="TxtFile" fileName="logs/log.txt" bufferedIO="true">
+			<patternLayout
+				pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{1} - %msg%n" />
+		</file>
+		<console name="Console" target="SYSTEM_OUT">
+			<patternLayout
+				pattern="%d{ABSOLUTE} %-5level %logger{1} - %msg%n" />
+		</console>
+	</appenders>
+	<loggers>
+		<root level="debug">
+			<appenderRef ref="TxtFile" />
+			<appenderRef ref="Console" />
+		</root>
+	</loggers>
 </configuration>

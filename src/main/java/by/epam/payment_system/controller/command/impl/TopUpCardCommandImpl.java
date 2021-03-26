@@ -15,9 +15,9 @@ import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.TransactionService;
+import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
-import by.epam.payment_system.service.exception.TopUpCardServiceException;
-import by.epam.payment_system.service.exception.TransferDataServiceException;
+import by.epam.payment_system.service.exception.TransactionDataServiceException;
 
 public class TopUpCardCommandImpl implements Command {
 
@@ -33,7 +33,7 @@ public class TopUpCardCommandImpl implements Command {
 	private static final String ATTRIBUTE_PAGE = "page";
 	private static final String CURRENCY = "currency";
 	private static final String RECIPIENT_CARD_NUMBER = "recipientCardNumber";
-	private static final String ERROR_INVALID_OPERATION = "local.error.invalid_operation";
+	private static final String ERROR_IPOSSIBLE_OPERATION = "local.error.impossible_operation";
 	private static final String MESSAGE_TOP_UP_CARD_OK = "local.message.top_up_card_ok";
 
 
@@ -48,7 +48,7 @@ public class TopUpCardCommandImpl implements Command {
 		}
 
 		if (session.getAttribute(ATTRIBUTE_USER_TYPE) == UserType.ADMIN) {
-			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_INVALID_OPERATION));
+			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IPOSSIBLE_OPERATION));
 			response.sendRedirect(GO_TO_MAIN_PAGE); // main for admin
 			return;
 		}
@@ -68,12 +68,12 @@ public class TopUpCardCommandImpl implements Command {
 			session.setAttribute(ATTRIBUTE_PAGE, GO_TO_MAIN_PAGE);
 			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_TOP_UP_CARD_OK);
 			response.sendRedirect(GO_TO_MAIN_PAGE);
-		} catch (TransferDataServiceException e) {
+		} catch (TransactionDataServiceException e) {
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, e.getErrorDescription());
 			response.sendRedirect(GO_TO_TOP_UP_CARD_PAGE + PARAMETER_NUMBER_CARD
 					+ transferDetails.get(RECIPIENT_CARD_NUMBER) + PARAMETER_CURRENCY + transferDetails.get(CURRENCY));
-		} catch (TopUpCardServiceException e) {
-			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_INVALID_OPERATION));
+		} catch (ImpossibleOperationServiceException e) {
+			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IPOSSIBLE_OPERATION));
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (ServiceException e) {
 			response.sendRedirect(GO_TO_ERROR_PAGE);

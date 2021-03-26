@@ -92,29 +92,8 @@ header>div>form>input[type="submit"]:hover {
 	background: #198d98;
 }
 
-/*  CONTENT : INPUT SUBMIT AND BUTTON  */
-.content input[type="submit"], .content button {
-	border:0;
-	border-radius: 3px;
-	font-weight: bold;
-	margin-top: 5px;
-	padding: 5px 20px;
-	color: #fff;
-	cursor: pointer;
-	background: #1dabb8; /* Old browsers */
-	background: -moz-linear-gradient(top,  #1dabb8 0%, #1dabb8 75%, #0c8a9b 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(top,  #1dabb8 0%,#1dabb8 75%,#0c8a9b 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(to bottom,  #1dabb8 0%,#1dabb8 75%,#0c8a9b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1dabb8', endColorstr='#1dabb8',GradientType=0 ); /* IE6-9 */
-
-}
-
-.content input[type="submit"]:hover, .content button:hover {
-	background: #198d98;
-}
 
 /*  CONTENT  */
-
 .content > section {
 	width: 960px;
 	max-width: 960px;
@@ -128,7 +107,7 @@ header>div>form>input[type="submit"]:hover {
 	margin-bottom: 50px;
 }
 
-.content > section > div > p {
+.content > section > div:first-child > p {
 	z-index: auto;
 	font: 18px Cambria;
 	color: #404040;
@@ -136,13 +115,9 @@ header>div>form>input[type="submit"]:hover {
 	text-align: left;
 }
 
-#picture1, #picture5, #picture9{
-	margin-left: 0;
-}
 
-
-/*  transfer  */
-.transfer{
+/*  JOURNAL  */
+.journal{
 	padding: 10px 20px;
 	margin: 15px;
 	width: 80%;
@@ -151,33 +126,30 @@ header>div>form>input[type="submit"]:hover {
 
 }
 
-.transfer p {
+.journal p {
 	font: normal 16px Cambria;
 	line-height: 35px;
 }
 
-.transfer:first-child {
-	color: #585863;
-}
-
-.transfer form {
-	display: inline-block;
-}
-
-.transfer form input {
-	font: normal 16px Cambria;
-	margin-top: 10px;
-}
-
-.transfer label, select {
+.income p:first-child {
 	font: normal 16px Cambria;
 	line-height: 35px;
+	color: green;
 }
-#payment-submit-input {
-	visibility: hidden;
+
+.outcome p:first-child {
+	font: normal 16px Cambria;
+	line-height: 35px;
+	color: red;
 }
-#payment-button {
-margin-left: -425px;
+
+/*  FOOTER  */
+footer {
+	margin-top: 110px;
+	position:relative;
+	margin-right: 70px;
+	font-size: 10px;
+	float:right;
 }
 
 /* ERROR */
@@ -196,41 +168,4 @@ margin-left: -425px;
 	width: 80%;
 	border-radius: 5px;
 	border: solid 3px #07D032;
-}
-
-/* POPUP */
-.popup {
-	visibility: hidden; /* Hidden by default */
-	position: fixed; /* Stay in place */
-	z-index: 1; /* Sit on top */
-	left: 0;
-	top: 0;
-	width: 100%; /* Full width */
-	height: 100%; /* Full height */
-	overflow: auto; /* Enable scroll if needed */
-	background-color: rgb(0,0,0); /* Fallback color */
-	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-.popup-content {
-	background-color: #fefefe;
-	margin: 15% auto; /* 15% from the top and centered */
-	padding: 20px;
-	border: 1px solid #888;
-	width: 50%;
-}
-.popup-content button, form {
-	display: inline-block;
-}
-.popup-content p {
-	font: normal 16px helvetica;
-	line-height: 35px;
-}
-
-/*  FOOTER  */
-footer {
-	margin-top: 110px;
-	position:relative;
-	margin-right: 70px;
-	font-size: 10px;
-	float:right;
 }

@@ -24,6 +24,8 @@
       <fmt:message bundle="${loc}" key="local.command.top_up_card" var="command_top_up_card"/>
       <fmt:message bundle="${loc}" key="local.command.make_payment" var="command_make_payment"/>
       <fmt:message bundle="${loc}" key="local.command.close_card" var="close"/>
+      <fmt:message bundle="${loc}" key="local.cancel" var="cancelButton"/>
+      <fmt:message bundle="${loc}" key="local.word_card" var="word_card"/>
       <title>${title}</title>
     </head>
     <link rel="stylesheet" href="css/main/style.css" type="text/css" />
@@ -173,25 +175,25 @@
     
     <div class="popup" id="close-card-popup">
         <div class="popup-content">
-            <p>Подтвердите свои действия, что хотите <b>закрыть</b> карту <span id="closeCardNumberHolder"></span>.</p>
+            <p> <b>${close}</b> ${word_card} № <span id="closeCardNumberHolder"></span> ?</p>
             <form action="Controller" method="post">
                 <input type="hidden" name="command" value="close_card"/>
                 <input type="hidden" id="closeNumberCard" name="numberCard" value="${card.numberCard}"/>
                 <input type="submit" value="${close}"/>
             </form>
-            <button onclick="closePopup('close-card-popup')">Отмена</button>
+            <button onclick="closePopup('close-card-popup')">${cancelButton}</button>
         </div>
     </div>
 
     <div class="popup" id="block-card-popup">
         <div class="popup-content">
-            <p>Подтвердите свои действия, что хотите <b>заблокировать</b> карту <span id="blockCardNumberHolder"></span>.</p>
+            <p><b>${block}</b> ${word_card} № <span id="blockCardNumberHolder"></span> ?</p>
             <form action="Controller" method="post">
                 <input type="hidden" name="command" value="blocking"/>
                 <input type="hidden" id="blockNumberCard" name="numberCard" value="${card.numberCard}"/>
                 <input type="submit" value="${block}"/>
             </form>
-            <button onclick="closePopup('block-card-popup')">Отмена</button>
+            <button onclick="closePopup('block-card-popup')">${cancelButton}</button>
         </div>
     </div>
 </div>

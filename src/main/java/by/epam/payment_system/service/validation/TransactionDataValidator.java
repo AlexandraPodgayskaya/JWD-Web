@@ -16,18 +16,27 @@ public class TransactionDataValidator {
 	private static final String SENDER_CVV_CODE = "senderCvvCode";
 	private static final String AMOUNT = "amount";
 	private static final String CURRENCY = "currency";
+	private static final String RECIPIENT_YNP = "recipientYNP";
+	private static final String RECIPIENT = "recipientName";
 	private static final String RECIPIENT_CARD_NUMBER = "recipientCardNumber";
+	private static final String RECIPIENT_BANK_CODE = "BIC";
+	private static final String RECIPIENT_IBAN_ACCOUNT = "IBAN";
 	private static final String NUMBER_CARD = "^[0-9]{16}$";
 	private static final String EXPIRATION_DATE = "^(0\\d|1[012])\\/(\\d{2})$";
 	private static final String CVV_CODE = "^[0-9]{3}$";
 	private static final String DATE_FORMAT = "MM/yy";
 	private static final String SUM = "^[0-9]{1,8}(\\.[0-9]{2})?$";
-	private static final String PASSWORD = "^[a-zA-Z0-9]{5,15}$";
+	private static final String YNP = "^[0-9]{9}$";
+	private static final String BIC = "^[A-Z0-9]{8}$";
+	private static final String IBAN = "^BY[0-9]{2}[A-Z]{4}[0-9]{20}$";
 	private static final String ERROR_NUMBER_CARD = "local.error.number_card";
 	private static final String ERROR_EXPIRATION_DATE = "local.error.expiration_date";
 	private static final String ERROR_CVV_CODE = "local.error.cvv_code";
 	private static final String ERROR_SUM = "local.error.sum";
 	private static final String ERROR_CURRENCY = "local.error.currency";
+	private static final String ERROR_YNP = "local.error.ynp";
+	private static final String ERROR_RECIPIENT = "local.error.recipient";
+	private static final String ERROR_BIC = "local.error.bic";
 
 	private List<String> descriptionList;
 
@@ -94,15 +103,45 @@ public class TransactionDataValidator {
 		return descriptionList == null;
 	}
 
-	public final boolean passwordValidation(String password) {
-
-		if (password == null || !password.matches(PASSWORD)) {
-			return false;
-		}
-		return true;
-	}
-
 	public final boolean paymentValidation(Map<String, String> paymentDetails) {
+
+		if (paymentDetails.get(SENDER_CARD_NUMBER) == null
+				|| !paymentDetails.get(SENDER_CARD_NUMBER).matches(NUMBER_CARD)) {
+			setDescriptionList(ERROR_NUMBER_CARD);
+		}
+
+		if (paymentDetails.get(RECIPIENT_YNP) == null || !paymentDetails.get(RECIPIENT_YNP).matches(YNP)) {
+			setDescriptionList(ERROR_YNP);
+		}
+
+		if (paymentDetails.get(RECIPIENT) == null) {
+			setDescriptionList(ERROR_RECIPIENT);
+		}
+
+		if (paymentDetails.get(RECIPIENT_BANK_CODE) == null || !paymentDetails.get(RECIPIENT_BANK_CODE).matches(BIC)) {
+			System.out.println(paymentDetails.get(RECIPIENT_BANK_CODE));
+			System.out.println(paymentDetails.get(RECIPIENT_BANK_CODE).matches(BIC));
+			setDescriptionList(ERROR_BIC);
+		}
+
+		if (paymentDetails.get(RECIPIENT_IBAN_ACCOUNT) == null
+				|| !paymentDetails.get(RECIPIENT_IBAN_ACCOUNT).matches(IBAN)) {
+			setDescriptionList(ERROR_BIC);
+		}
+
+		if (paymentDetails.get(AMOUNT) == null || !paymentDetails.get(AMOUNT).matches(SUM)) {
+			setDescriptionList(ERROR_SUM);
+		}
+
+		if (paymentDetails.get(CURRENCY) != null) {
+			try {
+				Currency.valueOf(paymentDetails.get(CURRENCY));
+			} catch (IllegalArgumentException e) {
+				setDescriptionList(ERROR_CURRENCY);
+			}
+		} else {
+			setDescriptionList(ERROR_CURRENCY);
+		}
 
 		return descriptionList == null;
 	}

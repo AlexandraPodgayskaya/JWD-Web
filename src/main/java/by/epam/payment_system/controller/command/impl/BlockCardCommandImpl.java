@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.service.CardService;
 import by.epam.payment_system.service.ServiceFactory;
-import by.epam.payment_system.service.exception.BlockCardServiceException;
+import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 
 public class BlockCardCommandImpl implements Command {
@@ -45,7 +45,7 @@ public class BlockCardCommandImpl implements Command {
 			cardService.blockCard(numberCard);
 			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_BLOCKING_OK);
 			response.sendRedirect(GO_TO_MAIN_PAGE);
-		} catch (BlockCardServiceException e) {
+		} catch (ImpossibleOperationServiceException e) {
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_BLOCKING_ERROR));
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (ServiceException e) {

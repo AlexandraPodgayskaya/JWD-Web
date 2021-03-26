@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.service.CardService;
 import by.epam.payment_system.service.ServiceFactory;
-import by.epam.payment_system.service.exception.CloseCardServiceException;
+import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 
 public class CloseCardCommandImpl implements Command {
@@ -43,7 +43,7 @@ public class CloseCardCommandImpl implements Command {
 			cardService.closeCard(numberCard);
 			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_CLOSING_OK);
 			response.sendRedirect(GO_TO_MAIN_PAGE);
-		} catch (CloseCardServiceException e) {
+		} catch (ImpossibleOperationServiceException e) {
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_CLOSING_ERROR));
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (ServiceException e) {

@@ -9,8 +9,8 @@ import by.epam.payment_system.dao.DAOFactory;
 import by.epam.payment_system.entity.Account;
 import by.epam.payment_system.entity.Card;
 import by.epam.payment_system.service.CardService;
-import by.epam.payment_system.service.exception.BlockCardServiceException;
-import by.epam.payment_system.service.exception.CloseCardServiceException;
+
+import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 
 public class CardServiceImpl implements CardService {
@@ -42,7 +42,7 @@ public class CardServiceImpl implements CardService {
 	public void blockCard(String numberCard) throws ServiceException {
 
 		if (numberCard == null) {
-			throw new BlockCardServiceException("no card number to block");
+			throw new ImpossibleOperationServiceException("no card number to block");
 		}
 
 		DAOFactory factory = DAOFactory.getInstance();
@@ -52,7 +52,7 @@ public class CardServiceImpl implements CardService {
 
 		try {
 			if (!cardDAO.updateBlocking(card)) {
-				throw new BlockCardServiceException("card blocking error");
+				throw new ImpossibleOperationServiceException("card blocking error");
 			}
 
 		} catch (DAOException e) {
@@ -64,7 +64,7 @@ public class CardServiceImpl implements CardService {
 	public void closeCard(String numberCard) throws ServiceException {
 
 		if (numberCard == null) {
-			throw new CloseCardServiceException("no card number to close");
+			throw new ImpossibleOperationServiceException("no card number to close");
 		}
 
 		DAOFactory factory = DAOFactory.getInstance();
@@ -72,7 +72,7 @@ public class CardServiceImpl implements CardService {
 
 		try {
 			if (!cardDAO.setClosed(numberCard)) {
-				throw new CloseCardServiceException("card closing error");
+				throw new ImpossibleOperationServiceException("card closing error");
 			}
 
 		} catch (DAOException e) {

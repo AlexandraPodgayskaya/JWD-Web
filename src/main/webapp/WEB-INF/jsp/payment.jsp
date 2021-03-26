@@ -21,7 +21,7 @@
     <fmt:message bundle="${loc}" key="local.amount" var="amount"/>
     <fmt:message bundle="${loc}" key="local.card_number" var="card_number"/>
     <fmt:message bundle="${loc}" key="local.ynp" var="ynp"/>
-    <fmt:message bundle="${loc}" key="local.recipient_bik" var="recipient_bik"/>
+    <fmt:message bundle="${loc}" key="local.recipient_bic" var="recipient_bic"/>
     <fmt:message bundle="${loc}" key="local.recipient_iban" var="recipient_iban"/>
     <fmt:message bundle="${loc}" key="local.recipient_name" var="recipient_name"/>
     <fmt:message bundle="${loc}" key="local.purpose_of_payment" var="purpose_of_payment"/>
@@ -29,6 +29,13 @@
     <fmt:message bundle="${loc}" key="local.payment_card" var="payment_card"/>
     <fmt:message bundle="${loc}" key="local.command.pay" var="command_pay"/>
     <fmt:message bundle="${loc}" key="local.password" var="password"/>
+    <fmt:message bundle="${loc}" key="local.confirm_operation" var="confirm_operation"/>
+    <fmt:message bundle="${loc}" key="local.operation_payment" var="operation_payment"/>
+    <fmt:message bundle="${loc}" key="local.operation_payment" var="operation_payment"/>
+    <fmt:message bundle="${loc}" key="local.with_card" var="with_card"/>
+    <fmt:message bundle="${loc}" key="local.continue" var="continueButton"/>
+    <fmt:message bundle="${loc}" key="local.cancel" var="cancelButton"/>
+    <fmt:message bundle="${loc}" key="local.save" var="save"/>
     <title>${title}</title>
     <link rel="stylesheet" href="css/payment/style.css" type="text/css" />
 </head>
@@ -90,7 +97,7 @@
 			<form action="Controller" method="post">
 				<div>
 					<label>${ynp}:
-						<input type="text" name="recipientYNP" required placeholder="${ynp}"/>
+						<input type="text" name="recipientYNP" required placeholder="123456789"/>
 					</label>
 				</div>
 				<div>
@@ -99,13 +106,13 @@
 					</label>
 				</div>
 				<div>
-					<label>${recipient_bik}:
-						<input type="text" name="BIK" required placeholder="${recipient_bik}"/>
+					<label>${recipient_bic}:
+						<input type="text" name="BIC" required placeholder="BPSBBY2X"/>
 					</label>
 				</div>
 				<div>
 					<label>${recipient_iban}:
-						<input type="text" name="IBAN" required placeholder="${recipient_iban}"/>
+						<input type="text" name="IBAN" required placeholder="BY10BPSB30120001000200030004"/>
 					</label>
 				</div>
 				<div>
@@ -115,7 +122,7 @@
 				</div>
 				<div>
 					<label>${amount}:
-						<input type="text" name="amount" required placeholder="${amount}"/>
+						<input type="text" name="amount" required placeholder="0.00"/>
 					</label>
 				</div>
 				<div>
@@ -123,18 +130,15 @@
 						<input type="text" name="currency" value="${requestScope.currency}" disabled/>
 					</label>
 				</div>
-				<div>
-					<label>${password}:
-						<input type="text" name="passwordCheck" required placeholder="${password}"/>
-					</label>
-				</div>
+				
 				<input type="hidden" name="senderCardNumber" value="${requestScope.numberCard}"/>
+				<input type="hidden" name="balance" value="${requestScope.balance}"/>
+				<input type="hidden" name="currency" value="${requestScope.currency}"/>
 				<input type="hidden" name="passwordCheck" id="passwordCheckInput" value=""/>
-				<input type="hidden" name="action" value=""/>
-				<input type="hidden" name="page" value=""/>
+				<input type="hidden" name="command" value="pay"/>
 				<input type="submit" id="payment-submit-input" value="${command_pay}"/>
 			</form>
-			<button id="payment-button" onclick="openPopup('${requestScope.numberCard}')">${command_pay}</button>
+			<button id="payment-button" onclick="openPopup('${requestScope.numberCard}')">${save}</button>
 		</div>
 
 
@@ -160,18 +164,18 @@
     
     <div class="popup" id="check-password-popup">
         <div class="popup-content">
-            <p>Подтвердите свои действия, что хотите <b>совершить платёж</b> картой <span id="сardNumberHolder"></span>.</p>
+            <p>${confirm_operation}: <b>${operation_payment}</b> ${with_card} № <span id="сardNumberHolder"></span>.</p>
             
-            <input type="password" id="passwordInput" name="password" placeholder="password"/>
-            <button onclick="closePopup()">Подтвердить</button>
-            <button onclick="closePopupWithNoPassword()">Отмена</button>
+            <input type="password" id="passwordInput" name="password" required placeholder="${password}"/>
+            <button onclick="closePopup()">${continueButton}</button>
+            <button onclick="closePopupWithNoPassword()">${cancelButton}</button>
         </div>
     </div>
     
 
 </div>
 
-<footer> </footer>
+<mytag:copyright/>
 
 <script>
     function openPopup(cardNumber) {
@@ -198,8 +202,6 @@
 		popup.style.visibility = "hidden";
     }
 </script>
-
-<mytag:copyright/>
 
 </body>
 </html>

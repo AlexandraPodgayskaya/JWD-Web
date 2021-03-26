@@ -3,7 +3,9 @@ package by.epam.payment_system.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.dao.DAOException;
 import by.epam.payment_system.dao.TransactionLogDAO;
@@ -12,6 +14,8 @@ import by.epam.payment_system.dao.connectionpool.ConnectionPoolException;
 import by.epam.payment_system.entity.Transaction;
 
 public class SQLTransactionLogDAO implements TransactionLogDAO {
+
+	public static final Logger logger = LogManager.getLogger();
 
 	private static final String INSERT_TRANSACTION_SQL = "INSERT INTO TRANSACTION_LOG (ACCOUNT, NUMBER_CARD, TYPE_TRANSACTION_ID, SUM, CURRENCY_ID, DATA_AND_TIME, BANK_CODE, SENDER_OR_RECIPIENT_ACCOUNT, YNP, NAME, PURPOSE_OF_PAYMENT) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
@@ -39,49 +43,16 @@ public class SQLTransactionLogDAO implements TransactionLogDAO {
 			statement.executeUpdate();
 
 		} catch (ConnectionPoolException | SQLException e) {
+			logger.error(e.getMessage());
 			throw new DAOException(e);
 		} finally {
 			try {
 				connectionPool.closeConnection(connection, statement);
 			} catch (ConnectionPoolException e) {
+				logger.error(e.getMessage());
 				throw new DAOException(e);
 			}
 		}
 	}
 
-	public static void main(String[] args) throws DAOException {
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
-		Connection connection = null;
-		PreparedStatement statement = null;
-
-		try {
-			connectionPool.init();
-			connection = connectionPool.takeConnection();
-			statement = connection.prepareStatement(INSERT_TRANSACTION_SQL);
-
-			statement.setString(1, "21081001");
-			statement.setString(2, "5489333344441111");
-			statement.setInt(3, 1);
-			statement.setString(4, "15.00");
-			statement.setInt(5, 1);
-			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-			statement.setTimestamp(6, timestamp);
-			statement.setString(7, "code");
-			statement.setString(8, "321");
-			statement.setString(9, "115125364");
-			statement.setString(10, "Campany");
-			statement.setString(11, "top up card");
-			statement.executeUpdate();
-
-		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			try {
-				connectionPool.closeConnection(connection, statement);
-				connectionPool.destroy();
-			} catch (ConnectionPoolException e) {
-				throw new DAOException(e);
-			}
-		}
-	}
 }
