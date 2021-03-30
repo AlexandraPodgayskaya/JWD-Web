@@ -33,9 +33,6 @@ public class MakePaymentCommandImpl implements Command {
 	private static final String GO_TO_MAIN_PAGE = "Controller?command=go_to_main_page";
 	private static final String GO_TO_PAYMENT_PAGE = "Controller?command=go_to_payment_page";
 	private static final String GO_TO_ERROR_PAGE = "error.jsp";
-	private static final String PARAMETER_CURRENCY = "&currency=";
-	private static final String PARAMETER_NUMBER_CARD = "&numberCard=";
-	private static final String PARAMETER_BALANCE = "&balance=";
 	private static final String ATTRIBUTE_USER_TYPE = "userType";
 	private static final String ATTRIBUTE_ERROR_MESSAGE = "errorMessageList";
 	private static final String ATTRIBUTE_INFO_MESSAGE = "infoMessage";
@@ -44,10 +41,13 @@ public class MakePaymentCommandImpl implements Command {
 	private static final String CURRENCY = "currency";
 	private static final String BALANCE = "balance";
 	private static final String SENDER_CARD_NUMBER = "senderCardNumber";
+	private static final String MESSAGE_PAYMENT_OK = "local.message.payment_ok";
 	private static final String ERROR_IMPOSSIBLE_OPERATION = "local.error.impossible_operation";
 	private static final String ERROR_WRONG_PASSWORD = "local.error.wrong_password";
 	private static final String ERROR_NOT_ENOUGH_MONEY = "local.error.not_enough_money";
-	private static final String MESSAGE_PAYMENT_OK = "local.message.payment_ok";
+	private static final String SET_PARAMETER_CURRENCY = "&currency=";
+	private static final String SET_PARAMETER_NUMBER_CARD = "&numberCard=";
+	private static final String SET_PARAMETER_BALANCE = "&balance=";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -85,14 +85,14 @@ public class MakePaymentCommandImpl implements Command {
 		} catch (NoSuchUserServiceException e) {
 			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_WRONG_PASSWORD));
-			response.sendRedirect(GO_TO_PAYMENT_PAGE + PARAMETER_NUMBER_CARD + paymentDetails.get(SENDER_CARD_NUMBER)
-					+ PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + PARAMETER_BALANCE
+			response.sendRedirect(GO_TO_PAYMENT_PAGE + SET_PARAMETER_NUMBER_CARD + paymentDetails.get(SENDER_CARD_NUMBER)
+					+ SET_PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + SET_PARAMETER_BALANCE
 					+ paymentDetails.get(BALANCE));
 		} catch (TransactionDataServiceException e) {
 			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, e.getErrorDescription());
-			response.sendRedirect(GO_TO_PAYMENT_PAGE + PARAMETER_NUMBER_CARD + paymentDetails.get(SENDER_CARD_NUMBER)
-					+ PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + PARAMETER_BALANCE
+			response.sendRedirect(GO_TO_PAYMENT_PAGE + SET_PARAMETER_NUMBER_CARD + paymentDetails.get(SENDER_CARD_NUMBER)
+					+ SET_PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + SET_PARAMETER_BALANCE
 					+ paymentDetails.get(BALANCE));
 		} catch (ImpossibleOperationServiceException e) {
 			logger.error(e.getMessage());
@@ -101,8 +101,8 @@ public class MakePaymentCommandImpl implements Command {
 		} catch (NotEnoughMoneyServiceException e) {
 			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_NOT_ENOUGH_MONEY));
-			response.sendRedirect(GO_TO_PAYMENT_PAGE + PARAMETER_NUMBER_CARD + paymentDetails.get(SENDER_CARD_NUMBER)
-					+ PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + PARAMETER_BALANCE
+			response.sendRedirect(GO_TO_PAYMENT_PAGE + SET_PARAMETER_NUMBER_CARD + paymentDetails.get(SENDER_CARD_NUMBER)
+					+ SET_PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + SET_PARAMETER_BALANCE
 					+ paymentDetails.get(BALANCE));
 		} catch (ServiceException e) {
 			logger.error(e.getMessage());

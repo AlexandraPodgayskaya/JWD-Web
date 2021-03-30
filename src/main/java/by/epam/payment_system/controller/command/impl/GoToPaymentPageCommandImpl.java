@@ -19,14 +19,14 @@ public class GoToPaymentPageCommandImpl implements Command {
 
 	private static final String GO_TO_INDEX_PAGE = "index.jsp";
 	private static final String GO_TO_PAYMENT_PAGE = "/WEB-INF/jsp/payment.jsp";
+	private static final String THIS_PAGE = "Controller?command=go_to_payment_page";
+	private static final String ATTRIBUTE_PAGE = "page";
 	private static final String NUMBER_CARD = "numberCard";
 	private static final String CURRENCY = "currency";
 	private static final String BALANCE = "balance";
-	private static final String THIS_PAGE = "Controller?command=go_to_payment_page";
-	private static final String ATTRIBUTE_PAGE = "page";
-	private static final String PARAMETER_CURRENCY = "&currency=";
-	private static final String PARAMETER_NUMBER_CARD = "&numberCard=";
-	private static final String PARAMETER_BALANCE = "&balance=";
+	private static final String SET_PARAMETER_CURRENCY = "&currency=";
+	private static final String SET_PARAMETER_NUMBER_CARD = "&numberCard=";
+	private static final String SET_PARAMETER_BALANCE = "&balance=";
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,8 +43,8 @@ public class GoToPaymentPageCommandImpl implements Command {
 		request.setAttribute(CURRENCY, request.getParameter(CURRENCY));
 		request.setAttribute(BALANCE, request.getParameter(BALANCE));
 
-		session.setAttribute(ATTRIBUTE_PAGE, THIS_PAGE + PARAMETER_NUMBER_CARD + request.getParameter(NUMBER_CARD)
-				+ PARAMETER_CURRENCY + request.getParameter(CURRENCY) + PARAMETER_BALANCE + request.getParameter(BALANCE));
+		session.setAttribute(ATTRIBUTE_PAGE, THIS_PAGE + SET_PARAMETER_NUMBER_CARD + request.getParameter(NUMBER_CARD)
+				+ SET_PARAMETER_CURRENCY + request.getParameter(CURRENCY) + SET_PARAMETER_BALANCE + request.getParameter(BALANCE));
 
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher(GO_TO_PAYMENT_PAGE);
 		requestDispatcher.forward(request, response);

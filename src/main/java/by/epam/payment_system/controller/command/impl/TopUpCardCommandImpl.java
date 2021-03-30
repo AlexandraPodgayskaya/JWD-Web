@@ -31,16 +31,16 @@ public class TopUpCardCommandImpl implements Command {
 	private static final String GO_TO_MAIN_PAGE = "Controller?command=go_to_main_page";
 	private static final String GO_TO_TOP_UP_CARD_PAGE = "Controller?command=go_to_top_up_card_page";
 	private static final String GO_TO_ERROR_PAGE = "error.jsp";
-	private static final String PARAMETER_CURRENCY = "&currency=";
-	private static final String PARAMETER_NUMBER_CARD = "&numberCard=";
 	private static final String ATTRIBUTE_USER_TYPE = "userType";
 	private static final String ATTRIBUTE_ERROR_MESSAGE = "errorMessageList";
 	private static final String ATTRIBUTE_INFO_MESSAGE = "infoMessage";
 	private static final String ATTRIBUTE_PAGE = "page";
 	private static final String CURRENCY = "currency";
 	private static final String RECIPIENT_CARD_NUMBER = "recipientCardNumber";
-	private static final String ERROR_IPOSSIBLE_OPERATION = "local.error.impossible_operation";
 	private static final String MESSAGE_TOP_UP_CARD_OK = "local.message.top_up_card_ok";
+	private static final String ERROR_IPOSSIBLE_OPERATION = "local.error.impossible_operation";
+	private static final String SET_PARAMETER_CURRENCY = "&currency=";
+	private static final String SET_PARAMETER_NUMBER_CARD = "&numberCard=";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -77,8 +77,8 @@ public class TopUpCardCommandImpl implements Command {
 		} catch (TransactionDataServiceException e) {
 			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, e.getErrorDescription());
-			response.sendRedirect(GO_TO_TOP_UP_CARD_PAGE + PARAMETER_NUMBER_CARD
-					+ transferDetails.get(RECIPIENT_CARD_NUMBER) + PARAMETER_CURRENCY + transferDetails.get(CURRENCY));
+			response.sendRedirect(GO_TO_TOP_UP_CARD_PAGE + SET_PARAMETER_NUMBER_CARD
+					+ transferDetails.get(RECIPIENT_CARD_NUMBER) + SET_PARAMETER_CURRENCY + transferDetails.get(CURRENCY));
 		} catch (ImpossibleOperationServiceException e) {
 			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IPOSSIBLE_OPERATION));

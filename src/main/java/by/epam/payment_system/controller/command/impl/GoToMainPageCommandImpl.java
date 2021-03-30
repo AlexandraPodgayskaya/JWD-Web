@@ -25,10 +25,10 @@ public class GoToMainPageCommandImpl implements Command {
 	private static final String GO_TO_INDEX_PAGE = "index.jsp";
 	private static final String GO_TO_MAIN_PAGE = "/WEB-INF/jsp/main.jsp";
 	private static final String GO_TO_ERROR_PAGE = "error.jsp";
+	private static final String MAIN_PAGE = "Controller?command=go_to_main_page";
 	private static final String ATTRIBUTE_USER_ID = "userId";
 	private static final String ATTRIBUTE_CARD_LIST = "cardList";
 	private static final String ATTRIBUTE_PAGE = "page";
-	private static final String MAIN_PAGE = "Controller?command=go_to_main_page";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

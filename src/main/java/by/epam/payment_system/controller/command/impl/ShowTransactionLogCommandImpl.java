@@ -31,16 +31,16 @@ public class ShowTransactionLogCommandImpl implements Command {
 	private static final String THIS_PAGE = "Controller?command=";
 	private static final String PARAMETER_COMMAND = "command";
 	private static final String PARAMETER_NUMBER_CARD = "numberCard";
-	private static final String SET_PARAMETER_NUMBER_CARD = "&numberCard=";
-	private static final String COMMAND_SHOW_ACCOUNT_LOG = "show_account_log";
-	private static final String COMMAND_SHOW_CARD_LOG = "show_card_log";
 	private static final String ATTRIBUTE_ERROR_MESSAGE = "errorMessageList";
 	private static final String ATTRIBUTE_TRANSACTION_LIST = "transactionList";
 	private static final String ATTRIBUTE_PAGE = "page";
 	private static final String ATTRIBUTE_COMMAND = "command";
 	private static final String ATTRIBUTE_INFO_MESSAGE = "infoMessage";
-	private static final String ERROR_IMPOSSIBLE_OPERATION = "local.error.impossible_operation";
 	private static final String MESSAGE_LOG_IS_EMPTY = "local.message.log_is_empty";
+	private static final String ERROR_IMPOSSIBLE_OPERATION = "local.error.impossible_operation";
+	private static final String SET_PARAMETER_NUMBER_CARD = "&numberCard=";
+	private static final String COMMAND_SHOW_ACCOUNT_LOG = "show_account_log";
+	private static final String COMMAND_SHOW_CARD_LOG = "show_card_log";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
