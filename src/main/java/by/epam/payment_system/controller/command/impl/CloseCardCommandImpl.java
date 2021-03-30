@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.service.CardService;
 import by.epam.payment_system.service.ServiceFactory;
@@ -16,6 +19,8 @@ import by.epam.payment_system.service.exception.ServiceException;
 
 public class CloseCardCommandImpl implements Command {
 
+	private static final Logger logger = LogManager.getLogger();
+	
 	private static final String GO_TO_INDEX_PAGE = "index.jsp";
 	private static final String GO_TO_ERROR_PAGE = "error.jsp";
 	private static final String GO_TO_MAIN_PAGE = "Controller?command=go_to_main_page";
@@ -23,13 +28,14 @@ public class CloseCardCommandImpl implements Command {
 	private static final String ATTRIBUTE_INFO_MESSAGE = "infoMessage";
 	private static final String ATTRIBUTE_ERROR_MESSAGE = "errorMessageList";
 	private static final String MESSAGE_CLOSING_OK = "local.message.closing_card_ok";
-	private static final String ERROR_CLOSING_ERROR = "local.error.closing_card";
+	private static final String ERROR_IMPOSSIBLE_OPERATION = "local.error.impossible_operation";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession(false);
 		if (session == null) {
+			logger.info("session aborted");
 			response.sendRedirect(GO_TO_INDEX_PAGE);
 			return;
 		}
@@ -44,9 +50,11 @@ public class CloseCardCommandImpl implements Command {
 			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_CLOSING_OK);
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (ImpossibleOperationServiceException e) {
-			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_CLOSING_ERROR));
+			logger.error(e.getMessage());
+			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IMPOSSIBLE_OPERATION));
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (ServiceException e) {
+			logger.error(e.getMessage());
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 

@@ -22,8 +22,13 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
-public final class ConnectionPool {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+public final class ConnectionPool {
+	
+	private static final Logger logger = LogManager.getLogger();
+	
 	private static final int DEFAULT_POOL_SIZE = 5;
 	private static final ConnectionPool instance = new ConnectionPool();
 
@@ -51,6 +56,7 @@ public final class ConnectionPool {
 		try {
 			poolSize = Integer.parseInt(dbResourceManager.getValue(DBParameter.DB_POLL_SIZE));
 		} catch (NumberFormatException e) {
+			logger.error(e.getMessage());
 			poolSize = DEFAULT_POOL_SIZE;
 		}
 		connectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
@@ -67,8 +73,10 @@ public final class ConnectionPool {
 				connectionQueue.add(connectionWrapper);
 			}
 		} catch (ClassNotFoundException e) {
+			logger.error(e.getMessage());
 			throw new ConnectionPoolException("Can not find database driver class", e);
 		} catch (SQLException e) {
+			logger.error(e.getMessage());
 			throw new ConnectionPoolException("Can not get connection", e);
 		}
 	}
@@ -92,6 +100,7 @@ public final class ConnectionPool {
 				((ConnectionWrapper) connection).reallyClose();
 
 			} catch (SQLException e) {
+				logger.error(e.getMessage());
 				throw new ConnectionPoolException("Can not close connection queue", e);
 			}
 		}
@@ -104,6 +113,7 @@ public final class ConnectionPool {
 			connection = connectionQueue.take();
 			givenAwayConnectionQueue.add(connection);
 		} catch (InterruptedException e) {
+			logger.error(e.getMessage());
 			throw new ConnectionPoolException("Can not take connection", e);
 		}
 		return connection;
@@ -115,6 +125,7 @@ public final class ConnectionPool {
 				connection.close();
 			}
 		} catch (SQLException e) {
+			logger.error(e.getMessage());
 			throw new ConnectionPoolException("Can not return connection", e);
 		}
 
@@ -123,6 +134,7 @@ public final class ConnectionPool {
 				statement.close();
 			}
 		} catch (SQLException e) {
+			logger.error(e.getMessage());
 			throw new ConnectionPoolException("Can not close statement", e);
 		}
 
@@ -139,6 +151,7 @@ public final class ConnectionPool {
 			try {
 				connection.close();
 			} catch (SQLException e) {
+				logger.error(e.getMessage());
 				throw new ConnectionPoolException("Can not close connection", e);
 			}
 		}

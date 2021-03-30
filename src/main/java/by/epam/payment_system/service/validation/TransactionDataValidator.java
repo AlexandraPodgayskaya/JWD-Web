@@ -21,14 +21,14 @@ public class TransactionDataValidator {
 	private static final String RECIPIENT_CARD_NUMBER = "recipientCardNumber";
 	private static final String RECIPIENT_BANK_CODE = "BIC";
 	private static final String RECIPIENT_IBAN_ACCOUNT = "IBAN";
-	private static final String NUMBER_CARD = "^[0-9]{16}$";
-	private static final String EXPIRATION_DATE = "^(0\\d|1[012])\\/(\\d{2})$";
-	private static final String CVV_CODE = "^[0-9]{3}$";
+	private static final String NUMBER_CARD_PATTERN = "^[0-9]{16}$";
+	private static final String EXPIRATION_DATE_PATTERN = "^(0\\d|1[012])\\/(\\d{2})$";
+	private static final String CVV_CODE_PATTERN = "^[0-9]{3}$";
+	private static final String SUM_PATTERN = "^[0-9]{1,8}(\\.[0-9]{2})?$";
+	private static final String YNP_PATTERN = "^[0-9]{9}$";
+	private static final String BIC_PATTERN = "^[A-Z0-9]{8}$";
+	private static final String IBAN_PATTERN = "^BY[0-9]{2}[A-Z]{4}[0-9]{20}$";
 	private static final String DATE_FORMAT = "MM/yy";
-	private static final String SUM = "^[0-9]{1,8}(\\.[0-9]{2})?$";
-	private static final String YNP = "^[0-9]{9}$";
-	private static final String BIC = "^[A-Z0-9]{8}$";
-	private static final String IBAN = "^BY[0-9]{2}[A-Z]{4}[0-9]{20}$";
 	private static final String ERROR_NUMBER_CARD = "local.error.number_card";
 	private static final String ERROR_EXPIRATION_DATE = "local.error.expiration_date";
 	private static final String ERROR_CVV_CODE = "local.error.cvv_code";
@@ -54,12 +54,12 @@ public class TransactionDataValidator {
 	public final boolean topUpCardValidation(Map<String, String> transferDetails) {
 
 		if (transferDetails.get(SENDER_CARD_NUMBER) == null
-				|| !transferDetails.get(SENDER_CARD_NUMBER).matches(NUMBER_CARD)) {
+				|| !transferDetails.get(SENDER_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
 			setDescriptionList(ERROR_NUMBER_CARD);
 		}
 
 		if (transferDetails.get(SENDER_EXPIRATION_DATE) != null
-				&& transferDetails.get(SENDER_EXPIRATION_DATE).matches(EXPIRATION_DATE)) {
+				&& transferDetails.get(SENDER_EXPIRATION_DATE).matches(EXPIRATION_DATE_PATTERN)) {
 
 			String expirationDate = transferDetails.get(SENDER_EXPIRATION_DATE);
 			SimpleDateFormat format = new SimpleDateFormat();
@@ -77,11 +77,11 @@ public class TransactionDataValidator {
 			setDescriptionList(ERROR_EXPIRATION_DATE);
 		}
 
-		if (transferDetails.get(SENDER_CVV_CODE) == null || !transferDetails.get(SENDER_CVV_CODE).matches(CVV_CODE)) {
+		if (transferDetails.get(SENDER_CVV_CODE) == null || !transferDetails.get(SENDER_CVV_CODE).matches(CVV_CODE_PATTERN)) {
 			setDescriptionList(ERROR_CVV_CODE);
 		}
 
-		if (transferDetails.get(AMOUNT) == null || !transferDetails.get(AMOUNT).matches(SUM)) {
+		if (transferDetails.get(AMOUNT) == null || !transferDetails.get(AMOUNT).matches(SUM_PATTERN)) {
 			setDescriptionList(ERROR_SUM);
 		}
 
@@ -96,7 +96,7 @@ public class TransactionDataValidator {
 		}
 
 		if (transferDetails.get(RECIPIENT_CARD_NUMBER) == null
-				|| !transferDetails.get(RECIPIENT_CARD_NUMBER).matches(NUMBER_CARD)) {
+				|| !transferDetails.get(RECIPIENT_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
 			setDescriptionList(ERROR_NUMBER_CARD);
 		}
 
@@ -106,11 +106,11 @@ public class TransactionDataValidator {
 	public final boolean paymentValidation(Map<String, String> paymentDetails) {
 
 		if (paymentDetails.get(SENDER_CARD_NUMBER) == null
-				|| !paymentDetails.get(SENDER_CARD_NUMBER).matches(NUMBER_CARD)) {
+				|| !paymentDetails.get(SENDER_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
 			setDescriptionList(ERROR_NUMBER_CARD);
 		}
 
-		if (paymentDetails.get(RECIPIENT_YNP) == null || !paymentDetails.get(RECIPIENT_YNP).matches(YNP)) {
+		if (paymentDetails.get(RECIPIENT_YNP) == null || !paymentDetails.get(RECIPIENT_YNP).matches(YNP_PATTERN)) {
 			setDescriptionList(ERROR_YNP);
 		}
 
@@ -118,18 +118,18 @@ public class TransactionDataValidator {
 			setDescriptionList(ERROR_RECIPIENT);
 		}
 
-		if (paymentDetails.get(RECIPIENT_BANK_CODE) == null || !paymentDetails.get(RECIPIENT_BANK_CODE).matches(BIC)) {
+		if (paymentDetails.get(RECIPIENT_BANK_CODE) == null || !paymentDetails.get(RECIPIENT_BANK_CODE).matches(BIC_PATTERN)) {
 			System.out.println(paymentDetails.get(RECIPIENT_BANK_CODE));
-			System.out.println(paymentDetails.get(RECIPIENT_BANK_CODE).matches(BIC));
+			System.out.println(paymentDetails.get(RECIPIENT_BANK_CODE).matches(BIC_PATTERN));
 			setDescriptionList(ERROR_BIC);
 		}
 
 		if (paymentDetails.get(RECIPIENT_IBAN_ACCOUNT) == null
-				|| !paymentDetails.get(RECIPIENT_IBAN_ACCOUNT).matches(IBAN)) {
+				|| !paymentDetails.get(RECIPIENT_IBAN_ACCOUNT).matches(IBAN_PATTERN)) {
 			setDescriptionList(ERROR_BIC);
 		}
 
-		if (paymentDetails.get(AMOUNT) == null || !paymentDetails.get(AMOUNT).matches(SUM)) {
+		if (paymentDetails.get(AMOUNT) == null || !paymentDetails.get(AMOUNT).matches(SUM_PATTERN)) {
 			setDescriptionList(ERROR_SUM);
 		}
 

@@ -2,6 +2,9 @@ package by.epam.payment_system.service.impl;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.payment_system.dao.AccountDAO;
 import by.epam.payment_system.dao.CardDAO;
 import by.epam.payment_system.dao.DAOException;
@@ -14,6 +17,8 @@ import by.epam.payment_system.service.exception.ImpossibleOperationServiceExcept
 import by.epam.payment_system.service.exception.ServiceException;
 
 public class CardServiceImpl implements CardService {
+	
+	private static final Logger logger = LogManager.getLogger();
 
 	@Override
 	public List<Card> takeCards(Integer userId) throws ServiceException {
@@ -33,6 +38,7 @@ public class CardServiceImpl implements CardService {
 				}
 			}
 		} catch (DAOException e) {
+			logger.error(e.getMessage());
 			throw new ServiceException("card search error", e);
 		}
 		return cardList;
@@ -56,6 +62,7 @@ public class CardServiceImpl implements CardService {
 			}
 
 		} catch (DAOException e) {
+			logger.error(e.getMessage());
 			throw new ServiceException("card blocking error", e);
 		}
 	}
@@ -76,6 +83,7 @@ public class CardServiceImpl implements CardService {
 			}
 
 		} catch (DAOException e) {
+			logger.error(e.getMessage());
 			throw new ServiceException("card closing error", e);
 		}
 

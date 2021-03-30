@@ -27,10 +27,12 @@
     <fmt:message bundle="${loc}" key="local.card_number" var="card_number"/>
     <title>${title}</title>
     <link rel="stylesheet" href="css/transfer/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/common/footer.css" type="text/css" />
+    <link rel="stylesheet" href="css/common/error_info.css" type="text/css" />
 </head>
 
 <body>
-
+<div id="wrap">
 <header>
     <div>
         <p>${welcome}, ${sessionScope.userLogin}!</p>
@@ -52,7 +54,6 @@
                 <li>
                     <form action="profile.html" method="post">
                         <input type="hidden" name="command" value=""/>
-                        <input type="hidden" name="page" value=""/>
                         <input type="submit" value="${menu_profile}"/>
                     </form>
                 </li>
@@ -65,7 +66,6 @@
                 <li>
                     <form action="cart_application.html" method="post">
                         <input type="hidden" name="command" value=""/>
-                        <input type="hidden" name="page" value=""/>
                         <input type="submit" value="${menu_card_application}"/>
                     </form>
                 </li>
@@ -106,29 +106,28 @@
 			</form>
 		</div>
         
-		
-	</section>
-	
-	 <c:if test="${errorMessageList != null}">
-    	<c:forEach var="errorMessageKey" items="${errorMessageList}">
-    	<fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
-    		<div class="error">
-    			<h4>${error}</h4>
-    		</div>
-    	</c:forEach>
-    	<c:remove var="errorMessageList"/>
-    </c:if>
+		<c:if test="${errorMessageList != null}">
+            <c:forEach var="errorMessageKey" items="${errorMessageList}">
+            <fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
+                <div class="error">
+                    <h4>${error}</h4>
+                </div>
+            </c:forEach>
+            <c:remove var="errorMessageList"/>
+        </c:if>
 
-    <c:if test="${infoMessage != null}">
-        <fmt:message bundle="${loc}" key="${infoMessage}" var="message"/>
-    	<div class="message">
-    		<h4>${message}</h4>
-    	</div>
-    	<c:remove var="infoMessage"/>
-    </c:if>
+        <c:if test="${infoMessage != null}">
+            <fmt:message bundle="${loc}" key="${infoMessage}" var="message"/>
+            <div class="message">
+                <h4>${message}</h4>
+            </div>
+            <c:remove var="infoMessage"/>
+        </c:if>
+
+	</section>
 
 </div>
-
+</div>
 <mytag:copyright/>
 
 

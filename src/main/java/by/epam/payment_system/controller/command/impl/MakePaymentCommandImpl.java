@@ -2,6 +2,7 @@ package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +11,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.entity.UserType;
@@ -22,6 +26,8 @@ import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.TransactionDataServiceException;
 
 public class MakePaymentCommandImpl implements Command {
+	
+	private static final Logger logger = LogManager.getLogger();
 
 	private static final String GO_TO_INDEX_PAGE = "index.jsp";
 	private static final String GO_TO_MAIN_PAGE = "Controller?command=go_to_main_page";
@@ -48,21 +54,22 @@ public class MakePaymentCommandImpl implements Command {
 		HttpSession session = request.getSession(false);
 
 		if (session == null) {
+			logger.info("session aborted");
 			response.sendRedirect(GO_TO_INDEX_PAGE);
 			return;
 		}
 
 		if (session.getAttribute(ATTRIBUTE_USER_TYPE) == UserType.ADMIN) {
+			logger.info("impossible operation for " + UserType.ADMIN);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IMPOSSIBLE_OPERATION));
-			response.sendRedirect(GO_TO_MAIN_PAGE); // main for admin
+			response.sendRedirect(GO_TO_MAIN_PAGE); 
 			return;
 		}
 
 		Enumeration<String> parameters = request.getParameterNames();
 		Map<String, String> paymentDetails = new HashMap<>();
-		String parameter = null;
-		while (parameters.hasMoreElements()) {
-			parameter = parameters.nextElement();
+
+		for (String parameter : Collections.list(parameters)) {
 			paymentDetails.put(parameter, request.getParameter(parameter));
 		}
 
@@ -76,24 +83,29 @@ public class MakePaymentCommandImpl implements Command {
 			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_PAYMENT_OK);
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (NoSuchUserServiceException e) {
+			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_WRONG_PASSWORD));
 			response.sendRedirect(GO_TO_PAYMENT_PAGE + PARAMETER_NUMBER_CARD + paymentDetails.get(SENDER_CARD_NUMBER)
 					+ PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + PARAMETER_BALANCE
 					+ paymentDetails.get(BALANCE));
 		} catch (TransactionDataServiceException e) {
+			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, e.getErrorDescription());
 			response.sendRedirect(GO_TO_PAYMENT_PAGE + PARAMETER_NUMBER_CARD + paymentDetails.get(SENDER_CARD_NUMBER)
 					+ PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + PARAMETER_BALANCE
 					+ paymentDetails.get(BALANCE));
 		} catch (ImpossibleOperationServiceException e) {
+			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IMPOSSIBLE_OPERATION));
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (NotEnoughMoneyServiceException e) {
+			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_NOT_ENOUGH_MONEY));
 			response.sendRedirect(GO_TO_PAYMENT_PAGE + PARAMETER_NUMBER_CARD + paymentDetails.get(SENDER_CARD_NUMBER)
-			+ PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + PARAMETER_BALANCE
-			+ paymentDetails.get(BALANCE));
+					+ PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + PARAMETER_BALANCE
+					+ paymentDetails.get(BALANCE));
 		} catch (ServiceException e) {
+			logger.error(e.getMessage());
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 

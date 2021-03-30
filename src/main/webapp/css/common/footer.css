@@ -1,0 +1,24 @@
+html,
+body {
+  height: 100%;
+}
+
+#wrap {
+  min-height: 100%;
+}
+
+/*  FOOTER  */
+footer {
+	width: 100%;
+	margin-top: -50px;
+	height: 50px;
+	background-color: #ddd;
+}
+footer > p {
+	font: normal 12px Cambria;
+	padding-top: 10px;
+	width: 960px;
+	max-width: 960px;
+	min-width: 950px;
+	margin:auto;
+}

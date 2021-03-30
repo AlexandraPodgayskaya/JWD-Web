@@ -18,9 +18,11 @@
     <fmt:message bundle="${loc}" key="local.register" var="register"/>
     <title>${title}</title>
     <link rel="stylesheet" href="css/registration/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/common/footer.css" type="text/css" />
+    <link rel="stylesheet" href="css/common/error_info.css" type="text/css" />
 </head>
 <body>
-
+<div id="wrap">
 <div id="registration-form">
   <header>
     <ul class="clearfix">
@@ -52,7 +54,6 @@
     </form>
   </fieldset>
 </div>
-
 <c:if test="${errorMessageList != null}">
 	<c:forEach var="errorMessageKey" items="${errorMessageList}">
 	<fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
@@ -70,7 +71,7 @@
 	</div>
 	<c:remove var="infoMessage"/>
 </c:if>
-
+</div>
 <mytag:copyright/>
 
 </body>

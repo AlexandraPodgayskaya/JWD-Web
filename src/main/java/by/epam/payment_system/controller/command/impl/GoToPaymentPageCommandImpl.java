@@ -8,9 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.payment_system.controller.command.Command;
 
 public class GoToPaymentPageCommandImpl implements Command {
+	
+	private static final Logger logger = LogManager.getLogger();
 
 	private static final String GO_TO_INDEX_PAGE = "index.jsp";
 	private static final String GO_TO_PAYMENT_PAGE = "/WEB-INF/jsp/payment.jsp";
@@ -29,6 +34,7 @@ public class GoToPaymentPageCommandImpl implements Command {
 		HttpSession session = request.getSession(false);
 
 		if (session == null) {
+			logger.info("session aborted");
 			response.sendRedirect(GO_TO_INDEX_PAGE);
 			return;
 		}

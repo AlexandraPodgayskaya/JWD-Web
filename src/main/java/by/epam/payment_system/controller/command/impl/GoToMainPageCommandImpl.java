@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.entity.Card;
 import by.epam.payment_system.service.CardService;
@@ -16,6 +19,8 @@ import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.exception.ServiceException;
 
 public class GoToMainPageCommandImpl implements Command {
+	
+	private static final Logger logger = LogManager.getLogger();
 
 	private static final String GO_TO_INDEX_PAGE = "index.jsp";
 	private static final String GO_TO_MAIN_PAGE = "/WEB-INF/jsp/main.jsp";
@@ -31,6 +36,7 @@ public class GoToMainPageCommandImpl implements Command {
 		HttpSession session = request.getSession(false);
 
 		if (session == null) {
+			logger.info("session aborted");
 			response.sendRedirect(GO_TO_INDEX_PAGE);
 			return;
 		}
@@ -42,11 +48,15 @@ public class GoToMainPageCommandImpl implements Command {
 		
 		try {
 			cardList = cardService.takeCards((Integer)session.getAttribute(ATTRIBUTE_USER_ID));
+			while (cardList.contains(null)) {
+				cardList.remove(null);
+			}
 			request.setAttribute(ATTRIBUTE_CARD_LIST, cardList);
 			session.setAttribute(ATTRIBUTE_PAGE, MAIN_PAGE);
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(GO_TO_MAIN_PAGE);
 			requestDispatcher.forward(request, response);
 		} catch (ServiceException e) {
+			logger.error(e.getMessage());
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 

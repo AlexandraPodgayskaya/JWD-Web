@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.payment_system.dao.DAOException;
 import by.epam.payment_system.dao.connectionpool.ConnectionPool;
 import by.epam.payment_system.dao.connectionpool.ConnectionPoolException;
@@ -11,6 +14,9 @@ import by.epam.payment_system.dao.AdditionalClientDataDAO;
 import by.epam.payment_system.entity.UserInfo;
 
 public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
+	
+	private static final Logger logger = LogManager.getLogger();
+	
 	private static final String INSERT_ADDITIONAL_CLIENT_DATA_SQL = "INSERT INTO CLIENT_DETAILS (USER_ID, SURNAME, NAME, PATRONYMIC, DATE_OF_BIRTH, PERSONAL_NUMBER_PASSPORT, PHONE) VALUES(?, ?, ?, ?, ?, ?, ?) ";
 
 	@Override
@@ -34,11 +40,13 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 			statement.executeUpdate();
 
 		} catch (ConnectionPoolException | SQLException e) {
+			logger.error(e.getMessage());
 			throw new DAOException(e);
 		} finally {
 			try {
 				connectionPool.closeConnection(connection, statement);
 			} catch (ConnectionPoolException e) {
+				logger.error(e.getMessage());
 				throw new DAOException(e);
 			}
 		}

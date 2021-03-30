@@ -1,5 +1,8 @@
 package by.epam.payment_system.service.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.payment_system.dao.AdditionalClientDataDAO;
 import by.epam.payment_system.dao.DAOException;
 import by.epam.payment_system.dao.DAOFactory;
@@ -10,6 +13,8 @@ import by.epam.payment_system.service.exception.UserInfoFormatServiceException;
 import by.epam.payment_system.service.validation.UserDataValidator;
 
 public class AdditionalClientDataServiceImpl implements AdditionalClientDataService {
+	
+	private static final Logger logger = LogManager.getLogger();
 
 	@Override
 	public void addData(UserInfo additionalClientInfo) throws ServiceException {
@@ -25,6 +30,7 @@ public class AdditionalClientDataServiceImpl implements AdditionalClientDataServ
 		try {
 			additionalClientDataDAO.create(additionalClientInfo);
 		} catch (DAOException e) {
+			logger.error(e.getMessage());
 			throw new ServiceException("additional client data creation error", e);
 		}
 

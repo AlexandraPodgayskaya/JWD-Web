@@ -8,18 +8,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.payment_system.controller.builder.AbstractUserInfoBuilder;
 import by.epam.payment_system.controller.builder.UserInfoBuilder;
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.entity.User;
 import by.epam.payment_system.entity.UserInfo;
-import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.UserService;
 import by.epam.payment_system.service.exception.NoSuchUserServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 
 public class LoginCommandImpl implements Command {
+	
+	private static final Logger logger = LogManager.getLogger();
 
 	private static final String GO_TO_INDEX_PAGE = "index.jsp";
 	private static final String GO_TO_MAIN_PAGE = "Controller?command=go_to_main_page";
@@ -50,16 +54,15 @@ public class LoginCommandImpl implements Command {
 			session.setAttribute(ATTRIBUTE_USER_ID, user.getId());
 			session.setAttribute(ATTRIBUTE_USER_LOGIN, user.getLogin());
 
-			if (user.getType() == UserType.CLIENT) {
-				session.setAttribute(ATTRIBUTE_PAGE, GO_TO_MAIN_PAGE);
-				response.sendRedirect(GO_TO_MAIN_PAGE);
-			}
-			// else - go to admin page
+			session.setAttribute(ATTRIBUTE_PAGE, GO_TO_MAIN_PAGE);
+			response.sendRedirect(GO_TO_MAIN_PAGE);
 
 		} catch (NoSuchUserServiceException e) {
+			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_NO_SUCH_USER));
 			response.sendRedirect(GO_TO_INDEX_PAGE);
 		} catch (ServiceException e) {
+			logger.error(e.getMessage());
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 

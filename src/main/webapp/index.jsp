@@ -21,6 +21,7 @@
   <title>${title}</title>
 
   <link rel="stylesheet" href="css/login/style.css" type="text/css" />
+  <link rel="stylesheet" href="css/common/error_info.css" type="text/css" />
 </head>
 <body>
 

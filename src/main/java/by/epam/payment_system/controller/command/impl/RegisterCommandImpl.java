@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.payment_system.controller.builder.AbstractUserInfoBuilder;
 import by.epam.payment_system.controller.builder.UserInfoBuilder;
 import by.epam.payment_system.controller.command.Command;
@@ -19,6 +22,8 @@ import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.UserInfoFormatServiceException;
 
 public class RegisterCommandImpl implements Command {
+	
+	private static final Logger logger = LogManager.getLogger();
 
 	private static final String GO_TO_CLIENT_DATA_PAGE = "UserData?userId=";
 	private static final String GO_TO_REGISTRATION_PAGE = "Registration";
@@ -46,12 +51,15 @@ public class RegisterCommandImpl implements Command {
 			session.setAttribute(ATTRIBUTE_PAGE, GO_TO_CLIENT_DATA_PAGE + String.valueOf(id));
 			response.sendRedirect(GO_TO_CLIENT_DATA_PAGE + String.valueOf(id));		
 		} catch (UserInfoFormatServiceException e) {
+			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, e.getErrorDescription());
 			response.sendRedirect(GO_TO_REGISTRATION_PAGE);
 		} catch (BusyLoginServiceException e) {
+			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_BUSY_LOGIN));
 			response.sendRedirect(GO_TO_REGISTRATION_PAGE);
 		} catch (ServiceException e) {
+			logger.error(e.getMessage());
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 	}

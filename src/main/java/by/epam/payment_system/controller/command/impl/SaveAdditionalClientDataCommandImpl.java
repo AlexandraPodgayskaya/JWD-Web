@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.payment_system.controller.builder.AbstractUserInfoBuilder;
 import by.epam.payment_system.controller.builder.AdditionalUserClientInfoBuilder;
 import by.epam.payment_system.controller.command.Command;
@@ -17,6 +20,8 @@ import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.UserInfoFormatServiceException;
 
 public class SaveAdditionalClientDataCommandImpl implements Command {
+	
+	private static final Logger logger = LogManager.getLogger();
 	
 	private static final String GO_TO_INDEX_PAGE = "index.jsp";
 	private static final String GO_TO_CLIENT_DATA_PAGE = "UserData?userId=";
@@ -42,9 +47,11 @@ public class SaveAdditionalClientDataCommandImpl implements Command {
 			session.setAttribute(ATTRIBUTE_PAGE, GO_TO_INDEX_PAGE);
 			response.sendRedirect(GO_TO_INDEX_PAGE);
 		} catch (UserInfoFormatServiceException e) {
+			logger.error(e.getMessage());
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, e.getErrorDescription());
 			response.sendRedirect(GO_TO_CLIENT_DATA_PAGE + additionalClientInfo.getId());
 		} catch (ServiceException e) {
+			logger.error(e.getMessage());
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 	}

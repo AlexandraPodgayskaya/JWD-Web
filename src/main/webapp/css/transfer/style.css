@@ -124,8 +124,7 @@ header>div>form>input[type="submit"]:hover {
 /*  transfer  */
 .transfer{
 	padding: 10px 20px;
-	margin: 15px;
-	width: 80%;
+	width: 100%;
 	border-radius: 5px;
 	border: solid 3px #585863;
 
@@ -171,30 +170,4 @@ header>div>form>input[type="submit"]:hover {
 .transfer label, select {
 	font: normal 16px Cambria;
 	line-height: 35px;
-}
-
-/* ERROR */
-.error {
-	padding: 10px 20px;
-	margin: 15px;
-	width: 80%;
-	border-radius: 5px;
-	border: solid 3px #FF5733;
-}
-
-/* MESSAGE */
-.message {
-	padding: 10px 20px;
-	margin: 15px;
-	width: 80%;
-	border-radius: 5px;
-	border: solid 3px #07D032;
-}
-
-
-/*  FOOTER  */
-footer {
-	margin: 110px auto;
-	font-size: 10px;
-	width: 960px;
 }

@@ -144,11 +144,9 @@ header>div>form>input[type="submit"]:hover {
 /*  transfer  */
 .transfer{
 	padding: 10px 20px;
-	margin: 15px;
-	width: 80%;
+	width: 100%;
 	border-radius: 5px;
 	border: solid 3px #585863;
-
 }
 
 .transfer p {
@@ -177,27 +175,11 @@ header>div>form>input[type="submit"]:hover {
 	visibility: hidden;
 }
 #payment-button {
-margin-left: -425px;
+    margin-left: -425px;
 }
-
-/* ERROR */
-.error {
-	padding: 10px 20px;
-	margin: 15px;
-	width: 80%;
-	border-radius: 5px;
-	border: solid 3px #FF5733;
+#IBAN {
+    width: 300px;
 }
-
-/* MESSAGE */
-.message {
-	padding: 10px 20px;
-	margin: 15px;
-	width: 80%;
-	border-radius: 5px;
-	border: solid 3px #07D032;
-}
-
 /* POPUP */
 .popup {
 	visibility: hidden; /* Hidden by default */
@@ -224,13 +206,4 @@ margin-left: -425px;
 .popup-content p {
 	font: normal 16px helvetica;
 	line-height: 35px;
-}
-
-/*  FOOTER  */
-footer {
-	margin-top: 110px;
-	position:relative;
-	margin-right: 70px;
-	font-size: 10px;
-	float:right;
 }

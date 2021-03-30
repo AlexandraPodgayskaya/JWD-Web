@@ -9,32 +9,33 @@
 <html>
 <head>
     <meta charset="utf-8">
-
-      <fmt:setLocale value="${sessionScope.locale}"/>
-      <fmt:setBundle basename="local" var="loc"/>
-      <fmt:message bundle="${loc}" key="local.title.main" var="title"/>
-      <fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button"/>
-      <fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button"/>
-      <fmt:message bundle="${loc}" key="local.logout" var="logout"/>
-      <fmt:message bundle="${loc}" key="local.welcome" var="welcome"/>
-      <fmt:message bundle="${loc}" key="local.block" var="block"/>
-      <fmt:message bundle="${loc}" key="local.menu.profile" var="menu_profile"/>
-      <fmt:message bundle="${loc}" key="local.menu.cards" var="menu_cards"/>
-      <fmt:message bundle="${loc}" key="local.menu.card_application" var="menu_card_application"/>
-      <fmt:message bundle="${loc}" key="local.command.top_up_card" var="command_top_up_card"/>
-      <fmt:message bundle="${loc}" key="local.command.make_payment" var="command_make_payment"/>
-      <fmt:message bundle="${loc}" key="local.command.close_card" var="close"/>
-      <fmt:message bundle="${loc}" key="local.cancel" var="cancelButton"/>
-      <fmt:message bundle="${loc}" key="local.word_card" var="word_card"/>
-      <fmt:message bundle="${loc}" key="local.command.account_transaction_log" var="account_transaction_log"/>
-      <fmt:message bundle="${loc}" key="local.command.card_transaction_log" var="card_transaction_log"/>
-      <title>${title}</title>
+        <fmt:setLocale value="${sessionScope.locale}"/>
+        <fmt:setBundle basename="local" var="loc"/>
+        <fmt:message bundle="${loc}" key="local.title.main" var="title"/>
+        <fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button"/>
+        <fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button"/>
+        <fmt:message bundle="${loc}" key="local.logout" var="logout"/>
+        <fmt:message bundle="${loc}" key="local.welcome" var="welcome"/>
+        <fmt:message bundle="${loc}" key="local.block" var="block"/>
+        <fmt:message bundle="${loc}" key="local.menu.profile" var="menu_profile"/>
+        <fmt:message bundle="${loc}" key="local.menu.cards" var="menu_cards"/>
+        <fmt:message bundle="${loc}" key="local.menu.card_application" var="menu_card_application"/>
+        <fmt:message bundle="${loc}" key="local.command.top_up_card" var="command_top_up_card"/>
+        <fmt:message bundle="${loc}" key="local.command.make_payment" var="command_make_payment"/>
+        <fmt:message bundle="${loc}" key="local.command.close_card" var="close"/>
+        <fmt:message bundle="${loc}" key="local.cancel" var="cancelButton"/>
+        <fmt:message bundle="${loc}" key="local.word_card" var="word_card"/>
+        <fmt:message bundle="${loc}" key="local.command.account_transaction_log" var="account_transaction_log"/>
+        <fmt:message bundle="${loc}" key="local.command.card_transaction_log" var="card_transaction_log"/>
+        <title>${title}</title>
     </head>
     <link rel="stylesheet" href="css/main/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/common/footer.css" type="text/css" />
+    <link rel="stylesheet" href="css/common/error_info.css" type="text/css" />
 </head>
 
 <body>
-
+<div id="wrap">
 <header>
     <div>
         <p>${welcome}, ${sessionScope.userLogin}!</p>
@@ -53,26 +54,37 @@
                         <input type="submit" value="${ru_button}"/>
                     </form>
                 </li>
+                <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <li>
                     <form action="profile.html" method="post">
                         <input type="hidden" name="command" value=""/>
-                        <input type="hidden" name="page" value=""/>
                         <input type="submit" value="${menu_profile}"/>
                     </form>
                 </li>
+                </c:if>
                 <li>
                     <form action="Controller" method="post">
                         <input type="hidden" name="command" value="go_to_main_page"/>
                         <input type="submit" value="${menu_cards}"/>
                     </form>
                 </li>
+                <c:if test="${sessionScope.userType == 'CLIENT'}">
+                <li>
+                    <form action="cart_application.html" method="post">
+                        <input type="hidden" name="command" value=""/>
+                        <input type="submit" value="${menu_card_application}"/>
+                    </form>
+                </li>
+                </c:if>
+                <c:if test="${sessionScope.userType == 'ADMIN'}">
                 <li>
                     <form action="cart_application.html" method="post">
                         <input type="hidden" name="command" value=""/>
                         <input type="hidden" name="page" value=""/>
-                        <input type="submit" value="${menu_card_application}"/>
+                        <input type="submit" value="Добавить вид карты"/>
                     </form>
                 </li>
+                </c:if>
             </ul>
         </nav>
     </div>
@@ -80,8 +92,20 @@
 
 <div class="content">
 
+    <c:if test="${sessionScope.userType == 'ADMIN'}">
     <section>
+        <form action="Controller" method="post">
+            <label>Enter client passport number:
+                <input type="text" name="clientPassportNumber" value="" placeholder="Client passport number"/>
+            </label>
+            <input type="hidden" name="command" value=""/>
+            <input type="hidden" name="page" value=""/>
+            <input type="submit" value="Search"/>
+        </form>
+    </section>
+    </c:if>
 
+    <section>
 	<c:forEach var="card" items="${requestScope.cardList}">
 	  <c:if test="${card.isClosed == false}">
         <c:if test="${card.isBlocked == false}">
@@ -100,36 +124,41 @@
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="submit" value="${card_transaction_log}"/>
                 </form>
+                <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <form action="Controller" method="post">
                     <input type="hidden" name="command" value="go_to_payment_page"/>
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="hidden" name="currency" value="${card.currency}"/>
                      <input type="hidden" name="balance" value="${card.balance}"/>
                     <input type="submit" value="${command_make_payment}"/>
-
                 </form>
+                </c:if>
+                <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <form action="transfer.html" method="post">
                     <input type="hidden" name="command" value=""/>
                     <input type="submit" value="Перевод на карту другого банка"/>
-
                 </form>
+                </c:if>
+                <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <form action="transfer.html" method="post">
                     <input type="hidden" name="command" value=""/>
                     <input type="submit" value="Перевод внутри платёжной системы"/>
-
                 </form>
+                </c:if>
+                <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <form action="transfer_to_me.html" method="post">
                     <input type="hidden" name="command" value=""/>
                     <input type="submit" value="Перевод на свою карту"/>
-
                 </form>
+                </c:if>
+                <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <form action="Controller" method="post">
                     <input type="hidden" name="command" value="go_to_top_up_card_page"/>
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="hidden" name="currency" value="${card.currency}"/>
                     <input type="submit" value="${command_top_up_card}"/>
                 </form>
-                
+                </c:if>
                 <button onclick="openPopup('block-card-popup', 'blockNumberCard', 'blockCardNumberHolder', '${card.numberCard}')">${block}</button>
                 <button onclick="openPopup('close-card-popup', 'closeNumberCard', 'closeCardNumberHolder', '${card.numberCard}')">${close}</button>
                 
@@ -152,14 +181,18 @@
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="submit" value="${card_transaction_log}"/>
                 </form>
+                <c:if test="${sessionScope.userType == 'ADMIN'}">
+                    <button onclick="openPopup('unblock-card-popup', 'unblockNumberCard', 'unblockCardNumberHolder', '${card.numberCard}')">Разблокировать</button>
+                </c:if>
+                <c:if test="${sessionScope.userType == 'ADMIN'}">
+                    <button onclick="openPopup('close-card-popup', 'closeNumberCard', 'closeCardNumberHolder', '${card.numberCard}')">${close}</button>
+                </c:if>
             </div>
 		</c:if>
 	  </c:if>
 	</c:forEach>	
-	
-    </section>
 
- <c:if test="${errorMessageList != null}">
+	<c:if test="${errorMessageList != null}">
         <c:forEach var="errorMessageKey" items="${errorMessageList}">
         <fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
             <div class="error">
@@ -176,6 +209,8 @@
         </div>
         <c:remove var="infoMessage"/>
     </c:if>
+
+    </section>
     
     <div class="popup" id="close-card-popup">
         <div class="popup-content">
@@ -200,6 +235,19 @@
             <button onclick="closePopup('block-card-popup')">${cancelButton}</button>
         </div>
     </div>
+
+    <div class="popup" id="unblock-card-popup">
+        <div class="popup-content">
+            <p>Подтвердите свои действия, что хотите <b>разблокировать</b> карту <span id="blockCardNumberHolder"></span>.</p>
+            <form action="Controller" method="post">
+                <input type="hidden" name="command" value=""/>
+                <input type="hidden" id="unblockNumberCard" name="numberCard" value="${card.numberCard}"/>
+                <input type="submit" value="Разблокировать"/>
+            </form>
+            <button onclick="closePopup('unblock-card-popup')">Отмена</button>
+        </div>
+    </div>
+</div>
 </div>
 <mytag:copyright/>
 

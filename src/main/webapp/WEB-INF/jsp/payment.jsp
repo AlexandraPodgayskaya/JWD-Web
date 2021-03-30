@@ -38,10 +38,12 @@
     <fmt:message bundle="${loc}" key="local.save" var="save"/>
     <title>${title}</title>
     <link rel="stylesheet" href="css/payment/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/common/footer.css" type="text/css" />
+    <link rel="stylesheet" href="css/common/error_info.css" type="text/css" />
 </head>
 
 <body>
-
+<div id="wrap">
 <header>
     <div>
         <p>${welcome}, ${sessionScope.userLogin}!</p>
@@ -63,7 +65,6 @@
                 <li>
                     <form action="profile.html" method="post">
                         <input type="hidden" name="command" value=""/>
-                        <input type="hidden" name="page" value=""/>
                         <input type="submit" value="${menu_profile}"/>
                     </form>
                 </li>
@@ -76,7 +77,6 @@
                 <li>
                     <form action="cart_application.html" method="post">
                         <input type="hidden" name="command" value=""/>
-                        <input type="hidden" name="page" value=""/>
                         <input type="submit" value="${menu_card_application}"/>
                     </form>
                 </li>
@@ -112,7 +112,7 @@
 				</div>
 				<div>
 					<label>${recipient_iban}:
-						<input type="text" name="IBAN" required placeholder="BY10BPSB30120001000200030004"/>
+						<input type="text" id="IBAN" name="IBAN" required placeholder="BY10BPSB30120001000200030004"/>
 					</label>
 				</div>
 				<div>
@@ -141,26 +141,25 @@
 			<button id="payment-button" onclick="openPopup('${requestScope.numberCard}')">${save}</button>
 		</div>
 
+        <c:if test="${errorMessageList != null}">
+            <c:forEach var="errorMessageKey" items="${errorMessageList}">
+            <fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
+                <div class="error">
+                    <h4>${error}</h4>
+                </div>
+            </c:forEach>
+            <c:remove var="errorMessageList"/>
+        </c:if>
+
+        <c:if test="${infoMessage != null}">
+            <fmt:message bundle="${loc}" key="${infoMessage}" var="message"/>
+            <div class="message">
+                <h4>${message}</h4>
+            </div>
+            <c:remove var="infoMessage"/>
+        </c:if>
 
 	</section>
-
-	<c:if test="${errorMessageList != null}">
-        <c:forEach var="errorMessageKey" items="${errorMessageList}">
-        <fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
-            <div class="error">
-                <h4>${error}</h4>
-            </div>
-        </c:forEach>
-        <c:remove var="errorMessageList"/>
-    </c:if>
-
-    <c:if test="${infoMessage != null}">
-        <fmt:message bundle="${loc}" key="${infoMessage}" var="message"/>
-        <div class="message">
-            <h4>${message}</h4>
-        </div>
-        <c:remove var="infoMessage"/>
-    </c:if>
     
     <div class="popup" id="check-password-popup">
         <div class="popup-content">
@@ -174,7 +173,7 @@
     
 
 </div>
-
+</div>
 <mytag:copyright/>
 
 <script>
