@@ -11,6 +11,8 @@ public interface CardService {
 
 	void blockCard(String numberCard) throws ServiceException;
 
+	void unblockCard(String numberCard) throws ServiceException;
+
 	void closeCard(String numberCard) throws ServiceException;
 
 }

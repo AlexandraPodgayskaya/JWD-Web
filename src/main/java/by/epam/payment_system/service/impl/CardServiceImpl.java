@@ -68,6 +68,29 @@ public class CardServiceImpl implements CardService {
 	}
 
 	@Override
+	public void unblockCard(String numberCard) throws ServiceException {
+		if (numberCard == null) {
+			throw new ImpossibleOperationServiceException("no card number to unblock");
+		}
+
+		DAOFactory factory = DAOFactory.getInstance();
+		CardDAO cardDAO = factory.getCardDAO();
+
+		Card card = new Card(numberCard, Boolean.FALSE);
+
+		try {
+			if (!cardDAO.updateBlocking(card)) {
+				throw new ImpossibleOperationServiceException("card unblocking error");
+			}
+
+		} catch (DAOException e) {
+			logger.error(e.getMessage());
+			throw new ServiceException("card unblocking error", e);
+		}
+		
+	}
+	
+	@Override
 	public void closeCard(String numberCard) throws ServiceException {
 
 		if (numberCard == null) {
@@ -88,5 +111,6 @@ public class CardServiceImpl implements CardService {
 		}
 
 	}
+
 
 }

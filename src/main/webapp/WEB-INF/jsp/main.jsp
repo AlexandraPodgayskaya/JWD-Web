@@ -33,6 +33,8 @@
         <fmt:message bundle="${loc}" key="local.date_of_birth" var="date_of_birth"/>
         <fmt:message bundle="${loc}" key="local.personal_number_passport" var="personal_number_passport"/>
         <fmt:message bundle="${loc}" key="local.phone" var="phone"/>
+        <fmt:message bundle="${loc}" key="local.closed" var="closed"/>
+        <fmt:message bundle="${loc}" key="local.unblock" var="unblock"/>
         <title>${title}</title>
     </head>
     <link rel="stylesheet" href="css/main/style.css" type="text/css" />
@@ -196,7 +198,7 @@
                     <input type="submit" value="${card_transaction_log}"/>
                 </form>
                 <c:if test="${sessionScope.userType == 'ADMIN'}">
-                    <button onclick="openPopup('unblock-card-popup', 'unblockNumberCard', 'unblockCardNumberHolder', '${card.numberCard}')">Разблокировать</button>
+                    <button onclick="openPopup('unblock-card-popup', 'unblockNumberCard', 'unblockCardNumberHolder', '${card.numberCard}')">${unblock}</button>
                 </c:if>
                 <c:if test="${sessionScope.userType == 'ADMIN'}">
                     <button onclick="openPopup('close-card-popup', 'closeNumberCard', 'closeCardNumberHolder', '${card.numberCard}')">${close}</button>
@@ -207,7 +209,7 @@
 		<c:if test="${card.isClosed == true}">
 		  <c:if test="${sessionScope.userType == 'ADMIN'}">
 		  <div class ="cart">
-		        <p>Закрыта</p>
+		        <p><b>${closed}</b></p>
                 <p>${card.numberCard}</p>
                 <p>${card.balance} ${card.currency}</p>
                 <c:if test="${card.status == 'MAIN'}">
@@ -263,7 +265,7 @@
         <div class="popup-content">
             <p><b>${block}</b> ${word_card} № <span id="blockCardNumberHolder"></span> ?</p>
             <form action="Controller" method="post">
-                <input type="hidden" name="command" value="blocking"/>
+                <input type="hidden" name="command" value="block"/>
                 <input type="hidden" id="blockNumberCard" name="numberCard" value="${card.numberCard}"/>
                 <input type="submit" value="${block}"/>
             </form>
@@ -273,13 +275,13 @@
 
     <div class="popup" id="unblock-card-popup">
         <div class="popup-content">
-            <p>Подтвердите свои действия, что хотите <b>разблокировать</b> карту <span id="blockCardNumberHolder"></span>.</p>
+            <p><b>${unblock}</b> ${word_card} № <span id="unblockCardNumberHolder"></span> ?</p>
             <form action="Controller" method="post">
-                <input type="hidden" name="command" value=""/>
+                <input type="hidden" name="command" value="unblock"/>
                 <input type="hidden" id="unblockNumberCard" name="numberCard" value="${card.numberCard}"/>
-                <input type="submit" value="Разблокировать"/>
+                <input type="submit" value="${unblock}"/>
             </form>
-            <button onclick="closePopup('unblock-card-popup')">Отмена</button>
+            <button onclick="closePopup('unblock-card-popup')">${cancelButton}</button>
         </div>
     </div>
 </div>

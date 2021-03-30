@@ -18,6 +18,7 @@ import by.epam.payment_system.controller.command.impl.RegisterCommandImpl;
 import by.epam.payment_system.controller.command.impl.SaveAdditionalClientDataCommandImpl;
 import by.epam.payment_system.controller.command.impl.ShowTransactionLogCommandImpl;
 import by.epam.payment_system.controller.command.impl.TopUpCardCommandImpl;
+import by.epam.payment_system.controller.command.impl.UnBlockCardCommandImpl;
 
 
 public class CommandProvider {
@@ -33,7 +34,8 @@ public class CommandProvider {
 		commands.put(CommandName.SAVE_ADDITIONAL_CLIENT_DATA, new SaveAdditionalClientDataCommandImpl());
 		commands.put(CommandName.EN, new ChangeLocaleCommandImpl());
 		commands.put(CommandName.RU, new ChangeLocaleCommandImpl());
-		commands.put(CommandName.BLOCKING, new BlockCardCommandImpl());
+		commands.put(CommandName.BLOCK, new BlockCardCommandImpl());
+		commands.put(CommandName.UNBLOCK, new UnBlockCardCommandImpl());
 		commands.put(CommandName.GO_TO_TOP_UP_CARD_PAGE, new GoToTopUpCardPageCommandImpl());
 		commands.put(CommandName.TOP_UP_CARD, new TopUpCardCommandImpl());
 		commands.put(CommandName.GO_TO_PAYMENT_PAGE, new GoToPaymentPageCommandImpl());
