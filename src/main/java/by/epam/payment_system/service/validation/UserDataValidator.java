@@ -72,4 +72,11 @@ public class UserDataValidator {
 		return descriptionList == null;
 	}
 
+	public final boolean numberPassportValidation(String personalNumberPassport) {
+		if (personalNumberPassport == null) {
+			return false;
+		}
+		return personalNumberPassport.matches(PERSONAL_NUMBER_PASSPORT_PATTERN);
+	}
+
 }

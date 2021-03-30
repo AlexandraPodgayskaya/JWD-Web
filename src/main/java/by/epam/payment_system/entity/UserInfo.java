@@ -26,12 +26,9 @@ public class UserInfo implements Serializable {
 		this.password = password;
 	}
 
-
 	public int getId() {
 		return id;
 	}
-
-
 
 	public void setId(int id) {
 		this.id = id;

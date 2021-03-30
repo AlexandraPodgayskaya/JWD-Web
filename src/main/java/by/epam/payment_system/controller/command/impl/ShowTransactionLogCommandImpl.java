@@ -75,7 +75,7 @@ public class ShowTransactionLogCommandImpl implements Command {
 
 			if (transactionList.isEmpty()) {
 				logger.info("transaction log is empty");
-				session.setAttribute(ATTRIBUTE_INFO_MESSAGE, Arrays.asList(MESSAGE_LOG_IS_EMPTY));
+				session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_LOG_IS_EMPTY);
 				response.sendRedirect(GO_TO_MAIN_PAGE);
 				return;
 			}

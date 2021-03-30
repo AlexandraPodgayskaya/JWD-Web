@@ -5,6 +5,7 @@ import java.util.Map;
 
 import by.epam.payment_system.controller.command.impl.BlockCardCommandImpl;
 import by.epam.payment_system.controller.command.impl.ChangeLocaleCommandImpl;
+import by.epam.payment_system.controller.command.impl.FindClientCommandImpl;
 import by.epam.payment_system.controller.command.impl.CloseCardCommandImpl;
 import by.epam.payment_system.controller.command.impl.DefaultCommandImpl;
 import by.epam.payment_system.controller.command.impl.GoToMainPageCommandImpl;
@@ -41,6 +42,7 @@ public class CommandProvider {
 		commands.put(CommandName.SHOW_ACCOUNT_LOG, new ShowTransactionLogCommandImpl());
 		commands.put(CommandName.SHOW_CARD_LOG, new ShowTransactionLogCommandImpl());
 		commands.put(CommandName.DEFAULT_COMMAND, new DefaultCommandImpl());
+		commands.put(CommandName.CLIENT_SEARCH, new FindClientCommandImpl());
 	
 	}
 

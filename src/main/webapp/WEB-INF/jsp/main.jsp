@@ -27,6 +27,12 @@
         <fmt:message bundle="${loc}" key="local.word_card" var="word_card"/>
         <fmt:message bundle="${loc}" key="local.command.account_transaction_log" var="account_transaction_log"/>
         <fmt:message bundle="${loc}" key="local.command.card_transaction_log" var="card_transaction_log"/>
+        <fmt:message bundle="${loc}" key="local.enter_passport_number" var="enter_passport_number"/>
+        <fmt:message bundle="${loc}" key="local.command.search" var="search"/>
+        <fmt:message bundle="${loc}" key="local.full_name" var="full_name"/>
+        <fmt:message bundle="${loc}" key="local.date_of_birth" var="date_of_birth"/>
+        <fmt:message bundle="${loc}" key="local.personal_number_passport" var="personal_number_passport"/>
+        <fmt:message bundle="${loc}" key="local.phone" var="phone"/>
         <title>${title}</title>
     </head>
     <link rel="stylesheet" href="css/main/style.css" type="text/css" />
@@ -95,14 +101,22 @@
     <c:if test="${sessionScope.userType == 'ADMIN'}">
     <section>
         <form action="Controller" method="post">
-            <label>Enter client passport number:
-                <input type="text" name="clientPassportNumber" value="" placeholder="Client passport number"/>
+            <label> ${enter_passport_number}:
+                <input type="text" name="clientPassportNumber" required placeholder="1111111A111PB1"/>
             </label>
-            <input type="hidden" name="command" value=""/>
-            <input type="hidden" name="page" value=""/>
-            <input type="submit" value="Search"/>
+            <input type="hidden" name="command" value="client_search"/>
+            <input type="submit" value="${search}"/>
         </form>
     </section>
+    </c:if>
+    
+    <c:if test="${sessionScope.foundClientInfo != null}">
+    <section>
+       <p> <b>${full_name}</b>: ${foundClientInfo.surname} ${foundClientInfo.name} ${foundClientInfo.patronymic}</p>
+       <p> <b>${date_of_birth}</b>: ${foundClientInfo.dateBirth} </p>
+       <p> <b>${personal_number_passport}</b>: ${foundClientInfo.personalNumberPassport} </p>
+       <p> <b>${phone}</b>: ${foundClientInfo.phone} </p>
+    </section>   
     </c:if>
 
     <section>
@@ -189,7 +203,28 @@
                 </c:if>
             </div>
 		</c:if>
-	  </c:if>
+		</c:if>
+		<c:if test="${card.isClosed == true}">
+		  <c:if test="${sessionScope.userType == 'ADMIN'}">
+		  <div class ="cart">
+		        <p>Закрыта</p>
+                <p>${card.numberCard}</p>
+                <p>${card.balance} ${card.currency}</p>
+                <c:if test="${card.status == 'MAIN'}">
+                    <form action="Controller" method="post">
+                        <input type="hidden" name="command" value="show_account_log"/>
+                        <input type="hidden" name="numberCard" value="${card.numberCard}"/>
+                        <input type="submit" value="${account_transaction_log}"/>
+                    </form>
+                </c:if>
+                <form action="Controller" method="post">
+                    <input type="hidden" name="command" value="show_card_log"/>
+                    <input type="hidden" name="numberCard" value="${card.numberCard}"/>
+                    <input type="submit" value="${card_transaction_log}"/>
+                </form>
+          </div>
+          </c:if>
+        </c:if>       
 	</c:forEach>	
 
 	<c:if test="${errorMessageList != null}">
