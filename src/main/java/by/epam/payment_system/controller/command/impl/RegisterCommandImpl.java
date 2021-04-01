@@ -22,7 +22,7 @@ import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.UserInfoFormatServiceException;
 
 public class RegisterCommandImpl implements Command {
-	
+
 	private static final Logger logger = LogManager.getLogger();
 
 	private static final String GO_TO_CLIENT_DATA_PAGE = "UserData?userId=";
@@ -33,7 +33,6 @@ public class RegisterCommandImpl implements Command {
 	private static final String ATTRIBUTE_PAGE = "page";
 	private static final String MESSAGE_REGISTRATION_OK = "local.message.registration_ok";
 	private static final String ERROR_BUSY_LOGIN = "local.error.login_is_busy";
-	
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,23 +42,23 @@ public class RegisterCommandImpl implements Command {
 
 		ServiceFactory factory = ServiceFactory.getInstance();
 		UserService userService = factory.getUserService();
-		
+
 		HttpSession session = request.getSession(true);
 		try {
 			Integer id = userService.registration(userInfo);
 			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_REGISTRATION_OK);
 			session.setAttribute(ATTRIBUTE_PAGE, GO_TO_CLIENT_DATA_PAGE + String.valueOf(id));
-			response.sendRedirect(GO_TO_CLIENT_DATA_PAGE + String.valueOf(id));		
+			response.sendRedirect(GO_TO_CLIENT_DATA_PAGE + String.valueOf(id));
 		} catch (UserInfoFormatServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("wrong user info format", e);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, e.getErrorDescription());
 			response.sendRedirect(GO_TO_REGISTRATION_PAGE);
 		} catch (BusyLoginServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("login is busy", e);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_BUSY_LOGIN));
 			response.sendRedirect(GO_TO_REGISTRATION_PAGE);
 		} catch (ServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("general system error", e);
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 	}

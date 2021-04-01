@@ -60,11 +60,11 @@ public class UnBlockCardCommandImpl implements Command {
 			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_UNBLOCKING_OK);
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (ImpossibleOperationServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("impossible operation", e);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IMPOSSIBLE_OPERATION));
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (ServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("general system error", e);
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 

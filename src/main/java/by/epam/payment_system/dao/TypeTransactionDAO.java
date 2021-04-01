@@ -4,7 +4,7 @@ import by.epam.payment_system.entity.TransactionType;
 
 public interface TypeTransactionDAO {
 	
-	TransactionType findType (Integer id) throws DAOException;
+	TransactionType findType (int id) throws DAOException;
 	Integer findId (TransactionType type)throws DAOException;
 
 }

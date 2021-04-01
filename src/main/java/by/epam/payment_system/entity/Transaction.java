@@ -20,6 +20,10 @@ public class Transaction implements Serializable {
 	private String name;
 	private String purposePayment;
 
+	public Transaction() {
+
+	}
+
 	public Transaction(String transactionAccount, String numberCard, TransactionType typeTransaction, String amount,
 			int currencyId, String senderOrRecipientAccount, String purposePayment) {
 		this.transactionAccount = transactionAccount;
@@ -39,22 +43,6 @@ public class Transaction implements Serializable {
 		this.typeTransaction = typeTransaction;
 		this.amount = amount;
 		this.currencyId = currencyId;
-		this.bankCode = bankCode;
-		this.senderOrRecipientAccount = senderOrRecipientAccount;
-		this.ynp = ynp;
-		this.name = name;
-		this.purposePayment = purposePayment;
-	}
-
-	public Transaction(String transactionAccount, String numberCard, TransactionType typeTransaction, String amount,
-			Currency currency, Timestamp dateTime, String bankCode, String senderOrRecipientAccount, String ynp,
-			String name, String purposePayment) {
-		this.transactionAccount = transactionAccount;
-		this.numberCard = numberCard;
-		this.typeTransaction = typeTransaction;
-		this.amount = amount;
-		this.currency = currency;
-		this.dateTime = dateTime;
 		this.bankCode = bankCode;
 		this.senderOrRecipientAccount = senderOrRecipientAccount;
 		this.ynp = ynp;

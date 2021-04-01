@@ -56,7 +56,7 @@ public final class ConnectionPool {
 		try {
 			poolSize = Integer.parseInt(dbResourceManager.getValue(DBParameter.DB_POLL_SIZE));
 		} catch (NumberFormatException e) {
-			logger.error(e.getMessage());
+			logger.error("pool size setting error",e);
 			poolSize = DEFAULT_POOL_SIZE;
 		}
 		connectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
@@ -73,11 +73,9 @@ public final class ConnectionPool {
 				connectionQueue.add(connectionWrapper);
 			}
 		} catch (ClassNotFoundException e) {
-			logger.error(e.getMessage());
-			throw new ConnectionPoolException("Can not find database driver class", e);
+			throw new ConnectionPoolException("can not find database driver class", e);
 		} catch (SQLException e) {
-			logger.error(e.getMessage());
-			throw new ConnectionPoolException("Can not get connection", e);
+			throw new ConnectionPoolException("can not get connection", e);
 		}
 	}
 
@@ -100,46 +98,22 @@ public final class ConnectionPool {
 				((ConnectionWrapper) connection).reallyClose();
 
 			} catch (SQLException e) {
-				logger.error(e.getMessage());
-				throw new ConnectionPoolException("Can not close connection queue", e);
+				throw new ConnectionPoolException("can not close connection queue", e);
 			}
 		}
 	}
 
-	// @Nullable
 	public Connection takeConnection() throws ConnectionPoolException {
-		Connection connection = null;
+		Connection connection;
 		try {
 			connection = connectionQueue.take();
 			givenAwayConnectionQueue.add(connection);
 		} catch (InterruptedException e) {
-			logger.error(e.getMessage());
-			throw new ConnectionPoolException("Can not take connection", e);
+			throw new ConnectionPoolException("can not take connection", e);
 		}
 		return connection;
 	}
-
-	public void closeConnection(Connection connection, Statement statement) throws ConnectionPoolException {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-			throw new ConnectionPoolException("Can not return connection", e);
-		}
-
-		try {
-			if (statement != null) {
-				statement.close();
-			}
-		} catch (SQLException e) {
-			logger.error(e.getMessage());
-			throw new ConnectionPoolException("Can not close statement", e);
-		}
-
-	}
-
+	
 	private class ConnectionWrapper implements Connection {
 		private Connection connection;
 
@@ -151,27 +125,30 @@ public final class ConnectionPool {
 			try {
 				connection.close();
 			} catch (SQLException e) {
-				logger.error(e.getMessage());
-				throw new ConnectionPoolException("Can not close connection", e);
+				throw new ConnectionPoolException("can not close connection", e);
 			}
 		}
 
 		@Override
 		public void close() throws SQLException {
 			if (connection.isClosed()) {
-				throw new SQLException("Can not return closed connection");
+				throw new SQLException("can not return closed connection");
 			}
 
 			if (connection.isReadOnly()) {
 				connection.setReadOnly(false);
 			}
+			
+			if (!connection.getAutoCommit()) {
+				connection.setAutoCommit(true);
+			}
 
 			if (!givenAwayConnectionQueue.remove(this)) {
-				throw new SQLException("Can not delete connection from the given away connections pool");
+				throw new SQLException("can not delete connection from the given away connections pool");
 			}
 
 			if (!connectionQueue.offer(this)) {
-				throw new SQLException("Can not put connection in the pool ");
+				throw new SQLException("can not put connection in the pool ");
 			}
 		}
 

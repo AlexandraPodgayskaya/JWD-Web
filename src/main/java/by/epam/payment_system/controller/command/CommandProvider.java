@@ -3,6 +3,9 @@ package by.epam.payment_system.controller.command;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.payment_system.controller.command.impl.BlockCardCommandImpl;
 import by.epam.payment_system.controller.command.impl.ChangeLocaleCommandImpl;
 import by.epam.payment_system.controller.command.impl.FindClientCommandImpl;
@@ -22,6 +25,8 @@ import by.epam.payment_system.controller.command.impl.UnBlockCardCommandImpl;
 
 
 public class CommandProvider {
+	
+	private static final Logger logger = LogManager.getLogger();
 	
 	private Map<CommandName, Command> commands = new HashMap<>();
 
@@ -54,6 +59,7 @@ public class CommandProvider {
 		try {
 			commandName = CommandName.valueOf(name.toUpperCase());
 		} catch (IllegalArgumentException e){
+			logger.error("no such command name");
 			commandName = CommandName.DEFAULT_COMMAND;
 		}
 		

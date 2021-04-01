@@ -9,7 +9,7 @@
     <uri> /WEB-INF/tld/taglib.tld </uri>
     <tag>
         <name> copyright </name>
-        <tag-class>by.epam.payment_system.service.util.jsp_tag.CopyrightTag</tag-class>
+        <tag-class>by.epam.payment_system.view.CopyrightTag</tag-class>
         <body-content> empty </body-content>
         <attribute>
             <name> set </name>

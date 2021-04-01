@@ -83,29 +83,29 @@ public class MakePaymentCommandImpl implements Command {
 			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_PAYMENT_OK);
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (NoSuchUserServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("wrong password", e);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_WRONG_PASSWORD));
 			response.sendRedirect(GO_TO_PAYMENT_PAGE + SET_PARAMETER_NUMBER_CARD + paymentDetails.get(SENDER_CARD_NUMBER)
 					+ SET_PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + SET_PARAMETER_BALANCE
 					+ paymentDetails.get(BALANCE));
 		} catch (TransactionDataServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("incorrect data for payment", e);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, e.getErrorDescription());
 			response.sendRedirect(GO_TO_PAYMENT_PAGE + SET_PARAMETER_NUMBER_CARD + paymentDetails.get(SENDER_CARD_NUMBER)
 					+ SET_PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + SET_PARAMETER_BALANCE
 					+ paymentDetails.get(BALANCE));
 		} catch (ImpossibleOperationServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("impossible operation", e);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IMPOSSIBLE_OPERATION));
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (NotEnoughMoneyServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("not enough money for payment", e);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_NOT_ENOUGH_MONEY));
 			response.sendRedirect(GO_TO_PAYMENT_PAGE + SET_PARAMETER_NUMBER_CARD + paymentDetails.get(SENDER_CARD_NUMBER)
 					+ SET_PARAMETER_CURRENCY + paymentDetails.get(CURRENCY) + SET_PARAMETER_BALANCE
 					+ paymentDetails.get(BALANCE));
 		} catch (ServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("general system error", e);
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 

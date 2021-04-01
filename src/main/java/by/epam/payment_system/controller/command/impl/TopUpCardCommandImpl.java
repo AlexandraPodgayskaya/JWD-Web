@@ -26,7 +26,7 @@ import by.epam.payment_system.service.exception.TransactionDataServiceException;
 public class TopUpCardCommandImpl implements Command {
 
 	private static final Logger logger = LogManager.getLogger();
-	
+
 	private static final String GO_TO_INDEX_PAGE = "index.jsp";
 	private static final String GO_TO_MAIN_PAGE = "Controller?command=go_to_main_page";
 	private static final String GO_TO_TOP_UP_CARD_PAGE = "Controller?command=go_to_top_up_card_page";
@@ -56,7 +56,7 @@ public class TopUpCardCommandImpl implements Command {
 		if (session.getAttribute(ATTRIBUTE_USER_TYPE) == UserType.ADMIN) {
 			logger.info("impossible operation for " + UserType.ADMIN);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IPOSSIBLE_OPERATION));
-			response.sendRedirect(GO_TO_MAIN_PAGE); 
+			response.sendRedirect(GO_TO_MAIN_PAGE);
 			return;
 		}
 
@@ -75,16 +75,17 @@ public class TopUpCardCommandImpl implements Command {
 			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_TOP_UP_CARD_OK);
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (TransactionDataServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("incorrect data for transaction", e);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, e.getErrorDescription());
-			response.sendRedirect(GO_TO_TOP_UP_CARD_PAGE + SET_PARAMETER_NUMBER_CARD
-					+ transferDetails.get(RECIPIENT_CARD_NUMBER) + SET_PARAMETER_CURRENCY + transferDetails.get(CURRENCY));
+			response.sendRedirect(
+					GO_TO_TOP_UP_CARD_PAGE + SET_PARAMETER_NUMBER_CARD + transferDetails.get(RECIPIENT_CARD_NUMBER)
+							+ SET_PARAMETER_CURRENCY + transferDetails.get(CURRENCY));
 		} catch (ImpossibleOperationServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("impossible operation", e);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IPOSSIBLE_OPERATION));
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (ServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("general system error", e);
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 

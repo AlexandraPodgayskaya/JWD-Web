@@ -79,10 +79,6 @@ public class ShowTransactionLogCommandImpl implements Command {
 				response.sendRedirect(GO_TO_MAIN_PAGE);
 				return;
 			}
-			
-			while (transactionList.contains(null)) {
-				transactionList.remove(null);
-			}
 
 			request.setAttribute(ATTRIBUTE_TRANSACTION_LIST, transactionList);
 			request.setAttribute(ATTRIBUTE_COMMAND, request.getParameter(PARAMETER_COMMAND));
@@ -91,11 +87,11 @@ public class ShowTransactionLogCommandImpl implements Command {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(GO_TO_TRANSACTION_LOG_PAGE);
 			requestDispatcher.forward(request, response);
 		} catch (ImpossibleOperationServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("impossible operation", e);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IMPOSSIBLE_OPERATION));
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (ServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("general system error", e);
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 

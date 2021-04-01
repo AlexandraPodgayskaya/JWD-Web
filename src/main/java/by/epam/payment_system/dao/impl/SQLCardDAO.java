@@ -7,9 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import by.epam.payment_system.dao.CardDAO;
 import by.epam.payment_system.dao.DAOException;
 import by.epam.payment_system.dao.connectionpool.ConnectionPool;
@@ -18,8 +15,6 @@ import by.epam.payment_system.entity.Card;
 import by.epam.payment_system.entity.CardStatus;
 
 public class SQLCardDAO implements CardDAO {
-	
-	private static final Logger logger = LogManager.getLogger();
 
 	private static final String SELECT_CARDS_SQL = "SELECT * FROM CARDS JOIN CARD_STATUSES ON CARDS.STATUS_ID=CARD_STATUSES.ID WHERE OWNER=? ";
 	private static final String SELECT_CARD_DATA_SQL = "SELECT * FROM CARDS JOIN CARD_STATUSES ON CARDS.STATUS_ID=CARD_STATUSES.ID WHERE NUMBER_CARD=? ";
@@ -32,21 +27,18 @@ public class SQLCardDAO implements CardDAO {
 	private static final String COLUMN_IS_BLOCKED = "is_blocked";
 	private static final String COLUMN_IS_CLOSED = "is_closed";
 
+	private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+
 	@Override
 	public List<Card> findCards(Integer userId) throws DAOException {
 
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
 		List<Card> cardList = new ArrayList<Card>();
 
-		try {
-			connection = connectionPool.takeConnection();
-			statement = connection.prepareStatement(SELECT_CARDS_SQL);
+		try (Connection connection = connectionPool.takeConnection();
+				PreparedStatement statement = connection.prepareStatement(SELECT_CARDS_SQL)) {
 
 			statement.setInt(1, userId);
-			resultSet = statement.executeQuery();
+			ResultSet resultSet = statement.executeQuery();
 
 			String numberCard;
 			String numberAccount;
@@ -68,61 +60,38 @@ public class SQLCardDAO implements CardDAO {
 			}
 
 		} catch (ConnectionPoolException | SQLException e) {
-			logger.error(e.getMessage());
 			throw new DAOException(e);
-		} finally {
-			try {
-				connectionPool.closeConnection(connection, statement);
-			} catch (ConnectionPoolException e) {
-				logger.error(e.getMessage());
-				throw new DAOException(e);
-			}
 		}
+
 		return cardList;
 	}
 
 	@Override
 	public boolean updateBlocking(Card card) throws DAOException {
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
-		Connection connection = null;
-		PreparedStatement statement = null;
 
-		try {
-			connection = connectionPool.takeConnection();
-			statement = connection.prepareStatement(UPDATE_IS_BLOCKED_SQL);
+		try (Connection connection = connectionPool.takeConnection();
+				PreparedStatement statement = connection.prepareStatement(UPDATE_IS_BLOCKED_SQL);) {
 
 			statement.setBoolean(1, card.getIsBlocked());
 			statement.setString(2, card.getNumberCard());
+
 			return statement.executeUpdate() != 0;
 
 		} catch (ConnectionPoolException | SQLException e) {
-			logger.error(e.getMessage());
 			throw new DAOException(e);
-		} finally {
-			try {
-				connectionPool.closeConnection(connection, statement);
-			} catch (ConnectionPoolException e) {
-				logger.error(e.getMessage());
-				throw new DAOException(e);
-			}
 		}
 	}
 
 	// @Nullable
 	@Override
 	public Card findCardData(String numberCard) throws DAOException {
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
 
 		Card card = null;
-		try {
-			connection = connectionPool.takeConnection();
-			statement = connection.prepareStatement(SELECT_CARD_DATA_SQL);
+		try (Connection connection = connectionPool.takeConnection();
+				PreparedStatement statement = connection.prepareStatement(SELECT_CARD_DATA_SQL)) {
 
 			statement.setString(1, numberCard);
-			resultSet = statement.executeQuery();
+			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {
 				String numberAccount = resultSet.getString(COLUMN_ACCOUNT);
@@ -135,42 +104,24 @@ public class SQLCardDAO implements CardDAO {
 			}
 
 		} catch (ConnectionPoolException | SQLException e) {
-			logger.error(e.getMessage());
 			throw new DAOException(e);
-		} finally {
-			try {
-				connectionPool.closeConnection(connection, statement);
-			} catch (ConnectionPoolException e) {
-				logger.error(e.getMessage());
-				throw new DAOException(e);
-			}
 		}
+
 		return card;
 	}
 
 	@Override
 	public boolean setClosed(String numberCard) throws DAOException {
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
-		Connection connection = null;
-		PreparedStatement statement = null;
 
-		try {
-			connection = connectionPool.takeConnection();
-			statement = connection.prepareStatement(UPDATE_IS_CLOSED_SQL);
+		try (Connection connection = connectionPool.takeConnection();
+				PreparedStatement statement = connection.prepareStatement(UPDATE_IS_CLOSED_SQL)) {
 
 			statement.setString(1, numberCard);
+
 			return statement.executeUpdate() != 0;
 
 		} catch (ConnectionPoolException | SQLException e) {
-			logger.error(e.getMessage());
 			throw new DAOException(e);
-		} finally {
-			try {
-				connectionPool.closeConnection(connection, statement);
-			} catch (ConnectionPoolException e) {
-				logger.error(e.getMessage());
-				throw new DAOException(e);
-			}
 		}
 	}
 }

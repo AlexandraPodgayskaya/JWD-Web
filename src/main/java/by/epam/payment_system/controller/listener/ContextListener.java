@@ -18,8 +18,8 @@ public class ContextListener implements ServletContextListener {
 		try {
 			ConnectionPool.getInstance().init();
 		} catch (ConnectionPoolException e) {
-			logger.error(e.getMessage());
-			throw new RuntimeException("Error in ConnectionPool.init",e);
+			logger.error("connection pool initialization error", e);
+			throw new RuntimeException("connection pool initialization error",e);
 		}
 	}
 
@@ -28,8 +28,8 @@ public class ContextListener implements ServletContextListener {
 		try {
 			ConnectionPool.getInstance().destroy();
 		} catch (ConnectionPoolException e) {
-			logger.error(e.getMessage());
-			throw new RuntimeException("Error in ConnectionPool.destroy",e);
+			logger.error("connection pool destruction error", e);
+			throw new RuntimeException("connection pool destruction error",e);
 		}
 	}
 }

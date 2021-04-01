@@ -5,9 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import by.epam.payment_system.dao.DAOException;
 import by.epam.payment_system.dao.connectionpool.ConnectionPool;
 import by.epam.payment_system.dao.connectionpool.ConnectionPoolException;
@@ -15,9 +12,7 @@ import by.epam.payment_system.dao.AdditionalClientDataDAO;
 import by.epam.payment_system.entity.UserInfo;
 
 public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
-	
-	private static final Logger logger = LogManager.getLogger();
-	
+
 	private static final String INSERT_ADDITIONAL_CLIENT_DATA_SQL = "INSERT INTO CLIENT_DETAILS (USER_ID, SURNAME, NAME, PATRONYMIC, DATE_OF_BIRTH, PERSONAL_NUMBER_PASSPORT, PHONE) VALUES(?, ?, ?, ?, ?, ?, ?) ";
 	private static final String SELECT_CLIENT_DATA_SQL = "SELECT * FROM CLIENT_DETAILS WHERE PERSONAL_NUMBER_PASSPORT=? ";
 	private static final String COLUMN_USER_ID = "user_id";
@@ -26,16 +21,14 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 	private static final String COLUMN_PATRONYMIC = "patronymic";
 	private static final String COLUMN_DATE_BIRTH = "date_of_birth";
 	private static final String COLUMN_PHONE = "phone";
+
+	private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+
 	@Override
 	public void create(UserInfo additionalClientInfo) throws DAOException {
 
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
-		Connection connection = null;
-		PreparedStatement statement = null;
-
-		try {
-			connection = connectionPool.takeConnection();
-			statement = connection.prepareStatement(INSERT_ADDITIONAL_CLIENT_DATA_SQL);
+		try (Connection connection = connectionPool.takeConnection();
+				PreparedStatement statement = connection.prepareStatement(INSERT_ADDITIONAL_CLIENT_DATA_SQL)) {
 
 			statement.setInt(1, additionalClientInfo.getId());
 			statement.setString(2, additionalClientInfo.getSurname());
@@ -44,35 +37,24 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 			statement.setString(5, additionalClientInfo.getDateBirth());
 			statement.setString(6, additionalClientInfo.getPersonalNumberPassport());
 			statement.setString(7, additionalClientInfo.getPhone());
+			
 			statement.executeUpdate();
 
 		} catch (ConnectionPoolException | SQLException e) {
-			logger.error(e.getMessage());
 			throw new DAOException(e);
-		} finally {
-			try {
-				connectionPool.closeConnection(connection, statement);
-			} catch (ConnectionPoolException e) {
-				logger.error(e.getMessage());
-				throw new DAOException(e);
-			}
 		}
 	}
-	
-	//@Nullable
-	public UserInfo findData (String personalNumberPassport) throws DAOException {
-		
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
+
+	// @Nullable
+	public UserInfo findData(String personalNumberPassport) throws DAOException {
 
 		UserInfo userInfo = null;
-		try {
-			connection = connectionPool.takeConnection();
-			statement = connection.prepareStatement(SELECT_CLIENT_DATA_SQL);
+
+		try (Connection connection = connectionPool.takeConnection();
+				PreparedStatement statement = connection.prepareStatement(SELECT_CLIENT_DATA_SQL)) {
+
 			statement.setString(1, personalNumberPassport);
-			resultSet = statement.executeQuery();
+			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {
 				userInfo = new UserInfo();
@@ -85,40 +67,10 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 				userInfo.setPhone(resultSet.getString(COLUMN_PHONE));
 			}
 		} catch (ConnectionPoolException | SQLException e) {
-			logger.error(e.getMessage());
 			throw new DAOException(e);
-		} finally {
-			try {
-				connectionPool.closeConnection(connection, statement);
-			} catch (ConnectionPoolException e) {
-				logger.error(e.getMessage());
-				throw new DAOException(e);
-			}
 		}
+
 		return userInfo;
-		
-	}
-
-	@Override
-	public void update(UserInfo entity) throws DAOException {
-		throw new DAOUnsupportedOperationException();
 
 	}
-
-	@Override
-	public void delete(String key) throws DAOException {
-		throw new DAOUnsupportedOperationException();
-
-	}
-
-	@Override
-	public Integer find(UserInfo entity) throws DAOException {
-		throw new DAOUnsupportedOperationException();
-	}
-
-	@Override
-	public Integer findId(String key) throws DAOException {
-		throw new DAOUnsupportedOperationException();
-	}
-
 }

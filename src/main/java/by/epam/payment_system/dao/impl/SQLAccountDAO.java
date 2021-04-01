@@ -6,9 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import by.epam.payment_system.dao.AccountDAO;
 import by.epam.payment_system.dao.DAOException;
 import by.epam.payment_system.dao.connectionpool.ConnectionPool;
@@ -20,8 +17,6 @@ import by.epam.payment_system.entity.TransactionType;
 
 public class SQLAccountDAO implements AccountDAO {
 
-	private static final Logger logger = LogManager.getLogger();
-	
 	private static final String SELECT_ACCOUNT_SQL = "SELECT * FROM ACCOUNTS JOIN CURRENCIES ON ACCOUNTS.CURRENCY_ID=CURRENCIES.ID WHERE NUMBER_ACCOUNT=? ";
 	private static final String INCREASE_BALANCE_SQL = "UPDATE ACCOUNTS SET BALANCE=BALANCE + ? WHERE NUMBER_ACCOUNT=?";
 	private static final String DECREASE_BALANCE_SQL = "UPDATE ACCOUNTS SET BALANCE=BALANCE - ? WHERE NUMBER_ACCOUNT=?";
@@ -30,21 +25,18 @@ public class SQLAccountDAO implements AccountDAO {
 	private static final String COLUMN_CURRENCY_ID = "currency_id";
 	private static final String COLUMN_OWNER = "owner";
 
+	private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
+
 	// @Nullable
 	@Override
 	public Account getAccount(String numberAccount) throws DAOException {
 
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
-		Connection connection = null;
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-
 		Account account = null;
-		try {
-			connection = connectionPool.takeConnection();
-			statement = connection.prepareStatement(SELECT_ACCOUNT_SQL);
+		try (Connection connection = connectionPool.takeConnection();
+				PreparedStatement statement = connection.prepareStatement(SELECT_ACCOUNT_SQL);) {
+
 			statement.setString(1, numberAccount);
-			resultSet = statement.executeQuery();
+			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {
 				BigDecimal balance = resultSet.getBigDecimal(COLUMN_BALANCE);
@@ -56,15 +48,7 @@ public class SQLAccountDAO implements AccountDAO {
 			}
 
 		} catch (ConnectionPoolException | SQLException e) {
-			logger.error(e.getMessage());
 			throw new DAOException(e);
-		} finally {
-			try {
-				connectionPool.closeConnection(connection, statement);
-			} catch (ConnectionPoolException e) {
-				logger.error(e.getMessage());
-				throw new DAOException(e);
-			}
 		}
 		return account;
 	}
@@ -89,15 +73,7 @@ public class SQLAccountDAO implements AccountDAO {
 			return statement.executeUpdate() != 0;
 
 		} catch (ConnectionPoolException | SQLException e) {
-			logger.error(e.getMessage());
 			throw new DAOException(e);
-		} finally {
-			try {
-				connectionPool.closeConnection(connection, statement);
-			} catch (ConnectionPoolException e) {
-				logger.error(e.getMessage());
-				throw new DAOException(e);
-			}
 		}
 	}
 }

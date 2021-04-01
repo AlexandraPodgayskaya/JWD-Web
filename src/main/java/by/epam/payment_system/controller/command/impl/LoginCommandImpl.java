@@ -58,11 +58,11 @@ public class LoginCommandImpl implements Command {
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 
 		} catch (NoSuchUserServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("wrong login and password", e);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_NO_SUCH_USER));
 			response.sendRedirect(GO_TO_INDEX_PAGE);
 		} catch (ServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("general system error", e);
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 

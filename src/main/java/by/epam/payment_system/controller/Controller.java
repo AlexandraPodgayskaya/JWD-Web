@@ -7,11 +7,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.command.CommandProvider;
 
 public class Controller extends HttpServlet {
 
+	private static final Logger logger = LogManager.getLogger();
+	
 	private static final long serialVersionUID = 1L;
 	private static final String PARAMETER_COMMAND = "command";
 	private static final String GO_TO_ERROR_PAGE = "error.jsp";
@@ -44,6 +49,7 @@ public class Controller extends HttpServlet {
 			command = provider.takeCommand(name);
 			command.execute(request, response);
 		} else {
+			logger.error ("null command");
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 	}

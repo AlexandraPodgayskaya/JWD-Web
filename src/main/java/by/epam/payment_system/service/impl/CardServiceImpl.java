@@ -1,9 +1,7 @@
 package by.epam.payment_system.service.impl;
 
+import java.util.Collections;
 import java.util.List;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.dao.AccountDAO;
 import by.epam.payment_system.dao.CardDAO;
@@ -18,12 +16,15 @@ import by.epam.payment_system.service.exception.ServiceException;
 
 public class CardServiceImpl implements CardService {
 	
-	private static final Logger logger = LogManager.getLogger();
+	private static final DAOFactory factory = DAOFactory.getInstance();
 
 	@Override
 	public List<Card> takeCards(Integer userId) throws ServiceException {
 
-		DAOFactory factory = DAOFactory.getInstance();
+		if (userId == null) {
+			return Collections.emptyList();
+		}
+		
 		CardDAO cardDAO = factory.getCardDAO();
 		AccountDAO accountDAO = factory.getAccountDAO();
 
@@ -38,7 +39,6 @@ public class CardServiceImpl implements CardService {
 				}
 			}
 		} catch (DAOException e) {
-			logger.error(e.getMessage());
 			throw new ServiceException("card search error", e);
 		}
 		return cardList;
@@ -51,7 +51,6 @@ public class CardServiceImpl implements CardService {
 			throw new ImpossibleOperationServiceException("no card number to block");
 		}
 
-		DAOFactory factory = DAOFactory.getInstance();
 		CardDAO cardDAO = factory.getCardDAO();
 
 		Card card = new Card(numberCard, Boolean.TRUE);
@@ -62,7 +61,6 @@ public class CardServiceImpl implements CardService {
 			}
 
 		} catch (DAOException e) {
-			logger.error(e.getMessage());
 			throw new ServiceException("card blocking error", e);
 		}
 	}
@@ -73,7 +71,6 @@ public class CardServiceImpl implements CardService {
 			throw new ImpossibleOperationServiceException("no card number to unblock");
 		}
 
-		DAOFactory factory = DAOFactory.getInstance();
 		CardDAO cardDAO = factory.getCardDAO();
 
 		Card card = new Card(numberCard, Boolean.FALSE);
@@ -84,7 +81,6 @@ public class CardServiceImpl implements CardService {
 			}
 
 		} catch (DAOException e) {
-			logger.error(e.getMessage());
 			throw new ServiceException("card unblocking error", e);
 		}
 		
@@ -97,7 +93,6 @@ public class CardServiceImpl implements CardService {
 			throw new ImpossibleOperationServiceException("no card number to close");
 		}
 
-		DAOFactory factory = DAOFactory.getInstance();
 		CardDAO cardDAO = factory.getCardDAO();
 
 		try {
@@ -106,7 +101,6 @@ public class CardServiceImpl implements CardService {
 			}
 
 		} catch (DAOException e) {
-			logger.error(e.getMessage());
 			throw new ServiceException("card closing error", e);
 		}
 

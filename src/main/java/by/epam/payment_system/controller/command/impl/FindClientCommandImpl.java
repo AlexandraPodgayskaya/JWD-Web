@@ -39,7 +39,7 @@ public class FindClientCommandImpl implements Command {
 			response.sendRedirect(GO_TO_INDEX_PAGE);
 			return;
 		}
-		
+
 		session.removeAttribute(ATTRIBUTE_FOUND_CLIENT_INFO);
 
 		ServiceFactory factory = ServiceFactory.getInstance();
@@ -50,11 +50,11 @@ public class FindClientCommandImpl implements Command {
 			session.setAttribute(ATTRIBUTE_FOUND_CLIENT_INFO, userInfo);
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (NoSuchUserServiceException e) {
-			logger.error(e.getMessage());
+			logger.info("user is not found", e);
 			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_CLIENT_NOT_FOUND);
 			response.sendRedirect(GO_TO_MAIN_PAGE);
 		} catch (ServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("general system error", e);
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 

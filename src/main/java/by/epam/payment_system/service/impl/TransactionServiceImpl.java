@@ -7,9 +7,6 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import by.epam.payment_system.dao.AccountDAO;
 import by.epam.payment_system.dao.CardDAO;
 import by.epam.payment_system.dao.DAOException;
@@ -34,8 +31,6 @@ import by.epam.payment_system.service.validation.TransactionDataValidator;
 import by.epam.payment_system.service.validation.UserDataValidator;
 
 public class TransactionServiceImpl implements TransactionService {
-	
-	private static final Logger logger = LogManager.getLogger();
 
 	private static final String CURRENCY = "currency";
 	private static final String AMOUNT = "amount";
@@ -50,6 +45,8 @@ public class TransactionServiceImpl implements TransactionService {
 	private static final String TOP_UP_CARD = "Top up card";
 	private static final String PURPOSE_OF_PAYMENT = "purposeOfPayment";
 
+	private static final DAOFactory factory = DAOFactory.getInstance();
+
 	@Override
 	public void topUpCard(Map<String, String> transferDetails) throws ServiceException {
 
@@ -58,7 +55,6 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new TransactionDataServiceException("transfer data error", validator.getDescriptionList());
 		}
 
-		DAOFactory factory = DAOFactory.getInstance();
 		CardDAO cardDAO = factory.getCardDAO();
 
 		String numberCard = transferDetails.get(RECIPIENT_CARD_NUMBER);
@@ -90,7 +86,6 @@ public class TransactionServiceImpl implements TransactionService {
 			transactionLogDAO.addTransaction(transaction);
 
 		} catch (DAOException e) {
-			logger.error(e.getMessage());
 			throw new ServiceException("toping up card error", e);
 		}
 	}
@@ -105,7 +100,6 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new NoSuchUserServiceException("wrong password");
 		}
 
-		DAOFactory factory = DAOFactory.getInstance();
 		UserDAO userDAO = factory.getUserDAO();
 
 		try {
@@ -114,7 +108,6 @@ public class TransactionServiceImpl implements TransactionService {
 				throw new NoSuchUserServiceException("wrong password");
 			}
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-			logger.error(e.getMessage());
 			throw new ServiceException("password encryption error", e);
 		} catch (DAOException e) {
 			throw new ServiceException("check password error", e);
@@ -160,7 +153,6 @@ public class TransactionServiceImpl implements TransactionService {
 			transactionLogDAO.addTransaction(transaction);
 
 		} catch (DAOException e) {
-			logger.error(e.getMessage());
 			throw new ServiceException("payment error", e);
 		}
 
@@ -173,7 +165,6 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new ImpossibleOperationServiceException("no card number to take account transactions");
 		}
 
-		DAOFactory factory = DAOFactory.getInstance();
 		CardDAO cardDAO = factory.getCardDAO();
 		TransactionLogDAO transactionLogDAO = factory.getTransactionLogDAO();
 
@@ -187,7 +178,6 @@ public class TransactionServiceImpl implements TransactionService {
 			transactionList = transactionLogDAO.findAccountTransactions(card.getNumberAccount());
 
 		} catch (DAOException e) {
-			logger.error(e.getMessage());
 			throw new ServiceException("search account transactions error", e);
 		}
 		return transactionList;
@@ -200,14 +190,12 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new ImpossibleOperationServiceException("no card number to take account transactions");
 		}
 
-		DAOFactory factory = DAOFactory.getInstance();
 		TransactionLogDAO transactionLogDAO = factory.getTransactionLogDAO();
 
 		List<Transaction> transactionList;
 		try {
 			transactionList = transactionLogDAO.findCardTransactions(numberCard);
 		} catch (DAOException e) {
-			logger.error(e.getMessage());
 			throw new ServiceException("search account transactions error", e);
 		}
 		return transactionList;

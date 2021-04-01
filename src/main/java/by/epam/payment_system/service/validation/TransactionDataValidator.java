@@ -29,6 +29,8 @@ public class TransactionDataValidator {
 	private static final String BIC_PATTERN = "^[A-Z0-9]{8}$";
 	private static final String IBAN_PATTERN = "^BY[0-9]{2}[A-Z]{4}[0-9]{20}$";
 	private static final String DATE_FORMAT = "MM/yy";
+	private static final String ERROR_NO_TRANSFER_DETAILS = "local.error.no_transfer_details";
+	private static final String ERROR_NO_PAYMENT_DETAILS = "local.error.no_payment_details";
 	private static final String ERROR_NUMBER_CARD = "local.error.number_card";
 	private static final String ERROR_EXPIRATION_DATE = "local.error.expiration_date";
 	private static final String ERROR_CVV_CODE = "local.error.cvv_code";
@@ -52,6 +54,11 @@ public class TransactionDataValidator {
 	}
 
 	public final boolean topUpCardValidation(Map<String, String> transferDetails) {
+
+		if (transferDetails == null) {
+			setDescriptionList(ERROR_NO_TRANSFER_DETAILS);
+			return false;
+		}
 
 		if (transferDetails.get(SENDER_CARD_NUMBER) == null
 				|| !transferDetails.get(SENDER_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
@@ -77,7 +84,8 @@ public class TransactionDataValidator {
 			setDescriptionList(ERROR_EXPIRATION_DATE);
 		}
 
-		if (transferDetails.get(SENDER_CVV_CODE) == null || !transferDetails.get(SENDER_CVV_CODE).matches(CVV_CODE_PATTERN)) {
+		if (transferDetails.get(SENDER_CVV_CODE) == null
+				|| !transferDetails.get(SENDER_CVV_CODE).matches(CVV_CODE_PATTERN)) {
 			setDescriptionList(ERROR_CVV_CODE);
 		}
 
@@ -104,6 +112,11 @@ public class TransactionDataValidator {
 	}
 
 	public final boolean paymentValidation(Map<String, String> paymentDetails) {
+		
+		if (paymentDetails == null) {
+			setDescriptionList(ERROR_NO_PAYMENT_DETAILS);
+			return false;
+		}
 
 		if (paymentDetails.get(SENDER_CARD_NUMBER) == null
 				|| !paymentDetails.get(SENDER_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
@@ -118,7 +131,8 @@ public class TransactionDataValidator {
 			setDescriptionList(ERROR_RECIPIENT);
 		}
 
-		if (paymentDetails.get(RECIPIENT_BANK_CODE) == null || !paymentDetails.get(RECIPIENT_BANK_CODE).matches(BIC_PATTERN)) {
+		if (paymentDetails.get(RECIPIENT_BANK_CODE) == null
+				|| !paymentDetails.get(RECIPIENT_BANK_CODE).matches(BIC_PATTERN)) {
 			System.out.println(paymentDetails.get(RECIPIENT_BANK_CODE));
 			System.out.println(paymentDetails.get(RECIPIENT_BANK_CODE).matches(BIC_PATTERN));
 			setDescriptionList(ERROR_BIC);

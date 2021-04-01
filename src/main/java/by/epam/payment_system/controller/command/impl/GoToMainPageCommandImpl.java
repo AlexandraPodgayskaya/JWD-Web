@@ -1,7 +1,6 @@
 package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -61,20 +60,14 @@ public class GoToMainPageCommandImpl implements Command {
 		}
 
 		try {
-			if (id == null) {
-				cardList = Collections.emptyList();
-			} else {
-				cardList = cardService.takeCards(id);
-				while (cardList.contains(null)) {
-					cardList.remove(null);
-				}
-			}
+			cardList = cardService.takeCards(id);
+
 			request.setAttribute(ATTRIBUTE_CARD_LIST, cardList);
 			session.setAttribute(ATTRIBUTE_PAGE, MAIN_PAGE);
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(GO_TO_MAIN_PAGE);
 			requestDispatcher.forward(request, response);
 		} catch (ServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("general system error", e);
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 

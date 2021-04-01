@@ -20,9 +20,9 @@ import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.UserInfoFormatServiceException;
 
 public class SaveAdditionalClientDataCommandImpl implements Command {
-	
+
 	private static final Logger logger = LogManager.getLogger();
-	
+
 	private static final String GO_TO_INDEX_PAGE = "index.jsp";
 	private static final String GO_TO_CLIENT_DATA_PAGE = "UserData?userId=";
 	private static final String GO_TO_ERROR_PAGE = "error.jsp";
@@ -30,7 +30,7 @@ public class SaveAdditionalClientDataCommandImpl implements Command {
 	private static final String ATTRIBUTE_INFO_MESSAGE = "infoMessage";
 	private static final String ATTRIBUTE_PAGE = "page";
 	private static final String MESSAGE_PROFILE_SAVED = "local.message.profile_saved";
-	
+
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		AbstractUserInfoBuilder builder = new AdditionalUserClientInfoBuilder();
@@ -39,7 +39,7 @@ public class SaveAdditionalClientDataCommandImpl implements Command {
 
 		ServiceFactory factory = ServiceFactory.getInstance();
 		AdditionalClientDataService additionalClientDataService = factory.getAdditionalClientDataService();
-		
+
 		HttpSession session = request.getSession(true);
 		try {
 			additionalClientDataService.addData(additionalClientInfo);
@@ -47,11 +47,11 @@ public class SaveAdditionalClientDataCommandImpl implements Command {
 			session.setAttribute(ATTRIBUTE_PAGE, GO_TO_INDEX_PAGE);
 			response.sendRedirect(GO_TO_INDEX_PAGE);
 		} catch (UserInfoFormatServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("wrong user info format", e);
 			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, e.getErrorDescription());
 			response.sendRedirect(GO_TO_CLIENT_DATA_PAGE + additionalClientInfo.getId());
 		} catch (ServiceException e) {
-			logger.error(e.getMessage());
+			logger.error("general system error", e);
 			response.sendRedirect(GO_TO_ERROR_PAGE);
 		}
 	}
