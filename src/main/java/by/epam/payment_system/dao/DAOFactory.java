@@ -4,7 +4,6 @@ import by.epam.payment_system.dao.impl.SQLAccountDAO;
 import by.epam.payment_system.dao.impl.SQLAdditionalClientDataDAO;
 import by.epam.payment_system.dao.impl.SQLCardDAO;
 import by.epam.payment_system.dao.impl.SQLTransactionLogDAO;
-import by.epam.payment_system.dao.impl.SQLTypeTransactionDAO;
 import by.epam.payment_system.dao.impl.SQLUserDAO;
 
 public final class DAOFactory {
@@ -16,7 +15,6 @@ public final class DAOFactory {
 	private final CardDAO cardDAO = new SQLCardDAO();
 	private final AccountDAO accountDAO = new SQLAccountDAO();
 	private final TransactionLogDAO transactionLogDAO = new SQLTransactionLogDAO();
-	private final TypeTransactionDAO typeTransactionDAO = new SQLTypeTransactionDAO();
 
 	private DAOFactory() {
 	}
@@ -45,7 +43,4 @@ public final class DAOFactory {
 		return transactionLogDAO;
 	}
 	
-	public TypeTransactionDAO getTypeTransactionDAO() {
-		return typeTransactionDAO;
-	}
 }

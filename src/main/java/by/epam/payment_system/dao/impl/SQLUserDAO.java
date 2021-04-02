@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import by.epam.payment_system.dao.DAOException;
 import by.epam.payment_system.dao.UserDAO;
@@ -39,11 +40,10 @@ public class SQLUserDAO implements UserDAO {
 		}
 	}
 
-	// @Nullable
 	@Override
-	public User find(UserInfo loginationInfo) throws DAOException {
+	public Optional<User> find(UserInfo loginationInfo) throws DAOException {
 
-		User user = null;
+		Optional<User> userOptional = Optional.empty();
 
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SELECT_USER_SQL);) {
@@ -56,19 +56,19 @@ public class SQLUserDAO implements UserDAO {
 				int id = resultSet.getInt(COLUMN_USER_ID);
 				String type = resultSet.getString(COLUMN_USER_TYPE);
 				UserType userType = UserType.valueOf(type.toUpperCase());
-				user = new User(id, loginationInfo.getLogin(), loginationInfo.getPassword(), userType);
+				User user = new User(id, loginationInfo.getLogin(), loginationInfo.getPassword(), userType);
+				userOptional = Optional.of(user);
 			}
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
 		}
-		return user;
+		return userOptional;
 	}
 
-	// @Nullable
 	@Override
-	public Integer findId(String login) throws DAOException {
+	public Optional<Integer> findId(String login) throws DAOException {
 
-		Integer id = null;
+		Optional<Integer> idOptional = Optional.empty();
 
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SELECT_ID_SQL)) {
@@ -77,13 +77,14 @@ public class SQLUserDAO implements UserDAO {
 			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {
-				id = resultSet.getInt(COLUMN_USER_ID);
+				Integer id = resultSet.getInt(COLUMN_USER_ID);
+				idOptional = Optional.of(id);
 			}
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
 		}
 
-		return id;
+		return idOptional;
 	}
 }

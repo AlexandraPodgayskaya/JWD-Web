@@ -26,9 +26,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public final class ConnectionPool {
-	
+
 	private static final Logger logger = LogManager.getLogger();
-	
+
 	private static final int DEFAULT_POOL_SIZE = 5;
 	private static final ConnectionPool instance = new ConnectionPool();
 
@@ -56,7 +56,7 @@ public final class ConnectionPool {
 		try {
 			poolSize = Integer.parseInt(dbResourceManager.getValue(DBParameter.DB_POLL_SIZE));
 		} catch (NumberFormatException e) {
-			logger.error("pool size setting error",e);
+			logger.error("pool size setting error", e);
 			poolSize = DEFAULT_POOL_SIZE;
 		}
 		connectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
@@ -113,7 +113,8 @@ public final class ConnectionPool {
 		}
 		return connection;
 	}
-	
+
+
 	private class ConnectionWrapper implements Connection {
 		private Connection connection;
 
@@ -121,12 +122,8 @@ public final class ConnectionPool {
 			this.connection = connection;
 		}
 
-		public void reallyClose() throws ConnectionPoolException {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				throw new ConnectionPoolException("can not close connection", e);
-			}
+		public void reallyClose() throws SQLException {
+			connection.close();
 		}
 
 		@Override
@@ -138,7 +135,7 @@ public final class ConnectionPool {
 			if (connection.isReadOnly()) {
 				connection.setReadOnly(false);
 			}
-			
+
 			if (!connection.getAutoCommit()) {
 				connection.setAutoCommit(true);
 			}

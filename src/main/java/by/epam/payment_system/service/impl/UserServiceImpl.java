@@ -2,6 +2,7 @@ package by.epam.payment_system.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 import by.epam.payment_system.dao.DAOException;
 import by.epam.payment_system.dao.DAOFactory;
@@ -19,7 +20,7 @@ import by.epam.payment_system.service.validation.UserDataValidator;
 public class UserServiceImpl implements UserService {
 
 	private static final int TYPE_USER_CLIENT = 1;
-	
+
 	private static final DAOFactory factory = DAOFactory.getInstance();
 
 	@Override
@@ -36,10 +37,13 @@ public class UserServiceImpl implements UserService {
 		User user;
 		try {
 			userInfo.setPassword(PasswordEncryption.encrypt(userInfo.getPassword()));
-			user = userDAO.find(userInfo);
-			if (user == null) {
+			Optional<User> userOptional = userDAO.find(userInfo);
+
+			if (userOptional.isEmpty()) {
 				throw new NoSuchUserServiceException("no such user");
 			}
+
+			user = userOptional.get();
 
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new ServiceException("password encryption error", e);
@@ -70,7 +74,11 @@ public class UserServiceImpl implements UserService {
 		try {
 			userInfo.setPassword(PasswordEncryption.encrypt(userInfo.getPassword()));
 			userDAO.create(userInfo);
-			id = userDAO.findId(userInfo.getLogin());
+			Optional<Integer> idOptional = userDAO.findId(userInfo.getLogin());
+			if (idOptional.isEmpty()) {
+				throw new ServiceException("user not created");
+			}
+			id = idOptional.get();
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new ServiceException("password encryption error", e);
 		} catch (DAOException e) {
@@ -83,13 +91,13 @@ public class UserServiceImpl implements UserService {
 	private boolean freeLogin(String login) throws ServiceException {
 		UserDAO userDAO = factory.getUserDAO();
 
-		Integer id;
+		Optional<Integer> idOptional;
 		try {
-			id = userDAO.findId(login);
+			idOptional = userDAO.findId(login);
 		} catch (DAOException e) {
 			throw new ServiceException("id search error", e);
 		}
-		return id == null;
+		return idOptional.isEmpty();
 	}
 
 }

@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import by.epam.payment_system.dao.AccountDAO;
 import by.epam.payment_system.dao.DAOException;
@@ -27,11 +28,10 @@ public class SQLAccountDAO implements AccountDAO {
 
 	private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-	// @Nullable
 	@Override
-	public Account getAccount(String numberAccount) throws DAOException {
+	public Optional <Account> getAccount(String numberAccount) throws DAOException {
 
-		Account account = null;
+		Optional <Account> accountOptional = Optional.empty();
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SELECT_ACCOUNT_SQL);) {
 
@@ -44,13 +44,14 @@ public class SQLAccountDAO implements AccountDAO {
 				String currencyAccount = resultSet.getString(COLUMN_CURRENCY);
 				Currency currency = Currency.valueOf(currencyAccount.toUpperCase());
 				int owner = resultSet.getInt(COLUMN_OWNER);
-				account = new Account(numberAccount, balance, currencyId, currency, owner);
+				Account account = new Account(numberAccount, balance, currencyId, currency, owner);
+				accountOptional = Optional.of(account);
 			}
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
 		}
-		return account;
+		return accountOptional;
 	}
 
 	@Override

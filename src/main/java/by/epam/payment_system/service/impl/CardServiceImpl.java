@@ -1,7 +1,7 @@
 package by.epam.payment_system.service.impl;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import by.epam.payment_system.dao.AccountDAO;
 import by.epam.payment_system.dao.CardDAO;
@@ -22,7 +22,7 @@ public class CardServiceImpl implements CardService {
 	public List<Card> takeCards(Integer userId) throws ServiceException {
 
 		if (userId == null) {
-			return Collections.emptyList();
+			throw new ImpossibleOperationServiceException("no user id to take cards");
 		}
 		
 		CardDAO cardDAO = factory.getCardDAO();
@@ -31,9 +31,12 @@ public class CardServiceImpl implements CardService {
 		List<Card> cardList;
 		try {
 			cardList = cardDAO.findCards(userId);
+			Optional <Account> accountOptional;
+			Account account;
 			for (Card card : cardList) {
-				Account account = accountDAO.getAccount(card.getNumberAccount());
-				if (account != null) {
+				accountOptional = accountDAO.getAccount(card.getNumberAccount());
+				if (!accountOptional.isEmpty()) {
+					account = accountOptional.get();
 					card.setBalance(account.getBalance());
 					card.setCurrency(account.getCurrency());
 				}
@@ -105,6 +108,5 @@ public class CardServiceImpl implements CardService {
 		}
 
 	}
-
 
 }

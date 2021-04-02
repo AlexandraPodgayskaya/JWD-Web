@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import by.epam.payment_system.dao.AccountDAO;
 import by.epam.payment_system.dao.CardDAO;
@@ -60,13 +61,26 @@ public class TransactionServiceImpl implements TransactionService {
 		String numberCard = transferDetails.get(RECIPIENT_CARD_NUMBER);
 
 		try {
-			Card card = cardDAO.findCardData(numberCard);
-			if (card == null || card.getIsClosed() || card.getIsBlocked()) {
+			Optional<Card> cardOptional = cardDAO.findCardData(numberCard);
+
+			if (cardOptional.isEmpty()) {
+				throw new ImpossibleOperationServiceException("can not top up card");
+			}
+
+			Card card = cardOptional.get();
+			if (card.getIsClosed() || card.getIsBlocked()) {
 				throw new ImpossibleOperationServiceException("can not top up card");
 			}
 
 			AccountDAO accountDAO = factory.getAccountDAO();
-			Account account = accountDAO.getAccount(card.getNumberAccount());
+
+			Optional<Account> accountOptional = accountDAO.getAccount(card.getNumberAccount());
+
+			if (accountOptional.isEmpty()) {
+				throw new ImpossibleOperationServiceException("can not top up card");
+			}
+
+			Account account = accountOptional.get();
 
 			if (Currency.valueOf(transferDetails.get(CURRENCY)) != account.getCurrency()) {
 				throw new ImpossibleOperationServiceException("can not top up card");
@@ -121,13 +135,26 @@ public class TransactionServiceImpl implements TransactionService {
 		CardDAO cardDAO = factory.getCardDAO();
 
 		try {
-			Card card = cardDAO.findCardData(paymentDetails.get(SENDER_CARD_NUMBER));
-			if (card == null || card.getIsClosed() || card.getIsBlocked()) {
+			Optional<Card> cardOptional = cardDAO.findCardData(paymentDetails.get(SENDER_CARD_NUMBER));
+
+			if (cardOptional.isEmpty()) {
+				throw new ImpossibleOperationServiceException("can not make payment");
+			}
+
+			Card card = cardOptional.get();
+
+			if (card.getIsClosed() || card.getIsBlocked()) {
 				throw new ImpossibleOperationServiceException("can not make payment");
 			}
 
 			AccountDAO accountDAO = factory.getAccountDAO();
-			Account account = accountDAO.getAccount(card.getNumberAccount());
+			Optional<Account> accountOptional = accountDAO.getAccount(card.getNumberAccount());
+
+			if (accountOptional.isEmpty()) {
+				throw new ImpossibleOperationServiceException("can not make payment");
+			}
+
+			Account account = accountOptional.get();
 
 			if (Currency.valueOf(paymentDetails.get(CURRENCY)) != account.getCurrency()) {
 				throw new ImpossibleOperationServiceException("can not make payment");
@@ -170,7 +197,12 @@ public class TransactionServiceImpl implements TransactionService {
 
 		List<Transaction> transactionList;
 		try {
-			Card card = cardDAO.findCardData(numberCard);
+			Optional<Card> cardOptional = cardDAO.findCardData(numberCard);
+			if (cardOptional.isEmpty()) {
+				throw new ImpossibleOperationServiceException("no such card in payment system");
+			}
+
+			Card card = cardOptional.get();
 			if (card.getStatus() == CardStatus.ADDITIONAL) {
 				throw new ImpossibleOperationServiceException(
 						"it is impossible to show account transactions for owners of additional cards");

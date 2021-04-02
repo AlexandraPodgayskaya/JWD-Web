@@ -15,7 +15,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import by.epam.payment_system.controller.command.Attribute;
 import by.epam.payment_system.controller.command.Command;
+import by.epam.payment_system.controller.command.GoToPage;
+import by.epam.payment_system.controller.command.Parameter;
 import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.TransactionService;
@@ -27,20 +30,8 @@ public class TopUpCardCommandImpl implements Command {
 
 	private static final Logger logger = LogManager.getLogger();
 
-	private static final String GO_TO_INDEX_PAGE = "index.jsp";
-	private static final String GO_TO_MAIN_PAGE = "Controller?command=go_to_main_page";
-	private static final String GO_TO_TOP_UP_CARD_PAGE = "Controller?command=go_to_top_up_card_page";
-	private static final String GO_TO_ERROR_PAGE = "error.jsp";
-	private static final String ATTRIBUTE_USER_TYPE = "userType";
-	private static final String ATTRIBUTE_ERROR_MESSAGE = "errorMessageList";
-	private static final String ATTRIBUTE_INFO_MESSAGE = "infoMessage";
-	private static final String ATTRIBUTE_PAGE = "page";
-	private static final String CURRENCY = "currency";
-	private static final String RECIPIENT_CARD_NUMBER = "recipientCardNumber";
 	private static final String MESSAGE_TOP_UP_CARD_OK = "local.message.top_up_card_ok";
 	private static final String ERROR_IPOSSIBLE_OPERATION = "local.error.impossible_operation";
-	private static final String SET_PARAMETER_CURRENCY = "&currency=";
-	private static final String SET_PARAMETER_NUMBER_CARD = "&numberCard=";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,14 +40,14 @@ public class TopUpCardCommandImpl implements Command {
 
 		if (session == null) {
 			logger.info("session aborted");
-			response.sendRedirect(GO_TO_INDEX_PAGE);
+			response.sendRedirect(GoToPage.INDEX_PAGE);
 			return;
 		}
 
-		if (session.getAttribute(ATTRIBUTE_USER_TYPE) == UserType.ADMIN) {
+		if (session.getAttribute(Attribute.USER_TYPE) == UserType.ADMIN) {
 			logger.info("impossible operation for " + UserType.ADMIN);
-			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IPOSSIBLE_OPERATION));
-			response.sendRedirect(GO_TO_MAIN_PAGE);
+			session.setAttribute(Attribute.ERROR_MESSAGE, Arrays.asList(ERROR_IPOSSIBLE_OPERATION));
+			response.sendRedirect(GoToPage.MAIN_PAGE);
 			return;
 		}
 
@@ -71,22 +62,22 @@ public class TopUpCardCommandImpl implements Command {
 		TransactionService transactionService = factory.getTransactionService();
 		try {
 			transactionService.topUpCard(transferDetails);
-			session.setAttribute(ATTRIBUTE_PAGE, GO_TO_MAIN_PAGE);
-			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_TOP_UP_CARD_OK);
-			response.sendRedirect(GO_TO_MAIN_PAGE);
+			session.setAttribute(Attribute.PAGE, GoToPage.MAIN_PAGE);
+			session.setAttribute(Attribute.INFO_MESSAGE, MESSAGE_TOP_UP_CARD_OK);
+			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (TransactionDataServiceException e) {
 			logger.error("incorrect data for transaction", e);
-			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, e.getErrorDescription());
-			response.sendRedirect(
-					GO_TO_TOP_UP_CARD_PAGE + SET_PARAMETER_NUMBER_CARD + transferDetails.get(RECIPIENT_CARD_NUMBER)
-							+ SET_PARAMETER_CURRENCY + transferDetails.get(CURRENCY));
+			session.setAttribute(Attribute.ERROR_MESSAGE, e.getErrorDescription());
+			response.sendRedirect(GoToPage.TOP_UP_CARD_PAGE + Parameter.SET_NUMBER_CARD
+					+ transferDetails.get(Parameter.RECIPIENT_CARD_NUMBER) + Parameter.SET_CURRENCY
+					+ transferDetails.get(Parameter.CURRENCY));
 		} catch (ImpossibleOperationServiceException e) {
 			logger.error("impossible operation", e);
-			session.setAttribute(ATTRIBUTE_ERROR_MESSAGE, Arrays.asList(ERROR_IPOSSIBLE_OPERATION));
-			response.sendRedirect(GO_TO_MAIN_PAGE);
+			session.setAttribute(Attribute.ERROR_MESSAGE, Arrays.asList(ERROR_IPOSSIBLE_OPERATION));
+			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);
-			response.sendRedirect(GO_TO_ERROR_PAGE);
+			response.sendRedirect(GoToPage.ERROR_PAGE);
 		}
 
 	}

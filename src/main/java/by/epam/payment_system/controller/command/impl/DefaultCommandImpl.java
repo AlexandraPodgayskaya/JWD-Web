@@ -7,15 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import by.epam.payment_system.controller.command.Command;
+import by.epam.payment_system.controller.command.GoToPage;
 
 public class DefaultCommandImpl implements Command {
-	
-	private static final String GO_TO_ERROR_PAGE = "error.jsp";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		response.sendRedirect(GO_TO_ERROR_PAGE);
+		response.sendRedirect(GoToPage.ERROR_PAGE);
 
 	}
 

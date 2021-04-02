@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import by.epam.payment_system.dao.DAOException;
 import by.epam.payment_system.dao.connectionpool.ConnectionPool;
@@ -45,10 +46,9 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 		}
 	}
 
-	// @Nullable
-	public UserInfo findData(String personalNumberPassport) throws DAOException {
+	public Optional <UserInfo> findData(String personalNumberPassport) throws DAOException {
 
-		UserInfo userInfo = null;
+		Optional <UserInfo> userInfoOptional = Optional.empty();
 
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SELECT_CLIENT_DATA_SQL)) {
@@ -57,7 +57,7 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {
-				userInfo = new UserInfo();
+				UserInfo userInfo = new UserInfo();
 				userInfo.setId(resultSet.getInt(COLUMN_USER_ID));
 				userInfo.setSurname(resultSet.getString(COLUMN_SURNAME));
 				userInfo.setName(resultSet.getString(COLUMN_NAME));
@@ -65,12 +65,14 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 				userInfo.setDateBirth(resultSet.getString(COLUMN_DATE_BIRTH));
 				userInfo.setPersonalNumberPassport(personalNumberPassport);
 				userInfo.setPhone(resultSet.getString(COLUMN_PHONE));
+				
+				userInfoOptional = Optional.of(userInfo);
 			}
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
 		}
 
-		return userInfo;
+		return userInfoOptional;
 
 	}
 }

@@ -10,7 +10,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import by.epam.payment_system.controller.command.Attribute;
 import by.epam.payment_system.controller.command.Command;
+import by.epam.payment_system.controller.command.GoToPage;
+import by.epam.payment_system.controller.command.Parameter;
 import by.epam.payment_system.entity.UserInfo;
 import by.epam.payment_system.service.AdditionalClientDataService;
 import by.epam.payment_system.service.ServiceFactory;
@@ -21,12 +24,6 @@ public class FindClientCommandImpl implements Command {
 
 	private static final Logger logger = LogManager.getLogger();
 
-	private static final String GO_TO_INDEX_PAGE = "index.jsp";
-	private static final String GO_TO_ERROR_PAGE = "error.jsp";
-	private static final String GO_TO_MAIN_PAGE = "Controller?command=go_to_main_page";
-	private static final String PARAMETER_NUMBER_PASSPORT = "clientPassportNumber";
-	private static final String ATTRIBUTE_FOUND_CLIENT_INFO = "foundClientInfo";
-	private static final String ATTRIBUTE_INFO_MESSAGE = "infoMessage";
 	private static final String MESSAGE_CLIENT_NOT_FOUND = "local.message.client_not_found";
 
 	@Override
@@ -36,26 +33,26 @@ public class FindClientCommandImpl implements Command {
 
 		if (session == null) {
 			logger.info("session aborted");
-			response.sendRedirect(GO_TO_INDEX_PAGE);
+			response.sendRedirect(GoToPage.INDEX_PAGE);
 			return;
 		}
 
-		session.removeAttribute(ATTRIBUTE_FOUND_CLIENT_INFO);
+		session.removeAttribute(Attribute.FOUND_CLIENT_INFO);
 
 		ServiceFactory factory = ServiceFactory.getInstance();
 		AdditionalClientDataService clientDataService = factory.getAdditionalClientDataService();
 
 		try {
-			UserInfo userInfo = clientDataService.getData(request.getParameter(PARAMETER_NUMBER_PASSPORT));
-			session.setAttribute(ATTRIBUTE_FOUND_CLIENT_INFO, userInfo);
-			response.sendRedirect(GO_TO_MAIN_PAGE);
+			UserInfo userInfo = clientDataService.getData(request.getParameter(Parameter.NUMBER_PASSPORT));
+			session.setAttribute(Attribute.FOUND_CLIENT_INFO, userInfo);
+			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (NoSuchUserServiceException e) {
-			logger.info("user is not found", e);
-			session.setAttribute(ATTRIBUTE_INFO_MESSAGE, MESSAGE_CLIENT_NOT_FOUND);
-			response.sendRedirect(GO_TO_MAIN_PAGE);
+			logger.error("user is not found", e);
+			session.setAttribute(Attribute.INFO_MESSAGE, MESSAGE_CLIENT_NOT_FOUND);
+			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);
-			response.sendRedirect(GO_TO_ERROR_PAGE);
+			response.sendRedirect(GoToPage.ERROR_PAGE);
 		}
 
 	}

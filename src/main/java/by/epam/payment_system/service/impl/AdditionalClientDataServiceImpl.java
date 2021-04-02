@@ -1,5 +1,7 @@
 package by.epam.payment_system.service.impl;
 
+import java.util.Optional;
+
 import by.epam.payment_system.dao.AdditionalClientDataDAO;
 import by.epam.payment_system.dao.DAOException;
 import by.epam.payment_system.dao.DAOFactory;
@@ -43,16 +45,17 @@ public class AdditionalClientDataServiceImpl implements AdditionalClientDataServ
 
 		AdditionalClientDataDAO additionalClientDataDAO = factory.getAdditionalClientDataDAO();
 
-		UserInfo userInfo;
+		Optional <UserInfo> userInfoOptional;
 		try {
-			userInfo = additionalClientDataDAO.findData(personalNumberPassport);
-			if (userInfo == null) {
+			userInfoOptional = additionalClientDataDAO.findData(personalNumberPassport);
+			
+			if (userInfoOptional.isEmpty()) {
 				throw new NoSuchUserServiceException("no client data");
 			}
 		} catch (DAOException e) {
 			throw new ServiceException("client data find error", e);
 		}
-		return userInfo;
+		return userInfoOptional.get();
 	}
 
 }

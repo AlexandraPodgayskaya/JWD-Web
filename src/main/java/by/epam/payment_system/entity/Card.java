@@ -9,6 +9,8 @@ public class Card implements Serializable {
 
 	private String numberCard;
 	private String numberAccount;
+	private String typeCard;
+	private String imagePath;
 	private CardStatus status;
 	private int ownerId;
 	private boolean isBlocked;
@@ -20,9 +22,11 @@ public class Card implements Serializable {
 
 	}
 
-	public Card(String numberCard, String numberAccount, CardStatus status, int ownerId, boolean isBlocked, boolean isClosed) {
+	public Card(String numberCard, String numberAccount, String typeCard, String imagePath, CardStatus status, int ownerId, boolean isBlocked, boolean isClosed) {
 		this.numberCard = numberCard;
 		this.numberAccount = numberAccount;
+		this.typeCard = typeCard;
+		this.imagePath = imagePath;
 		this.status = status;
 		this.ownerId = ownerId;
 		this.isBlocked = isBlocked;
@@ -48,6 +52,22 @@ public class Card implements Serializable {
 
 	public void setNumberAccount(String numberAccount) {
 		this.numberAccount = numberAccount;
+	}
+
+	public String getTypeCard() {
+		return typeCard;
+	}
+
+	public void setTypeCard(String typeCard) {
+		this.typeCard = typeCard;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	public CardStatus getStatus() {
@@ -104,12 +124,14 @@ public class Card implements Serializable {
 		int result = 1;
 		result = prime * result + ((balance == null) ? 0 : balance.hashCode());
 		result = prime * result + ((currency == null) ? 0 : currency.hashCode());
+		result = prime * result + ((imagePath == null) ? 0 : imagePath.hashCode());
 		result = prime * result + (isBlocked ? 1231 : 1237);
 		result = prime * result + (isClosed ? 1231 : 1237);
 		result = prime * result + ((numberAccount == null) ? 0 : numberAccount.hashCode());
 		result = prime * result + ((numberCard == null) ? 0 : numberCard.hashCode());
 		result = prime * result + ownerId;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((typeCard == null) ? 0 : typeCard.hashCode());
 		return result;
 	}
 
@@ -129,6 +151,11 @@ public class Card implements Serializable {
 			return false;
 		if (currency != other.currency)
 			return false;
+		if (imagePath == null) {
+			if (other.imagePath != null)
+				return false;
+		} else if (!imagePath.equals(other.imagePath))
+			return false;
 		if (isBlocked != other.isBlocked)
 			return false;
 		if (isClosed != other.isClosed)
@@ -147,14 +174,19 @@ public class Card implements Serializable {
 			return false;
 		if (status != other.status)
 			return false;
+		if (typeCard == null) {
+			if (other.typeCard != null)
+				return false;
+		} else if (!typeCard.equals(other.typeCard))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Card [numberCard=" + numberCard + ", numberAccount=" + numberAccount + ", status=" + status
-				+ ", ownerId=" + ownerId + ", isBlocked=" + isBlocked + ", isClosed=" + isClosed + ", balance="
-				+ balance + ", currency=" + currency + "]";
+		return "Card [numberCard=" + numberCard + ", numberAccount=" + numberAccount + ", typeCard=" + typeCard
+				+ ", imagePath=" + imagePath + ", status=" + status + ", ownerId=" + ownerId + ", isBlocked="
+				+ isBlocked + ", isClosed=" + isClosed + ", balance=" + balance + ", currency=" + currency + "]";
 	}
 
 	
