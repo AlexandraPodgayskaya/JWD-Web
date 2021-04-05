@@ -19,6 +19,9 @@ import by.epam.payment_system.controller.command.Parameter;
 public class GoToPaymentPageCommandImpl implements Command {
 
 	private static final Logger logger = LogManager.getLogger();
+	
+	private static final String ERROR_SESSION_TIMED_OUT = "local.error.session_timed_out";
+	private static final String ERROR_LOGOUT = "local.error.logout";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,7 +29,16 @@ public class GoToPaymentPageCommandImpl implements Command {
 		HttpSession session = request.getSession(false);
 
 		if (session == null) {
-			logger.info("session aborted");
+			logger.info("session timed out");
+			session = request.getSession(true);
+			session.setAttribute(Attribute.ERROR_MESSAGE, ERROR_SESSION_TIMED_OUT);
+			response.sendRedirect(GoToPage.INDEX_PAGE);
+			return;
+		}
+		
+		if (session.getAttribute(Attribute.USER_LOGIN) == null) {
+			logger.info("there was log out");
+			session.setAttribute(Attribute.ERROR_MESSAGE, ERROR_LOGOUT);
 			response.sendRedirect(GoToPage.INDEX_PAGE);
 			return;
 		}

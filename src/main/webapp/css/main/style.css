@@ -125,58 +125,30 @@ header>div>form>input[type="submit"]:hover {
 }
 
 /*  CONTENT  */
-.content {
-
-}
-.comment {
-	z-index: auto;
-	width: 944px;
-	height: 200px;
-	background-color: #fff;
-	background-image: url("../../img/ten2.png");
-    background-repeat: no-repeat;
-    background-position-y: 141px;
-	margin: auto;
-	margin-top: 50px;
-}
-.comment img {
-	margin-top: 10px;
-	margin-left: 49%;
-}
-.comment p {
-	z-index: auto;
-	width: 500px;
-	font: italic 22px Cambria;
-	color: #404040;
-	padding: 20px 250px 20px;
-	text-align: center;
-}
 .content > section {
 	width: 960px;
 	max-width: 960px;
 	min-width: 950px;
-	margin:auto;
-}
-.content > section h1 {
-	margin: 50px 0 0 0;
-	font: italic 22px Cambria;
-	color: #404040;
-	margin-bottom: 50px;
-}
+	margin: 15px auto;
+	padding: 10px 20px;
 
-#picture1, #picture5, #picture9{
-	margin-left: 0;
+
+}
+.content > section > form > label {
+	font: normal 16px helvetica;
+}
+.content > section > p {
+	font: normal 16px helvetica;
 }
 
 
 /*  CART  */
 .cart{
-	padding: 10px 20px;
-	margin: 15px;
-	width: 80%;
+    padding: 10px 20px;
+    margin-bottom: 15px;
+    width: 100%;
 	border-radius: 5px;
 	border: solid 3px #6bd433;
-
 }
 
 .cart p {
@@ -196,6 +168,17 @@ header>div>form>input[type="submit"]:hover {
 
 .blocked {
 	border: solid 3px #585863;
+}
+
+/* CLOSED CART */
+.closed img {
+	width: 35px;
+	float: right;
+}
+
+.closed {
+	border: solid 3px #585863;
+	background: #ccdae0;
 }
 
 /* POPUP */

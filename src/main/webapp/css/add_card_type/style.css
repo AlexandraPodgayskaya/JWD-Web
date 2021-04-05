@@ -3,7 +3,10 @@
 	padding: 0;
 }
 
+html {height: 100%;}
+
 body {
+	height: 100%;
 	background-color: #ffffff;
 	max-width: 1349px;
 	margin: auto;
@@ -89,36 +92,13 @@ header>div>form>input[type="submit"] {
 }
 
 header>div>form>input[type="submit"]:hover {
-	background: #198d98; 
+	background: #198d98;
 }
 
 
 /*  CONTENT  */
 .content {
-	
-}
-.comment {
-	z-index: auto;
-	width: 944px;
-	height: 200px;
-	background-color: #fff;
-	background-image: url("../../img/ten2.png");
-    background-repeat: no-repeat;
-    background-position-y: 141px;
-	margin: auto;
-	margin-top: 50px;
-}
-.comment img {
-	margin-top: 10px;
-	margin-left: 49%;
-}
-.comment p {
-	z-index: auto;
-	width: 500px;
-	font: italic 22px Cambria;
-	color: #404040;
-	padding: 20px 250px 20px;
-	text-align: center;
+	padding-bottom: 50px;
 }
 .content > section {
 	width: 960px;
@@ -126,41 +106,37 @@ header>div>form>input[type="submit"]:hover {
 	min-width: 950px;
 	margin:auto;
 }
-.content > section h1 {
-	margin: 50px 0 0 0;
-	font: italic 22px Cambria;
-	color: #404040;
-	margin-bottom: 50px;
-}
-
-#picture1, #picture5, #picture9{
-	margin-left: 0;
-}
 
 
-/*  CART  */
-.cart{
+/*  card_type  */
+.card_type{
 	padding: 10px 20px;
 	margin: 15px;
 	width: 80%;
 	border-radius: 5px;
-	border: solid 3px #6bd433;
-	
+	border: solid 3px #585863;
+
 }
 
-.cart p {
-	font: normal 16px helvetica;
+.card_type p {
+	font: normal 18px Cambria;
 	line-height: 35px;
+	color: #404040;
 }
 
-.cart>form {
+.card_type form {
 	display: inline-block;
 }
 
-.cart>form>input[type="submit"] {
+.card_type form input {
+	font: normal 16px Cambria;
+	margin-top: 10px;
+}
+
+.card_type form input[type="submit"] {
 	border:0;
 	border-radius: 3px;
-	font-weight: bold;
+	font: bold 14px Cambria;
 	margin-top: 5px;
 	padding: 5px 20px;
 	color: #fff;
@@ -172,26 +148,12 @@ header>div>form>input[type="submit"]:hover {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1dabb8', endColorstr='#1dabb8',GradientType=0 ); /* IE6-9 */
 }
 
-.cart>form>input[type="submit"]:hover {
-	background: #198d98; 
+.card_type form input[type="submit"]:hover {
+	background: #198d98;
 }
 
-/* BLOCKED CART */
-.blocked img {
-	width: 35px;
-	float: right;
-}
-
-.blocked {
-	border: solid 3px #585863;
-} 
-
-
-/*  FOOTER  */
-footer {
-	margin-top: 110px;
-	position:relative;
-	margin-right: 70px;
-	font-size: 10px;
-	float:right;
+.card_type label, select {
+	font: normal 16px Cambria;
+	line-height: 35px;
+	color: #404040;
 }

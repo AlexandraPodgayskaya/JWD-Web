@@ -4,6 +4,10 @@ body {
 	background: #ddd;
 }
 
+li {
+    list-style-type: none;
+}
+
 .main{
 	width: 850px;
 	padding-top: 30px;

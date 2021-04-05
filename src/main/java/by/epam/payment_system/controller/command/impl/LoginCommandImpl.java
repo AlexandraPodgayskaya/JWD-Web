@@ -28,6 +28,7 @@ public class LoginCommandImpl implements Command {
 	private static final Logger logger = LogManager.getLogger();
 
 	private static final String ERROR_NO_SUCH_USER = "local.error.no_such_user";
+	private static final String ERROR_REPEATED_LOGIN = "local.error.repeated_login";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,14 +42,21 @@ public class LoginCommandImpl implements Command {
 
 		HttpSession session = request.getSession(true);
 
+		if (session.getAttribute(Attribute.USER_LOGIN) != null) {
+			session.setAttribute(Attribute.ERROR_MESSAGE, Arrays.asList(ERROR_REPEATED_LOGIN));
+			response.sendRedirect(GoToPage.INDEX_PAGE);
+			return;
+		}
+
 		try {
 			User user = userService.authorization(loginationInfo);
 
-			session.setAttribute(Attribute.USER_TYPE, user.getType());
 			session.setAttribute(Attribute.USER_ID, user.getId());
 			session.setAttribute(Attribute.USER_LOGIN, user.getLogin());
+			session.setAttribute(Attribute.USER_TYPE, user.getType());
 
 			session.setAttribute(Attribute.PAGE, GoToPage.MAIN_PAGE);
+			session.setMaxInactiveInterval(300);
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 
 		} catch (NoSuchUserServiceException e) {

@@ -25,14 +25,26 @@ public class CloseCardCommandImpl implements Command {
 	private static final Logger logger = LogManager.getLogger();
 
 	private static final String MESSAGE_CLOSING_OK = "local.message.closing_card_ok";
+	private static final String ERROR_SESSION_TIMED_OUT = "local.error.session_timed_out";
+	private static final String ERROR_LOGOUT = "local.error.logout";
 	private static final String ERROR_IMPOSSIBLE_OPERATION = "local.error.impossible_operation";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession session = request.getSession(false);
+		
 		if (session == null) {
-			logger.info("session aborted");
+			logger.info("session timed out");
+			session = request.getSession(true);
+			session.setAttribute(Attribute.ERROR_MESSAGE, ERROR_SESSION_TIMED_OUT);
+			response.sendRedirect(GoToPage.INDEX_PAGE);
+			return;
+		}
+		
+		if (session.getAttribute(Attribute.USER_LOGIN) == null) {
+			logger.info("there was log out");
+			session.setAttribute(Attribute.ERROR_MESSAGE, ERROR_LOGOUT);
 			response.sendRedirect(GoToPage.INDEX_PAGE);
 			return;
 		}

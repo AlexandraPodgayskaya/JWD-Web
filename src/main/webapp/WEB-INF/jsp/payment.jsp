@@ -43,7 +43,6 @@
 </head>
 
 <body>
-<div id="wrap">
 <header>
     <div>
         <p>${welcome}, ${sessionScope.userLogin}!</p>
@@ -172,7 +171,6 @@
     </div>
     
 
-</div>
 </div>
 <mytag:copyright/>
 

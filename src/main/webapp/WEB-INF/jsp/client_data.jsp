@@ -30,7 +30,6 @@
   <link rel="stylesheet" href="css/common/error_info.css" type="text/css" />
 </head>
 <body>
-<div id="wrap">
 <div class="main">
     <header>
         <form action="index.jsp" method="get" class="skip">
@@ -101,7 +100,6 @@
         </div>
         <c:remove var="infoMessage"/>
     </c:if>
-</div>
 </div>
 <mytag:copyright/>
 

@@ -33,6 +33,8 @@ public class MakePaymentCommandImpl implements Command {
 	private static final Logger logger = LogManager.getLogger();
 
 	private static final String MESSAGE_PAYMENT_OK = "local.message.payment_ok";
+	private static final String ERROR_SESSION_TIMED_OUT = "local.error.session_timed_out";
+	private static final String ERROR_LOGOUT = "local.error.logout";
 	private static final String ERROR_IMPOSSIBLE_OPERATION = "local.error.impossible_operation";
 	private static final String ERROR_WRONG_PASSWORD = "local.error.wrong_password";
 	private static final String ERROR_NOT_ENOUGH_MONEY = "local.error.not_enough_money";
@@ -42,7 +44,16 @@ public class MakePaymentCommandImpl implements Command {
 		HttpSession session = request.getSession(false);
 
 		if (session == null) {
-			logger.info("session aborted");
+			logger.info("session timed out");
+			session = request.getSession(true);
+			session.setAttribute(Attribute.ERROR_MESSAGE, ERROR_SESSION_TIMED_OUT);
+			response.sendRedirect(GoToPage.INDEX_PAGE);
+			return;
+		}
+
+		if (session.getAttribute(Attribute.USER_LOGIN) == null) {
+			logger.info("there was log out");
+			session.setAttribute(Attribute.ERROR_MESSAGE, ERROR_LOGOUT);
 			response.sendRedirect(GoToPage.INDEX_PAGE);
 			return;
 		}

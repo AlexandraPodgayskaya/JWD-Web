@@ -22,55 +22,55 @@
     <link rel="stylesheet" href="css/common/error_info.css" type="text/css" />
 </head>
 <body>
-<div id="wrap">
-<div id="registration-form">
-  <header>
-    <ul class="clearfix">
-      <li>
-        <form action="Controller" method="post" class="locale">
-          <input type="hidden" name="command" value="en"/>
-           <input type="hidden" name="page" value="${pageContext.request.requestURI}"/>
-          <input type="submit" value="${en_button}"/>
-        </form>
-      </li>
-      <li>
-        <form action="Controller" method="post" class="locale">
-          <input type="hidden" name="command" value="ru"/>
-           <input type="hidden" name="page" value="${pageContext.request.requestURI}"/>
-          <input type="submit" value="${ru_button}"/>
-        </form>
-      </li>
-    </ul>
-    <h1>${title}</h1>
-    <a href="index.jsp">Back</a>
-  </header>
+<div>
+	<div id="registration-form">
+	  <header>
+		<ul class="clearfix">
+		  <li>
+			<form action="Controller" method="post" class="locale">
+			  <input type="hidden" name="command" value="en"/>
+			   <input type="hidden" name="page" value="${pageContext.request.requestURI}"/>
+			  <input type="submit" value="${en_button}"/>
+			</form>
+		  </li>
+		  <li>
+			<form action="Controller" method="post" class="locale">
+			  <input type="hidden" name="command" value="ru"/>
+			   <input type="hidden" name="page" value="${pageContext.request.requestURI}"/>
+			  <input type="submit" value="${ru_button}"/>
+			</form>
+		  </li>
+		</ul>
+		<h1>${title}</h1>
+		<a href="index.jsp">Back</a>
+	  </header>
 
-  <fieldset>
-    <form action="Controller" method="post">
-      <input type="hidden" name="command" value="registration"/>
-      <input type="text" name="login" required placeholder="${login}"/>
-      <input type="password" name="password" required placeholder="${password}"/>
-      <input type="submit" value="${register}"/>
-    </form>
-  </fieldset>
-</div>
-<c:if test="${errorMessageList != null}">
-	<c:forEach var="errorMessageKey" items="${errorMessageList}">
-	<fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
-		<div class="error">
-			<h4>${error}</h4>
-		</div>
-	</c:forEach>
-	<c:remove var="errorMessageList"/>
-</c:if>
-
-<c:if test="${infoMessage != null}">
-<fmt:message bundle="${loc}" key="${infoMessage}" var="message"/>
-	<div class="message">
-		<h4>${message}</h4>
+	  <fieldset>
+		<form action="Controller" method="post">
+		  <input type="hidden" name="command" value="registration"/>
+		  <input type="text" name="login" required placeholder="${login}"/>
+		  <input type="password" name="password" required placeholder="${password}"/>
+		  <input type="submit" value="${register}"/>
+		</form>
+	  </fieldset>
 	</div>
-	<c:remove var="infoMessage"/>
-</c:if>
+	<c:if test="${errorMessageList != null}">
+		<c:forEach var="errorMessageKey" items="${errorMessageList}">
+		<fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
+			<div class="error">
+				<h4>${error}</h4>
+			</div>
+		</c:forEach>
+		<c:remove var="errorMessageList"/>
+	</c:if>
+
+	<c:if test="${infoMessage != null}">
+	<fmt:message bundle="${loc}" key="${infoMessage}" var="message"/>
+		<div class="message">
+			<h4>${message}</h4>
+		</div>
+		<c:remove var="infoMessage"/>
+	</c:if>
 </div>
 <mytag:copyright/>
 

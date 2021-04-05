@@ -32,7 +32,6 @@
 </head>
 
 <body>
-<div id="wrap">
 <header>
     <div>
         <p>${welcome}, ${sessionScope.userLogin}!</p>
@@ -80,7 +79,7 @@
 		<div>
 			<p><a href="Controller?command=go_to_main_page">${menu_cards}</a> > ${command_top_up_card} № ${requestScope.numberCard} </p>
 		</div>
-	
+
 		<div class ="transfer">
 			<p>${enter_data}</p>
 			<form action="Controller" method="post">
@@ -100,12 +99,12 @@
                     <label>${recipient_card_data}: <input type="text" name="recipientCardNumber" value="${requestScope.numberCard}" disabled/></label>
                     <input type="hidden" name="recipientCardNumber" value="${requestScope.numberCard}"/>
                  </div>
-            
+
 				<input type="hidden" name="command" value="top_up_card"/>
 				<input type="submit" value="${command_top_up_card}"/>
 			</form>
 		</div>
-        
+
 		<c:if test="${errorMessageList != null}">
             <c:forEach var="errorMessageKey" items="${errorMessageList}">
             <fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
@@ -126,7 +125,6 @@
 
 	</section>
 
-</div>
 </div>
 <mytag:copyright/>
 

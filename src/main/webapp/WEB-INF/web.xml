@@ -17,6 +17,10 @@
 		<servlet-name>MyController</servlet-name>
 		<url-pattern>/Controller</url-pattern>
 	</servlet-mapping>
+	
+	<session-config>
+		<session-timeout>300</session-timeout>
+	</session-config>
     
 	 <servlet>
         <servlet-name>Registration</servlet-name>
@@ -35,10 +39,6 @@
         <servlet-name>ClientData</servlet-name>
         <url-pattern>/UserData</url-pattern>
     </servlet-mapping>
-	
-	<session-config>
-		<session-timeout>300</session-timeout>
-	</session-config>
 	
 	<error-page>
         <exception-type>java.lang.RuntimeException</exception-type>

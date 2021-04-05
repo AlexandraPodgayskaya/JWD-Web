@@ -31,7 +31,6 @@
 </head>
 
 <body>
-<div id="wrap">
 <header>
     <div>
         <p>${welcome}, ${sessionScope.userLogin}!</p>
@@ -120,7 +119,6 @@
         </c:if>
 	</section>
 
-</div>
 </div>
 <mytag:copyright/>
 

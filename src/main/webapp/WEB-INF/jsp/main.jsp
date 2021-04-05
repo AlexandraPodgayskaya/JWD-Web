@@ -43,7 +43,6 @@
 </head>
 
 <body>
-<div id="wrap">
 <header>
     <div>
         <p>${welcome}, ${sessionScope.userLogin}!</p>
@@ -64,7 +63,7 @@
                 </li>
                 <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <li>
-                    <form action="profile.html" method="post">
+                    <form action="profile.jsp" method="post">
                         <input type="hidden" name="command" value=""/>
                         <input type="submit" value="${menu_profile}"/>
                     </form>
@@ -111,14 +110,14 @@
         </form>
     </section>
     </c:if>
-    
+
     <c:if test="${sessionScope.foundClientInfo != null}">
     <section>
        <p> <b>${full_name}</b>: ${foundClientInfo.surname} ${foundClientInfo.name} ${foundClientInfo.patronymic}</p>
        <p> <b>${date_of_birth}</b>: ${foundClientInfo.dateBirth} </p>
        <p> <b>${personal_number_passport}</b>: ${foundClientInfo.personalNumberPassport} </p>
        <p> <b>${phone}</b>: ${foundClientInfo.phone} </p>
-    </section>   
+    </section>
     </c:if>
 
     <section>
@@ -177,7 +176,7 @@
                 </c:if>
                 <button onclick="openPopup('block-card-popup', 'blockNumberCard', 'blockCardNumberHolder', '${card.numberCard}')">${block}</button>
                 <button onclick="openPopup('close-card-popup', 'closeNumberCard', 'closeCardNumberHolder', '${card.numberCard}')">${close}</button>
-                
+
             </div>
         </c:if>
 		<c:if test="${card.isBlocked == true}">
@@ -208,7 +207,8 @@
 		</c:if>
 		<c:if test="${card.isClosed == true}">
 		  <c:if test="${sessionScope.userType == 'ADMIN'}">
-		  <div class ="cart">
+		  <div class ="cart closed">
+				<img src="img/close-img.png"/>
 		        <p><b>${closed}</b></p>
                 <p>${card.numberCard}</p>
                 <p>${card.balance} ${card.currency}</p>
@@ -226,8 +226,8 @@
                 </form>
           </div>
           </c:if>
-        </c:if>       
-	</c:forEach>	
+        </c:if>
+	</c:forEach>
 
 	<c:if test="${errorMessageList != null}">
         <c:forEach var="errorMessageKey" items="${errorMessageList}">
@@ -248,7 +248,7 @@
     </c:if>
 
     </section>
-    
+
     <div class="popup" id="close-card-popup">
         <div class="popup-content">
             <p> <b>${close}</b> ${word_card} № <span id="closeCardNumberHolder"></span> ?</p>
@@ -284,7 +284,6 @@
             <button onclick="closePopup('unblock-card-popup')">${cancelButton}</button>
         </div>
     </div>
-</div>
 </div>
 <mytag:copyright/>
 

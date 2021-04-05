@@ -27,13 +27,25 @@ public class GoToMainPageCommandImpl implements Command {
 
 	private static final Logger logger = LogManager.getLogger();
 
+	private static final String ERROR_SESSION_TIMED_OUT = "local.error.session_timed_out";
+	private static final String ERROR_LOGOUT = "local.error.logout";
+
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession session = request.getSession(false);
 
 		if (session == null) {
-			logger.info("session aborted");
+			logger.info("session timed out");
+			session = request.getSession(true);
+			session.setAttribute(Attribute.ERROR_MESSAGE, ERROR_SESSION_TIMED_OUT);
+			response.sendRedirect(GoToPage.INDEX_PAGE);
+			return;
+		}
+		
+		if (session.getAttribute(Attribute.USER_LOGIN) == null) {
+			logger.info("there was log out");
+			session.setAttribute(Attribute.ERROR_MESSAGE, ERROR_LOGOUT);
 			response.sendRedirect(GoToPage.INDEX_PAGE);
 			return;
 		}
@@ -58,7 +70,7 @@ public class GoToMainPageCommandImpl implements Command {
 			} else {
 				cardList = cardService.takeCards(id);
 			}
-			
+
 			request.setAttribute(Attribute.CARD_LIST, cardList);
 			session.setAttribute(Attribute.PAGE, GoToPage.MAIN_PAGE);
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(GoToPage.FORWARD_MAIN_PAGE);

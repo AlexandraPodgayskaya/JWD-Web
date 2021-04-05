@@ -11,7 +11,7 @@ public class UserDataValidator {
 	private static final String PASSWORD_PATTERN = "^[a-zA-Z0-9]{5,15}$";
 	private static final String CHARACTER_PATTERN = "^[a-zA-Zа-яА-Я]+$";
 	private static final String DATE_PATTERN = "^([0-2]\\d|3[01])\\.(0\\d|1[012])\\.(\\d{4})$";
-	private static final String PERSONAL_NUMBER_PASSPORT_PATTERN = "^[0-9]{7}[a-zA-Z][0-9]{3}[a-zA-Z]{2}[0-9]$";
+	private static final String PERSONAL_NUMBER_PASSPORT_PATTERN = "^[0-9]{7}[A-Z][0-9]{3}[A-Z]{2}[0-9]$";
 	private static final String PHONE_PATTERN = "^\\+375[0-9]{9}$";
 	private static final String ERROR_NO_USER_INFO = "local.error.no_user_info";
 	private static final String ERROR_LOGIN = "local.error.login";
