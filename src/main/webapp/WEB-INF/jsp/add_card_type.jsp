@@ -8,13 +8,19 @@
 <head>
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="local" var="loc"/>
+    <fmt:message bundle="${loc}" key="local.title.adding_card_type" var="title"/>
     <fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button"/>
     <fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button"/>
     <fmt:message bundle="${loc}" key="local.logout" var="logout"/>
     <fmt:message bundle="${loc}" key="local.welcome" var="welcome"/>
     <fmt:message bundle="${loc}" key="local.menu.cards" var="menu_cards"/>
+    <fmt:message bundle="${loc}" key="local.menu.add_card_type" var="add_card_type"/>
+    <fmt:message bundle="${loc}" key="local.enter_data" var="enter_data"/>
+    <fmt:message bundle="${loc}" key="local.card_type" var="card_type"/>
+    <fmt:message bundle="${loc}" key="local.image" var="image"/>
+    <fmt:message bundle="${loc}" key="local.add_type" var="add_type"/>
     <meta charset="UTF-8">
-    <title>Add card type</title>
+    <title>${tittle}</title>
     <link rel="stylesheet" href="css/add_card_type/style.css" type="text/css" />
     <link rel="stylesheet" href="css/common/footer.css" type="text/css" />
     <link rel="stylesheet" href="css/common/error_info.css" type="text/css" />
@@ -30,12 +36,14 @@
                 <li>
                     <form action="Controller" method="post" class="locale">
                         <input type="hidden" name="command" value="en"/>
+                        <input type="hidden" name="page" value="${pageContext.request.requestURI}"/>
                         <input type="submit" value="${en_button}"/>
                     </form>
                 </li>
                 <li>
                     <form action="Controller" method="post" class="locale">
                         <input type="hidden" name="command" value="ru"/>
+                        <input type="hidden" name="page" value="${pageContext.request.requestURI}"/>
                         <input type="submit" value="${ru_button}"/>
                     </form>
                 </li>
@@ -46,10 +54,8 @@
                     </form>
                 </li>
                 <li>
-                    <form action="" method="post">
-                        <input type="hidden" name="command" value=""/>
-                        <input type="hidden" name="page" value=""/>
-                        <input type="submit" value="�������� ��� �����"/>
+                   <form action="AddCardType" method="get">
+                        <input type="submit" value="${add_card_type}"/>
                     </form>
                 </li>
             </ul>
@@ -62,16 +68,16 @@
     <section>
 
 		<div class="card_type">
-			<p>Enter data:</p>
+			<p>${enter_data}</p>
 			<form action="Controller" method="post" enctype="multipart/form-data">
 				<div>
-                    <label>Card type name:<input type="text" name="cardTypeName" required placeholder="Card type name" value="" /></label>
+                    <label>${card_type}: <input type="text" name="cardType" required placeholder="${card_type}" value="" /></label>
                 </div>
                  <div>
-                    <label>Image:<input type="file" name="image" accept="image/*,image/jpeg"></label>
+                    <label>${image}: <input type="file" name="image" accept="image/*,image/jpeg"></label>
                  </div>
-				<input type="hidden" name="command" value=""/>
-				<input type="submit" value="Add"/>
+				<input type="hidden" name="command" value="add_card_type"/>
+				<input type="submit" value="${add_type}"/>
 			</form>
 		</div>
 

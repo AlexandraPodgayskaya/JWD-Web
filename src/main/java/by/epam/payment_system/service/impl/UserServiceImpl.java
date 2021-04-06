@@ -14,6 +14,7 @@ import by.epam.payment_system.service.exception.BusyLoginServiceException;
 import by.epam.payment_system.service.exception.NoSuchUserServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.UserInfoFormatServiceException;
+import by.epam.payment_system.service.exception.WrongPasswordServiceException;
 import by.epam.payment_system.service.util.encryption.PasswordEncryption;
 import by.epam.payment_system.service.validation.UserDataValidator;
 
@@ -88,6 +89,50 @@ public class UserServiceImpl implements UserService {
 		return id;
 	}
 
+	@Override
+	public void changeLogin(UserInfo userInfo, String newLogin) throws ServiceException {
+
+		UserDataValidator userValidator = new UserDataValidator();
+
+		if (!userValidator.basicDataValidation(userInfo)) {
+			throw new WrongPasswordServiceException("wrong password");
+		}
+
+		UserDAO userDAO = factory.getUserDAO();
+
+		try {
+			userInfo.setPassword(PasswordEncryption.encrypt(userInfo.getPassword()));
+			Optional<User> userOptional = userDAO.find(userInfo);
+			if (userOptional.isEmpty()) {
+				throw new WrongPasswordServiceException("wrong password");
+			}
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			throw new ServiceException("password encryption error", e);
+		} catch (DAOException e) {
+			throw new ServiceException("check password error", e);
+		}
+
+		if (!userValidator.loginValidation(newLogin)) {
+			throw new UserInfoFormatServiceException("new login format error");
+		}
+
+		if (!freeLogin(newLogin)) {
+			throw new BusyLoginServiceException("login is busy");
+		}
+
+		userInfo.setLogin(newLogin);
+
+		try {
+			if (!userDAO.updateLogin(userInfo)) {
+				throw new ServiceException("login change error");
+			}
+
+		} catch (DAOException e) {
+			throw new ServiceException("login change error", e);
+		}
+
+	}
+
 	private boolean freeLogin(String login) throws ServiceException {
 		UserDAO userDAO = factory.getUserDAO();
 
@@ -95,7 +140,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			idOptional = userDAO.findId(login);
 		} catch (DAOException e) {
-			throw new ServiceException("id search error", e);
+			throw new ServiceException("impossible to check whether the login is free", e);
 		}
 		return idOptional.isEmpty();
 	}

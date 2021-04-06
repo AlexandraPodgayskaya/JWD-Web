@@ -13,12 +13,15 @@ public final class Parameter {
 	public static final String ID = "userId";
 	public static final String LOGIN = "login";
 	public static final String PASSWORD = "password";
+	public static final String PASSWORD_CHECK = "passwordCheck";
 	public static final String SURNAME = "surname";
 	public static final String NAME = "name";
 	public static final String PATRONYMIC = "patronymic";
 	public static final String DATE_OF_BIRTH = "date_of_birth";
 	public static final String PERSONAL_NUMBER_PASSPORT = "personal_number_passport";
 	public static final String PHONE = "phone";
+	public static final String CARD_TYPE = "cardType";
+	public static final String IMAGE = "image";
 	public static final String SET_CURRENCY = "&currency=";
 	public static final String SET_NUMBER_CARD = "&numberCard=";
 	public static final String SET_BALANCE = "&balance=";

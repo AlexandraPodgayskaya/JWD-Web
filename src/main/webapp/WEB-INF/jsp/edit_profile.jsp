@@ -21,6 +21,15 @@
     <fmt:message bundle="${loc}" key="local.date_of_birth" var="date_of_birth"/>
     <fmt:message bundle="${loc}" key="local.personal_number_passport" var="personal_number_passport"/>
     <fmt:message bundle="${loc}" key="local.phone" var="phone"/>
+    <fmt:message bundle="${loc}" key="local.back" var="back"/>
+    <fmt:message bundle="${loc}" key="local.edit_profile" var="edit_profile"/>
+    <fmt:message bundle="${loc}" key="local.credentails" var="credentails"/>
+    <fmt:message bundle="${loc}" key="local.new_password" var="new_password"/>
+    <fmt:message bundle="${loc}" key="local.repeat_password" var="repeat_password"/>
+    <fmt:message bundle="${loc}" key="local.change" var="change"/>
+    <fmt:message bundle="${loc}" key="local.enter_password" var="enter_password"/>
+    <fmt:message bundle="${loc}" key="local.continue" var="continueButton"/>
+    <fmt:message bundle="${loc}" key="local.cancel" var="cancelButton"/>
     <title>${profile}</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/edit_profile/style.css" type="text/css" />
@@ -33,7 +42,7 @@
   <header>
     <form action="Controller" method="get" class="back">
         <input type="hidden" name="command" value="go_to_main_page"/>
-        <input type="submit" name="back" value="Back"/>
+        <input type="submit" name="back" value="${back}"/>
     </form>
 	<ul class="clearfix">
         <li>
@@ -49,18 +58,27 @@
             </form>
         </li>
     </ul>
-    <h1>Edit profile</h1>
+    <h1>${edit_profile}</h1>
   </header>
 
-  <p>Credentials</p>
+  <p>${credentails}</p>
   <form action="Controller" method="post" name="registration" class="edit clearfix">
-    <input type="hidden" name="command" value=""/>
-	<input type="hidden" name="userId" value=""/>
+    <input type="hidden" name="command" value="change_login"/>
 	<label>${login}:
-		<input type="text" name="login" required />
+		<input type="text" name="login" required placeholder="${sessionScope.userLogin}" value="${sessionScope.userLogin}" />
 	</label>
-	<label>${password}:
-		<input type="text" name="password" required />
+	<input type="hidden" name="passwordCheck" id="passwordCheckInput" value=""/>
+    <input type="submit" id="payment-submit-input" value="${change}"/>
+  </form>
+    <button id="payment-button" onclick="openPopup()">${save}</button>
+  
+  <form action="Controller" method="post" name="registration" class="edit clearfix">
+    <input type="hidden" name="command" value="change_password"/>
+	<label>${new_password}:
+		<input type="text" name="password" required placeholder="${new_password}" />
+	</label>
+	<label>${repeat_password}:
+		<input type="text" name="password" required placeholder="${repeat_password}" />
 	</label>
     <input type="submit" value="${save}"/>
   </form>
@@ -116,9 +134,43 @@
       <c:remove var="infoMessage"/>
   </c:if>
 
+    <div class="popup" id="check-password-popup">
+        <div class="popup-content">
+            <p>${enter_password}.</p>       
+            <input type="password" id="passwordInput" name="password" required placeholder="${password}"/>
+            <button onclick="closePopup()">${continueButton}</button>
+            <button onclick="closePopupWithNoPassword()">${cancelButton}</button>
+        </div>
+    </div>
+    
+    
 </div>
 
 <mytag:copyright/>
+
+<script>
+function openPopup() {
+      var popup = document.getElementById(popupId);
+      popup.style.visibility = "visible";
+  }
+
+    function closePopup() {
+		var passwordInputValue = document.getElementById("passwordInput").value;
+		var passwordCheckInput = document.getElementById("passwordCheckInput");
+		passwordCheckInput.setAttribute("value", passwordInputValue);
+		var paymentSubmitInput = document.getElementById("payment-submit-input");
+		paymentSubmitInput.style.visibility = "visible";
+		var paymentSubmitInput = document.getElementById("payment-button");
+		paymentSubmitInput.style.visibility = "hidden";
+		var popup = document.getElementById("check-password-popup");
+		popup.style.visibility = "hidden";
+    }
+	
+	function closePopupWithNoPassword() {
+		var popup = document.getElementById("check-password-popup");
+		popup.style.visibility = "hidden";
+    }
+</script>
 
 </body>
 </html>

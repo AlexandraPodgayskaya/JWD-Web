@@ -12,14 +12,14 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.command.CommandProvider;
+import by.epam.payment_system.controller.command.GoToPage;
+import by.epam.payment_system.controller.command.Parameter;
 
 public class Controller extends HttpServlet {
 
 	private static final Logger logger = LogManager.getLogger();
 	
 	private static final long serialVersionUID = 1L;
-	private static final String PARAMETER_COMMAND = "command";
-	private static final String GO_TO_ERROR_PAGE = "error.jsp";
 
 	private final CommandProvider provider = new CommandProvider();
 
@@ -40,17 +40,14 @@ public class Controller extends HttpServlet {
 	private void process(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String name;
-		Command command;
-
-		name = request.getParameter(PARAMETER_COMMAND);
+		String name = request.getParameter(Parameter.COMMAND);
 
 		if (name != null) {
-			command = provider.takeCommand(name);
+			Command command = provider.takeCommand(name);
 			command.execute(request, response);
 		} else {
 			logger.error ("null command");
-			response.sendRedirect(GO_TO_ERROR_PAGE);
+			response.sendRedirect(GoToPage.ERROR_PAGE);
 		}
 	}
 }

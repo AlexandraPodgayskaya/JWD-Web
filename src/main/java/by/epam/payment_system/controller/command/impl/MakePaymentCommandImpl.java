@@ -23,10 +23,10 @@ import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.TransactionService;
 import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
-import by.epam.payment_system.service.exception.NoSuchUserServiceException;
 import by.epam.payment_system.service.exception.NotEnoughMoneyServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.TransactionDataServiceException;
+import by.epam.payment_system.service.exception.WrongPasswordServiceException;
 
 public class MakePaymentCommandImpl implements Command {
 
@@ -81,7 +81,7 @@ public class MakePaymentCommandImpl implements Command {
 			session.setAttribute(Attribute.PAGE, GoToPage.MAIN_PAGE);
 			session.setAttribute(Attribute.INFO_MESSAGE, MESSAGE_PAYMENT_OK);
 			response.sendRedirect(GoToPage.MAIN_PAGE);
-		} catch (NoSuchUserServiceException e) {
+		} catch (WrongPasswordServiceException e) {
 			logger.error("wrong password", e);
 			session.setAttribute(Attribute.ERROR_MESSAGE, Arrays.asList(ERROR_WRONG_PASSWORD));
 			response.sendRedirect(

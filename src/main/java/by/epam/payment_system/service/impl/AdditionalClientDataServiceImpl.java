@@ -7,13 +7,14 @@ import by.epam.payment_system.dao.DAOException;
 import by.epam.payment_system.dao.DAOFactory;
 import by.epam.payment_system.entity.UserInfo;
 import by.epam.payment_system.service.AdditionalClientDataService;
+import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
 import by.epam.payment_system.service.exception.NoSuchUserServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.UserInfoFormatServiceException;
 import by.epam.payment_system.service.validation.UserDataValidator;
 
 public class AdditionalClientDataServiceImpl implements AdditionalClientDataService {
-	
+
 	private static final DAOFactory factory = DAOFactory.getInstance();
 
 	@Override
@@ -35,7 +36,7 @@ public class AdditionalClientDataServiceImpl implements AdditionalClientDataServ
 	}
 
 	@Override
-	public UserInfo getData(String personalNumberPassport) throws ServiceException {
+	public UserInfo search(String personalNumberPassport) throws ServiceException {
 
 		UserDataValidator validator = new UserDataValidator();
 
@@ -45,10 +46,10 @@ public class AdditionalClientDataServiceImpl implements AdditionalClientDataServ
 
 		AdditionalClientDataDAO additionalClientDataDAO = factory.getAdditionalClientDataDAO();
 
-		Optional <UserInfo> userInfoOptional;
+		Optional<UserInfo> userInfoOptional;
 		try {
-			userInfoOptional = additionalClientDataDAO.findData(personalNumberPassport);
-			
+			userInfoOptional = additionalClientDataDAO.findDataByPassport(personalNumberPassport);
+
 			if (userInfoOptional.isEmpty()) {
 				throw new NoSuchUserServiceException("no client data");
 			}
@@ -58,4 +59,25 @@ public class AdditionalClientDataServiceImpl implements AdditionalClientDataServ
 		return userInfoOptional.get();
 	}
 
+	@Override
+	public UserInfo getData(Integer userId) throws ServiceException {
+
+		if (userId == null) {
+			throw new ImpossibleOperationServiceException("no user id to get data");
+		}
+
+		AdditionalClientDataDAO additionalClientDataDAO = factory.getAdditionalClientDataDAO();
+
+		Optional<UserInfo> userInfoOptional;
+		try {
+			userInfoOptional = additionalClientDataDAO.findDataById(userId);
+
+			if (userInfoOptional.isEmpty()) {
+				throw new NoSuchUserServiceException("no client data");
+			}
+		} catch (DAOException e) {
+			throw new ServiceException("client data find error", e);
+		}
+		return userInfoOptional.get();
+	}
 }

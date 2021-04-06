@@ -7,6 +7,8 @@ public interface AdditionalClientDataService {
 	
 	void addData(UserInfo additionalUserClientInfo) throws ServiceException;
 	
-	UserInfo getData (String personalNumberPassport) throws ServiceException;
+	UserInfo search (String personalNumberPassport) throws ServiceException;
+	
+	UserInfo getData (Integer userId) throws ServiceException;
 
 }

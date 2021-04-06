@@ -160,8 +160,13 @@ header>div>form>input[type="submit"]:hover {
 	display: inline-block;
 }
 
+#cart_type_img {
+	width: 35px;
+	display: inline-block;
+}
+
 /* BLOCKED CART */
-.blocked img {
+.blocked img:first-child {
 	width: 35px;
 	float: right;
 }
@@ -171,7 +176,7 @@ header>div>form>input[type="submit"]:hover {
 }
 
 /* CLOSED CART */
-.closed img {
+.closed img:first-child {
 	width: 35px;
 	float: right;
 }

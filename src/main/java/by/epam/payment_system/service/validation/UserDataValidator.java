@@ -37,24 +37,24 @@ public class UserDataValidator {
 	}
 
 	public final boolean basicDataValidation(UserInfo userInfo) {
-		
+
 		if (userInfo == null) {
 			setDescriptionList(ERROR_NO_USER_INFO);
 			return false;
 		}
 
-		if (userInfo.getLogin() == null || !userInfo.getLogin().matches(LOGIN_PATTERN)) {
+		if (!loginValidation(userInfo.getLogin())) {
 			setDescriptionList(ERROR_LOGIN);
 		}
 
-		if (userInfo.getPassword() == null || !userInfo.getPassword().matches(PASSWORD_PATTERN)) {
+		if (!passwordValidation(userInfo.getPassword())) {
 			setDescriptionList(ERROR_PASSWORD);
 		}
 		return descriptionList == null;
 	}
 
 	public final boolean additionalDataValidation(UserInfo userInfo) {
-		
+
 		if (userInfo == null) {
 			setDescriptionList(ERROR_NO_USER_INFO);
 			return false;
@@ -72,8 +72,7 @@ public class UserDataValidator {
 		if (userInfo.getDateBirth() == null || !userInfo.getDateBirth().matches(DATE_PATTERN)) {
 			setDescriptionList(ERROR_DATE_OF_BIRTH);
 		}
-		if (userInfo.getPersonalNumberPassport() == null
-				|| !userInfo.getPersonalNumberPassport().matches(PERSONAL_NUMBER_PASSPORT_PATTERN)) {
+		if (!numberPassportValidation(userInfo.getPersonalNumberPassport())) {
 			setDescriptionList(ERROR_PERSONAL_NUMBER_PASSPORT);
 		}
 		if (userInfo.getPhone() == null || !userInfo.getPhone().matches(PHONE_PATTERN)) {
@@ -88,6 +87,20 @@ public class UserDataValidator {
 			return false;
 		}
 		return personalNumberPassport.matches(PERSONAL_NUMBER_PASSPORT_PATTERN);
+	}
+
+	public final boolean loginValidation(String login) {
+		if (login == null) {
+			return false;
+		}
+		return login.matches(LOGIN_PATTERN);
+	}
+
+	public final boolean passwordValidation(String password) {
+		if (password == null) {
+			return false;
+		}
+		return password.matches(PASSWORD_PATTERN);
 	}
 
 }

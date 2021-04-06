@@ -20,8 +20,14 @@ public class UserInfo implements Serializable {
 	public UserInfo() {
 
 	}
-	
+
 	public UserInfo(String login, String password) {
+		this.login = login;
+		this.password = password;
+	}
+
+	public UserInfo(int id, String login, String password) {
+		this.id = id;
 		this.login = login;
 		this.password = password;
 	}
@@ -186,6 +192,4 @@ public class UserInfo implements Serializable {
 				+ personalNumberPassport + ", phone=" + phone + ", typeUserId=" + typeUserId + "]";
 	}
 
-	
-	
 }

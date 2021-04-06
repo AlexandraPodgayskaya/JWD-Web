@@ -8,6 +8,8 @@ public interface AdditionalClientDataDAO {
 
 	void create(UserInfo additionalClientInfo) throws DAOException;
 
-	Optional <UserInfo> findData(String personalNumberPassport) throws DAOException;
+	Optional <UserInfo> findDataByPassport(String personalNumberPassport) throws DAOException;
+	
+	Optional <UserInfo> findDataById(Integer userId) throws DAOException;
 
 }

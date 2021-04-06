@@ -20,13 +20,14 @@ import by.epam.payment_system.entity.CardStatus;
 import by.epam.payment_system.entity.Currency;
 import by.epam.payment_system.entity.Transaction;
 import by.epam.payment_system.entity.TransactionType;
+import by.epam.payment_system.entity.User;
 import by.epam.payment_system.entity.UserInfo;
 import by.epam.payment_system.service.TransactionService;
 import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
-import by.epam.payment_system.service.exception.NoSuchUserServiceException;
 import by.epam.payment_system.service.exception.NotEnoughMoneyServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.TransactionDataServiceException;
+import by.epam.payment_system.service.exception.WrongPasswordServiceException;
 import by.epam.payment_system.service.util.encryption.PasswordEncryption;
 import by.epam.payment_system.service.validation.TransactionDataValidator;
 import by.epam.payment_system.service.validation.UserDataValidator;
@@ -111,15 +112,16 @@ public class TransactionServiceImpl implements TransactionService {
 
 		UserDataValidator userValidator = new UserDataValidator();
 		if (!userValidator.basicDataValidation(userInfo)) {
-			throw new NoSuchUserServiceException("wrong password");
+			throw new WrongPasswordServiceException("wrong password");
 		}
 
 		UserDAO userDAO = factory.getUserDAO();
 
 		try {
 			userInfo.setPassword(PasswordEncryption.encrypt(userInfo.getPassword()));
-			if (userDAO.find(userInfo) == null) {
-				throw new NoSuchUserServiceException("wrong password");
+			Optional<User> userOptional = userDAO.find(userInfo);
+			if (userOptional.isEmpty()) {
+				throw new WrongPasswordServiceException("wrong password");
 			}
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new ServiceException("password encryption error", e);

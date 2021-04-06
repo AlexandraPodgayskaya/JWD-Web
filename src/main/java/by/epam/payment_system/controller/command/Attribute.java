@@ -17,6 +17,7 @@ public final class Attribute {
 	public static final String SENDER_CARD_NUMBER = "senderCardNumber";
 	public static final String TRANSACTION_LIST = "transactionList";
 	public static final String COMMAND = "command";
+	public static final String USER_INFO = "userInfo";
 
 	private Attribute() {
 

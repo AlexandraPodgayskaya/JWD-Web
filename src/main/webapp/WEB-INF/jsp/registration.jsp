@@ -16,6 +16,7 @@
     <fmt:message bundle="${loc}" key="local.login" var="login"/>
     <fmt:message bundle="${loc}" key="local.password" var="password"/>
     <fmt:message bundle="${loc}" key="local.register" var="register"/>
+    <fmt:message bundle="${loc}" key="local.back" var="back"/>
     <title>${title}</title>
     <link rel="stylesheet" href="css/registration/style.css" type="text/css" />
     <link rel="stylesheet" href="css/common/footer.css" type="text/css" />
@@ -42,7 +43,7 @@
 		  </li>
 		</ul>
 		<h1>${title}</h1>
-		<a href="index.jsp">Back</a>
+		<a href="index.jsp">${back}</a>
 	  </header>
 
 	  <fieldset>

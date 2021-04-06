@@ -35,6 +35,7 @@
         <fmt:message bundle="${loc}" key="local.phone" var="phone"/>
         <fmt:message bundle="${loc}" key="local.closed" var="closed"/>
         <fmt:message bundle="${loc}" key="local.unblock" var="unblock"/>
+        <fmt:message bundle="${loc}" key="local.menu.add_card_type" var="add_card_type"/>
         <title>${title}</title>
     </head>
     <link rel="stylesheet" href="css/main/style.css" type="text/css" />
@@ -63,8 +64,8 @@
                 </li>
                 <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <li>
-                    <form action="profile.jsp" method="post">
-                        <input type="hidden" name="command" value=""/>
+                    <form action="Controller" method="post">
+                        <input type="hidden" name="command" value="go_to_edit_profile_page"/>
                         <input type="submit" value="${menu_profile}"/>
                     </form>
                 </li>
@@ -77,18 +78,16 @@
                 </li>
                 <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <li>
-                    <form action="cart_application.html" method="post">
-                        <input type="hidden" name="command" value=""/>
+                    <form action="Controller" method="post">
+                        <input type="hidden" name="command" value="go_to_open_card_page"/>
                         <input type="submit" value="${menu_card_application}"/>
                     </form>
                 </li>
                 </c:if>
                 <c:if test="${sessionScope.userType == 'ADMIN'}">
                 <li>
-                    <form action="cart_application.html" method="post">
-                        <input type="hidden" name="command" value=""/>
-                        <input type="hidden" name="page" value=""/>
-                        <input type="submit" value="Добавить вид карты"/>
+                    <form action="AddCardType" method="get">
+                        <input type="submit" value="${add_card_type}"/>
                     </form>
                 </li>
                 </c:if>
@@ -126,6 +125,9 @@
         <c:if test="${card.isBlocked == false}">
             <div class ="cart">
                 <p>${card.numberCard}</p>
+                <c:if test="${card.imagePath != null}">
+                <img id="cart_type_img" src="${card.imagePath}"/>
+                </c:if>
                 <p>${card.balance} ${card.currency}</p>
                 <c:if test="${card.status == 'MAIN'}">
                     <form action="Controller" method="post">
@@ -183,6 +185,9 @@
 		    <div class ="cart blocked">
                 <img src="img/zamok.png"/>
                 <p>${card.numberCard}</p>
+                <c:if test="${card.imagePath != null}">
+                <img id="cart_type_img" src="${card.imagePath}"/>
+                </c:if>
                 <p>${card.balance} ${card.currency}</p>
                 <c:if test="${card.status == 'MAIN'}">
                     <form action="Controller" method="post">
@@ -211,6 +216,9 @@
 				<img src="img/close-img.png"/>
 		        <p><b>${closed}</b></p>
                 <p>${card.numberCard}</p>
+                <c:if test="${card.imagePath != null}">
+                <img id="cart_type_img" src="${card.imagePath}"/>
+                </c:if>
                 <p>${card.balance} ${card.currency}</p>
                 <c:if test="${card.status == 'MAIN'}">
                     <form action="Controller" method="post">

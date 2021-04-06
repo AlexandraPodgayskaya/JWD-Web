@@ -6,9 +6,13 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import by.epam.payment_system.controller.command.impl.AddCardTypeCommandImpl;
 import by.epam.payment_system.controller.command.impl.BlockCardCommandImpl;
 import by.epam.payment_system.controller.command.impl.ChangeLocaleCommandImpl;
+import by.epam.payment_system.controller.command.impl.ChangeLoginCommandImpl;
+import by.epam.payment_system.controller.command.impl.ChangePasswordCommandImpl;
 import by.epam.payment_system.controller.command.impl.FindClientCommandImpl;
+import by.epam.payment_system.controller.command.impl.GoToEditProfilePageCommandImpl;
 import by.epam.payment_system.controller.command.impl.CloseCardCommandImpl;
 import by.epam.payment_system.controller.command.impl.DefaultCommandImpl;
 import by.epam.payment_system.controller.command.impl.GoToMainPageCommandImpl;
@@ -23,15 +27,14 @@ import by.epam.payment_system.controller.command.impl.ShowTransactionLogCommandI
 import by.epam.payment_system.controller.command.impl.TopUpCardCommandImpl;
 import by.epam.payment_system.controller.command.impl.UnBlockCardCommandImpl;
 
-
 public class CommandProvider {
-	
+
 	private static final Logger logger = LogManager.getLogger();
-	
+
 	private Map<CommandName, Command> commands = new HashMap<>();
 
 	public CommandProvider() {
-		
+
 		commands.put(CommandName.LOGIN, new LoginCommandImpl());
 		commands.put(CommandName.GO_TO_MAIN_PAGE, new GoToMainPageCommandImpl());
 		commands.put(CommandName.LOGOUT, new LogoutCommandImpl());
@@ -50,7 +53,11 @@ public class CommandProvider {
 		commands.put(CommandName.SHOW_CARD_LOG, new ShowTransactionLogCommandImpl());
 		commands.put(CommandName.DEFAULT_COMMAND, new DefaultCommandImpl());
 		commands.put(CommandName.CLIENT_SEARCH, new FindClientCommandImpl());
-	
+		commands.put(CommandName.ADD_CARD_TYPE, new AddCardTypeCommandImpl());
+		commands.put(CommandName.GO_TO_EDIT_PROFILE_PAGE, new GoToEditProfilePageCommandImpl());
+		commands.put(CommandName.CHANGE_LOGIN, new ChangeLoginCommandImpl());
+		commands.put(CommandName.CHANGE_PASSWORD, new ChangePasswordCommandImpl());
+
 	}
 
 	public Command takeCommand(String name) {
@@ -58,11 +65,11 @@ public class CommandProvider {
 
 		try {
 			commandName = CommandName.valueOf(name.toUpperCase());
-		} catch (IllegalArgumentException e){
+		} catch (IllegalArgumentException e) {
 			logger.error("no such command name");
 			commandName = CommandName.DEFAULT_COMMAND;
 		}
-		
+
 		return commands.get(commandName);
 	}
 
