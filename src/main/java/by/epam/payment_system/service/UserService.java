@@ -11,5 +11,7 @@ public interface UserService {
 	Integer registration(UserInfo registrationInfo) throws ServiceException;
 
 	void changeLogin(UserInfo userInfo, String newLogin) throws ServiceException;
+	
+	void changePassword(UserInfo userInfo, String newPassword) throws ServiceException;
 
 }

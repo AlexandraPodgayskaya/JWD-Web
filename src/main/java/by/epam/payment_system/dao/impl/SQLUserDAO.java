@@ -19,7 +19,7 @@ public class SQLUserDAO implements UserDAO {
 	private static final String SELECT_USER_SQL = "SELECT * FROM USERS WHERE LOGIN=? AND PASSWORD=? ";
 	private static final String SELECT_ID_SQL = "SELECT ID FROM USERS WHERE LOGIN=? ";
 	private static final String INSERT_USER_SQL = "INSERT INTO USERS (LOGIN, PASSWORD, TYPE) VALUES(?, ?, ?) ";
-	private static final String UPDATE_LOGIN_SQL = "UPDATE USERS SET LOGIN=? WHERE ID=? ";
+	private static final String UPDATE_LOGIN_SQL = "UPDATE USERS SET LOGIN=?, PASSWORD=? WHERE ID=? ";
 	private static final String COLUMN_USER_ID = "id";
 	private static final String COLUMN_USER_TYPE = "type";
 
@@ -90,12 +90,13 @@ public class SQLUserDAO implements UserDAO {
 	}
 
 	@Override
-	public boolean updateLogin(UserInfo userInfo) throws DAOException {
+	public boolean updateUser(UserInfo userInfo) throws DAOException {
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(UPDATE_LOGIN_SQL);) {
 
 			statement.setString(1, userInfo.getLogin());
-			statement.setInt(2, userInfo.getId());
+			statement.setString(2, userInfo.getPassword());
+			statement.setInt(3, userInfo.getId());
 
 			return statement.executeUpdate() != 0;
 

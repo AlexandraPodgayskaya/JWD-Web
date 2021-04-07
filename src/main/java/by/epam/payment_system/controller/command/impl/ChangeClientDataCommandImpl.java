@@ -10,18 +10,20 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import by.epam.payment_system.controller.builder.AbstractUserInfoBuilder;
+import by.epam.payment_system.controller.builder.AdditionalUserClientInfoBuilder;
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.util.GoToPage;
 import by.epam.payment_system.controller.util.SessionControl;
 import by.epam.payment_system.entity.UserInfo;
 import by.epam.payment_system.service.AdditionalClientDataService;
 import by.epam.payment_system.service.ServiceFactory;
-import by.epam.payment_system.service.exception.NoSuchUserServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
+import by.epam.payment_system.service.exception.UserInfoFormatServiceException;
 import by.epam.payment_system.util.Message;
 import by.epam.payment_system.util.ParameterConstraint;
 
-public class FindClientCommandImpl implements Command {
+public class ChangeClientDataCommandImpl implements Command {
 
 	private static final Logger logger = LogManager.getLogger();
 
@@ -31,27 +33,28 @@ public class FindClientCommandImpl implements Command {
 		if (!SessionControl.isExist(request, response)) {
 			return;
 		}
-		
-		HttpSession session = request.getSession(true);
 
-		session.removeAttribute(ParameterConstraint.FOUND_CLIENT_INFO);
+		AbstractUserInfoBuilder builder = new AdditionalUserClientInfoBuilder();
+		builder.buildUserInfo(request);
+		UserInfo additionalClientInfo = builder.getUserInfo();
 
 		ServiceFactory factory = ServiceFactory.getInstance();
-		AdditionalClientDataService clientDataService = factory.getAdditionalClientDataService();
+		AdditionalClientDataService additionalClientDataService = factory.getAdditionalClientDataService();
 
+		HttpSession session = request.getSession(true);
 		try {
-			UserInfo userInfo = clientDataService.search(request.getParameter(ParameterConstraint.NUMBER_PASSPORT));
-			session.setAttribute(ParameterConstraint.FOUND_CLIENT_INFO, userInfo);
-			response.sendRedirect(GoToPage.MAIN_PAGE);
-		} catch (NoSuchUserServiceException e) {
-			logger.error("user is not found", e);
-			session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_CLIENT_NOT_FOUND);
-			response.sendRedirect(GoToPage.MAIN_PAGE);
+			additionalClientDataService.addData(additionalClientInfo);
+			session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_PROFILE_SAVED);
+			session.setAttribute(ParameterConstraint.PAGE, GoToPage.INDEX_PAGE);
+			response.sendRedirect(GoToPage.INDEX_PAGE);
+		} catch (UserInfoFormatServiceException e) {
+			logger.error("wrong user info format", e);
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, e.getErrorDescription());
+			response.sendRedirect(GoToPage.CLIENT_DATA_PAGE + additionalClientInfo.getId());
 		} catch (ServiceException e) {
 			logger.error("general system error", e);
 			response.sendRedirect(GoToPage.ERROR_PAGE);
 		}
-
 	}
 
 }

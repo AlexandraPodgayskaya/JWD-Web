@@ -7,4 +7,5 @@ footer {
 }
 footer > p {
 	font: normal 12px Cambria;
+	background: transparent;
 }

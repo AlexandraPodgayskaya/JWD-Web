@@ -13,12 +13,12 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.util.GoToPage;
+import by.epam.payment_system.controller.util.SessionControl;
 import by.epam.payment_system.entity.UserInfo;
 import by.epam.payment_system.service.AdditionalClientDataService;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.exception.NoSuchUserServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
-import by.epam.payment_system.util.Message;
 import by.epam.payment_system.util.ParameterConstraint;
 
 public class GoToEditProfilePageCommandImpl implements Command {
@@ -28,26 +28,14 @@ public class GoToEditProfilePageCommandImpl implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		HttpSession session = request.getSession(false);
-
-		if (session == null) {
-			logger.info("session timed out");
-			session = request.getSession(true);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_SESSION_TIMED_OUT);
-			response.sendRedirect(GoToPage.INDEX_PAGE);
-			return;
-		}
-
-		if (session.getAttribute(ParameterConstraint.USER_LOGIN) == null) {
-			logger.info("there was log out");
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_LOGOUT);
-			response.sendRedirect(GoToPage.INDEX_PAGE);
+		if (!SessionControl.isExist(request, response)) {
 			return;
 		}
 
 		ServiceFactory factory = ServiceFactory.getInstance();
 		AdditionalClientDataService additionalClientDataService = factory.getAdditionalClientDataService();
 
+		HttpSession session = request.getSession(true);
 		Integer userId = (Integer) session.getAttribute(ParameterConstraint.USER_ID);
 		try {
 			UserInfo userInfo = additionalClientDataService.getData(userId);

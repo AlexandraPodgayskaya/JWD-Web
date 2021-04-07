@@ -110,12 +110,40 @@ public class UserServiceImpl implements UserService {
 		UserDAO userDAO = factory.getUserDAO();
 
 		try {
-			if (!userDAO.updateLogin(userInfo)) {
+			if (!userDAO.updateUser(userInfo)) {
 				throw new ServiceException("login change error");
 			}
 
 		} catch (DAOException e) {
 			throw new ServiceException("login change error", e);
+		}
+
+	}
+
+	@Override
+	public void changePassword(UserInfo userInfo, String newPassword) throws ServiceException {
+		if (!PasswordCheck.isCorrect(userInfo)) {
+			throw new WrongPasswordServiceException("wrong password for confirmation");
+		}
+
+		UserDataValidator userValidator = new UserDataValidator();
+
+		if (!userValidator.passwordValidation(newPassword)) {
+			throw new UserInfoFormatServiceException("new password format error");
+		}
+
+		UserDAO userDAO = factory.getUserDAO();
+
+		try {
+			userInfo.setPassword(PasswordEncryption.encrypt(newPassword));
+			if (!userDAO.updateUser(userInfo)) {
+				throw new ServiceException("password change error");
+			}
+
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			throw new ServiceException("password encryption error", e);
+		} catch (DAOException e) {
+			throw new ServiceException("password change error", e);
 		}
 
 	}

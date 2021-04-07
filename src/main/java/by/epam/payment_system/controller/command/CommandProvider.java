@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.command.impl.AddCardTypeCommandImpl;
 import by.epam.payment_system.controller.command.impl.BlockCardCommandImpl;
+import by.epam.payment_system.controller.command.impl.ChangeClientDataCommandImpl;
 import by.epam.payment_system.controller.command.impl.ChangeLocaleCommandImpl;
 import by.epam.payment_system.controller.command.impl.ChangeLoginCommandImpl;
 import by.epam.payment_system.controller.command.impl.ChangePasswordCommandImpl;
@@ -57,6 +58,7 @@ public class CommandProvider {
 		commands.put(CommandName.GO_TO_EDIT_PROFILE_PAGE, new GoToEditProfilePageCommandImpl());
 		commands.put(CommandName.CHANGE_LOGIN, new ChangeLoginCommandImpl());
 		commands.put(CommandName.CHANGE_PASSWORD, new ChangePasswordCommandImpl());
+		commands.put(CommandName.CHANGE_CLIENT_DATA, new ChangeClientDataCommandImpl());
 
 	}
 

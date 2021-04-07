@@ -11,6 +11,7 @@ public final class Message {
 	public static final String INFO_LOG_IS_EMPTY = "local.message.log_is_empty";
 	public static final String INFO_PROFILE_SAVED = "local.message.profile_saved";
 	public static final String INFO_LOGIN_CHANGED = "local.message.login_changed";
+	public static final String INFO_PASSWORD_CHANGED = "local.message.password_changed";
 	public static final String INFO_CLOSING_OK = "local.message.closing_card_ok";
 	public static final String INFO_CLIENT_NOT_FOUND = "local.message.client_not_found";
 	public static final String ERROR_SESSION_TIMED_OUT = "local.error.session_timed_out";
@@ -24,6 +25,7 @@ public final class Message {
 	public static final String ERROR_BUSY_LOGIN = "local.error.login_is_busy";
 	public static final String ERROR_NO_SUCH_USER = "local.error.no_such_user";
 	public static final String ERROR_REPEATED_LOGIN = "local.error.repeated_login";
+	public static final String ERROR_INCORRECT_PASSWORD_REPEAT = "local.error.incorrect_password_repeat";
 	public static final String ERROR_NO_TRANSFER_DETAILS = "local.error.no_transfer_details";
 	public static final String ERROR_NO_PAYMENT_DETAILS = "local.error.no_payment_details";
 	public static final String ERROR_NUMBER_CARD = "local.error.number_card";

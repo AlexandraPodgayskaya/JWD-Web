@@ -8,7 +8,7 @@
 <head>
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="local" var="loc"/>
-    <fmt:message bundle="${loc}" key="local.title.profile" var="title"/>
+    <fmt:message bundle="${loc}" key="local.title.profile" var="profile"/>
     <fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button"/>
     <fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button"/>
     <fmt:message bundle="${loc}" key="local.login" var="login"/>
@@ -65,50 +65,53 @@
   <form action="Controller" method="post" name="registration" class="edit clearfix">
     <input type="hidden" name="command" value="change_login"/>
 	<label>${login}:
-		<input type="text" name="login" required placeholder="${sessionScope.userLogin}" value="${sessionScope.userLogin}" />
+		<input type="text" name="login" required placeholder="${login}" value="${sessionScope.userLogin}" />
 	</label>
 	<input type="hidden" name="passwordCheck" id="passwordCheckInput" value=""/>
-    <input type="submit" id="payment-submit-input" value="${change}"/>
+    <input type="submit" id="edit-submit-input" value="${change}"/>
   </form>
-    <button id="payment-button" onclick="openPopup()">${save}</button>
-  
+    <button id="edit-button" onclick="openPopup()">${save}</button>
+
+  <hr/>
+
   <form action="Controller" method="post" name="registration" class="edit clearfix">
     <input type="hidden" name="command" value="change_password"/>
 	<label>${new_password}:
-		<input type="text" name="password" required placeholder="${new_password}" />
+		<input type="password" name="password" required placeholder="${new_password}" />
 	</label>
 	<label>${repeat_password}:
-		<input type="text" name="password" required placeholder="${repeat_password}" />
+		<input type="password" name="passwordRepeat" required placeholder="${repeat_password}" />
 	</label>
-    <input type="submit" value="${save}"/>
+    <input type="hidden" name="passwordCheck" id="passwordCheckInput" value=""/>
+    <input type="submit" id="edit-submit-input" value="${change}"/>
   </form>
-
+    <button id="edit-button" onclick="openPopup()">${save}</button>
+    
   <hr/>
 
   <p>${profile}</p>
   <form action="Controller" method="post" name="registration" class="edit clearfix">
-    <input type="hidden" name="command" value="save_additional_client_data"/>
-	<input type="hidden" name="userId" value=""/>
+    <input type="hidden" name="command" value="change_client_data"/>
     <div>
       <label>${full_name}: <br />
-          <input type="text" name="surname" required placeholder="${surname}" />
-          <input type="text" name="name" required placeholder="${name}" />
-          <input type="text" name="patronymic" required placeholder="${patronymic}" />
+          <input type="text" name="surname" required placeholder="${surname}" value="${userInfo.surname}" />
+          <input type="text" name="name" required placeholder="${name}" value="${userInfo.name}" />
+          <input type="text" name="patronymic" required placeholder="${patronymic}" value="${userInfo.patronymic}" />
       </label>
     </div>
     <div>
       <label>${date_of_birth}:
-		<input type="text" name="date_of_birth" required placeholder="XX.XX.XXXX" />
+		<input type="text" name="date_of_birth" required placeholder="XX.XX.XXXX" value="${userInfo.dateBirth}" />
       </label>
     </div>
 	<div>
 		<label>${personal_number_passport}:
-			<input type="text" name="personal_number_passport" id="passport" required placeholder="1111111A111PB1" />
+			<input type="text" name="personal_number_passport" id="passport" required placeholder="1111111A111PB1" value="${userInfo.personalNumberPassport}" />
 		</label>
 	</div>
     <div>
       <label>${phone}:
-		<input type="text" name="phone" required placeholder="+375XXXXXXXXX" />
+		<input type="text" name="phone" required placeholder="+375XXXXXXXXX" value="${userInfo.phone}" />
       </label>
     </div>
 
@@ -136,21 +139,21 @@
 
     <div class="popup" id="check-password-popup">
         <div class="popup-content">
-            <p>${enter_password}.</p>       
+            <p>${enter_password}:</p>
             <input type="password" id="passwordInput" name="password" required placeholder="${password}"/>
             <button onclick="closePopup()">${continueButton}</button>
             <button onclick="closePopupWithNoPassword()">${cancelButton}</button>
         </div>
     </div>
-    
-    
+
+
 </div>
 
 <mytag:copyright/>
 
 <script>
 function openPopup() {
-      var popup = document.getElementById(popupId);
+      var popup = document.getElementById("check-password-popup");
       popup.style.visibility = "visible";
   }
 
@@ -158,14 +161,14 @@ function openPopup() {
 		var passwordInputValue = document.getElementById("passwordInput").value;
 		var passwordCheckInput = document.getElementById("passwordCheckInput");
 		passwordCheckInput.setAttribute("value", passwordInputValue);
-		var paymentSubmitInput = document.getElementById("payment-submit-input");
+		var paymentSubmitInput = document.getElementById("edit-submit-input");
 		paymentSubmitInput.style.visibility = "visible";
-		var paymentSubmitInput = document.getElementById("payment-button");
+		var paymentSubmitInput = document.getElementById("edit-button");
 		paymentSubmitInput.style.visibility = "hidden";
 		var popup = document.getElementById("check-password-popup");
 		popup.style.visibility = "hidden";
     }
-	
+
 	function closePopupWithNoPassword() {
 		var popup = document.getElementById("check-password-popup");
 		popup.style.visibility = "hidden";

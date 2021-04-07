@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.util.GoToPage;
+import by.epam.payment_system.controller.util.SessionControl;
 import by.epam.payment_system.service.CardService;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
@@ -27,20 +28,7 @@ public class BlockCardCommandImpl implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		HttpSession session = request.getSession(false);
-
-		if (session == null) {
-			logger.info("session timed out");
-			session = request.getSession(true);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_SESSION_TIMED_OUT);
-			response.sendRedirect(GoToPage.INDEX_PAGE);
-			return;
-		}
-
-		if (session.getAttribute(ParameterConstraint.USER_LOGIN) == null) {
-			logger.info("there was log out");
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_LOGOUT);
-			response.sendRedirect(GoToPage.INDEX_PAGE);
+		if (!SessionControl.isExist(request, response)) {
 			return;
 		}
 
@@ -49,6 +37,7 @@ public class BlockCardCommandImpl implements Command {
 
 		String numberCard = request.getParameter(ParameterConstraint.NUMBER_CARD);
 
+		HttpSession session = request.getSession(true);
 		try {
 			cardService.blockCard(numberCard);
 			session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_BLOCKING_OK);

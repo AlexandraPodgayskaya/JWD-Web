@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.util.GoToPage;
+import by.epam.payment_system.controller.util.SessionControl;
 import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.service.CardService;
 import by.epam.payment_system.service.ServiceFactory;
@@ -28,23 +29,11 @@ public class UnBlockCardCommandImpl implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		HttpSession session = request.getSession(false);
-
-		if (session == null) {
-			logger.info("session timed out");
-			session = request.getSession(true);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_SESSION_TIMED_OUT);
-			response.sendRedirect(GoToPage.INDEX_PAGE);
+		if (!SessionControl.isExist(request, response)) {
 			return;
 		}
 
-		if (session.getAttribute(ParameterConstraint.USER_LOGIN) == null) {
-			logger.info("there was log out");
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_LOGOUT);
-			response.sendRedirect(GoToPage.INDEX_PAGE);
-			return;
-		}
-
+		HttpSession session = request.getSession(true);
 		if (session.getAttribute(ParameterConstraint.USER_TYPE) == UserType.CLIENT) {
 			logger.info("impossible operation for " + UserType.CLIENT);
 			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));

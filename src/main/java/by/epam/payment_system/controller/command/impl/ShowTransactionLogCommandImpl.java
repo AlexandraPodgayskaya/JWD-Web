@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.util.GoToPage;
+import by.epam.payment_system.controller.util.SessionControl;
 import by.epam.payment_system.controller.util.URIConstructor;
 import by.epam.payment_system.entity.Transaction;
 import by.epam.payment_system.service.ServiceFactory;
@@ -34,26 +35,14 @@ public class ShowTransactionLogCommandImpl implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		HttpSession session = request.getSession(false);
-
-		if (session == null) {
-			logger.info("session timed out");
-			session = request.getSession(true);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_SESSION_TIMED_OUT);
-			response.sendRedirect(GoToPage.INDEX_PAGE);
-			return;
-		}
-
-		if (session.getAttribute(ParameterConstraint.USER_LOGIN) == null) {
-			logger.info("there was log out");
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_LOGOUT);
-			response.sendRedirect(GoToPage.INDEX_PAGE);
+		if (!SessionControl.isExist(request, response)) {
 			return;
 		}
 
 		ServiceFactory factory = ServiceFactory.getInstance();
 		TransactionService transactionService = factory.getTransactionService();
 
+		HttpSession session = request.getSession(true);
 		try {
 			List<Transaction> transactionList;
 			if (request.getParameter(ParameterConstraint.COMMAND) != null

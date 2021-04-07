@@ -13,6 +13,6 @@ public interface UserDAO {
 
 	Optional<Integer> findId(String login) throws DAOException;
 
-	boolean updateLogin(UserInfo userInfo) throws DAOException;
+	boolean updateUser(UserInfo userInfo) throws DAOException;
 
 }

@@ -95,7 +95,7 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 				userInfo.setName(resultSet.getString(COLUMN_NAME));
 				userInfo.setPatronymic(resultSet.getString(COLUMN_PATRONYMIC));
 				userInfo.setDateBirth(resultSet.getString(COLUMN_DATE_BIRTH));
-				userInfo.setPersonalNumberPassport(COLUMN_PERSONAL_NUMBER_PASSPORT);
+				userInfo.setPersonalNumberPassport(resultSet.getString(COLUMN_PERSONAL_NUMBER_PASSPORT));
 				userInfo.setPhone(resultSet.getString(COLUMN_PHONE));
 
 				userInfoOptional = Optional.of(userInfo);
