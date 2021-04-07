@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import by.epam.payment_system.controller.command.Command;
-import by.epam.payment_system.controller.command.GoToPage;
+import by.epam.payment_system.controller.util.GoToPage;
 
 public class LogoutCommandImpl implements Command {
 	

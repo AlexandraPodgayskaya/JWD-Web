@@ -12,8 +12,8 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.command.CommandProvider;
-import by.epam.payment_system.controller.command.GoToPage;
-import by.epam.payment_system.controller.command.Parameter;
+import by.epam.payment_system.controller.util.GoToPage;
+import by.epam.payment_system.util.ParameterConstraint;
 
 public class Controller extends HttpServlet {
 
@@ -40,7 +40,7 @@ public class Controller extends HttpServlet {
 	private void process(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String name = request.getParameter(Parameter.COMMAND);
+		String name = request.getParameter(ParameterConstraint.COMMAND);
 
 		if (name != null) {
 			Command command = provider.takeCommand(name);

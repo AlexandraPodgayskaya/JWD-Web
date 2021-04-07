@@ -1,4 +1,4 @@
-package by.epam.payment_system.controller.command;
+package by.epam.payment_system.controller.util;
 
 public final class GoToPage {
 

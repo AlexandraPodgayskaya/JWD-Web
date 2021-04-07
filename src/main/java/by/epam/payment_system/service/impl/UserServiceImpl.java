@@ -9,18 +9,18 @@ import by.epam.payment_system.dao.DAOFactory;
 import by.epam.payment_system.dao.UserDAO;
 import by.epam.payment_system.entity.User;
 import by.epam.payment_system.entity.UserInfo;
+import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.service.UserService;
 import by.epam.payment_system.service.exception.BusyLoginServiceException;
 import by.epam.payment_system.service.exception.NoSuchUserServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.UserInfoFormatServiceException;
 import by.epam.payment_system.service.exception.WrongPasswordServiceException;
-import by.epam.payment_system.service.util.encryption.PasswordEncryption;
+import by.epam.payment_system.service.util.PasswordCheck;
+import by.epam.payment_system.service.util.PasswordEncryption;
 import by.epam.payment_system.service.validation.UserDataValidator;
 
 public class UserServiceImpl implements UserService {
-
-	private static final int TYPE_USER_CLIENT = 1;
 
 	private static final DAOFactory factory = DAOFactory.getInstance();
 
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 			throw new BusyLoginServiceException("login is busy");
 		}
 
-		userInfo.setTypeUserId(TYPE_USER_CLIENT);
+		userInfo.setUserType(UserType.CLIENT);
 
 		UserDAO userDAO = factory.getUserDAO();
 
@@ -92,25 +92,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void changeLogin(UserInfo userInfo, String newLogin) throws ServiceException {
 
-		UserDataValidator userValidator = new UserDataValidator();
-
-		if (!userValidator.basicDataValidation(userInfo)) {
+		if (!PasswordCheck.isCorrect(userInfo)) {
 			throw new WrongPasswordServiceException("wrong password");
 		}
 
-		UserDAO userDAO = factory.getUserDAO();
-
-		try {
-			userInfo.setPassword(PasswordEncryption.encrypt(userInfo.getPassword()));
-			Optional<User> userOptional = userDAO.find(userInfo);
-			if (userOptional.isEmpty()) {
-				throw new WrongPasswordServiceException("wrong password");
-			}
-		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-			throw new ServiceException("password encryption error", e);
-		} catch (DAOException e) {
-			throw new ServiceException("check password error", e);
-		}
+		UserDataValidator userValidator = new UserDataValidator();
 
 		if (!userValidator.loginValidation(newLogin)) {
 			throw new UserInfoFormatServiceException("new login format error");
@@ -121,6 +107,7 @@ public class UserServiceImpl implements UserService {
 		}
 
 		userInfo.setLogin(newLogin);
+		UserDAO userDAO = factory.getUserDAO();
 
 		try {
 			if (!userDAO.updateLogin(userInfo)) {

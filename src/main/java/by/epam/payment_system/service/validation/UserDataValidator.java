@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.epam.payment_system.entity.UserInfo;
+import by.epam.payment_system.util.Message;
 
 public class UserDataValidator {
 
@@ -13,15 +14,6 @@ public class UserDataValidator {
 	private static final String DATE_PATTERN = "^([0-2]\\d|3[01])\\.(0\\d|1[012])\\.(\\d{4})$";
 	private static final String PERSONAL_NUMBER_PASSPORT_PATTERN = "^[0-9]{7}[A-Z][0-9]{3}[A-Z]{2}[0-9]$";
 	private static final String PHONE_PATTERN = "^\\+375[0-9]{9}$";
-	private static final String ERROR_NO_USER_INFO = "local.error.no_user_info";
-	private static final String ERROR_LOGIN = "local.error.login";
-	private static final String ERROR_PASSWORD = "local.error.password";
-	private static final String ERROR_SURNAME = "local.error.surname";
-	private static final String ERROR_NAME = "local.error.name";
-	private static final String ERROR_PATRONYMIC = "local.error.patronymic";
-	private static final String ERROR_DATE_OF_BIRTH = "local.error.date_of_birth";
-	private static final String ERROR_PERSONAL_NUMBER_PASSPORT = "local.error.personal_number_passport";
-	private static final String ERROR_PHONE = "local.error.phone";
 
 	private List<String> descriptionList;
 
@@ -39,16 +31,16 @@ public class UserDataValidator {
 	public final boolean basicDataValidation(UserInfo userInfo) {
 
 		if (userInfo == null) {
-			setDescriptionList(ERROR_NO_USER_INFO);
+			setDescriptionList(Message.ERROR_NO_USER_INFO);
 			return false;
 		}
 
 		if (!loginValidation(userInfo.getLogin())) {
-			setDescriptionList(ERROR_LOGIN);
+			setDescriptionList(Message.ERROR_LOGIN);
 		}
 
 		if (!passwordValidation(userInfo.getPassword())) {
-			setDescriptionList(ERROR_PASSWORD);
+			setDescriptionList(Message.ERROR_PASSWORD);
 		}
 		return descriptionList == null;
 	}
@@ -56,27 +48,27 @@ public class UserDataValidator {
 	public final boolean additionalDataValidation(UserInfo userInfo) {
 
 		if (userInfo == null) {
-			setDescriptionList(ERROR_NO_USER_INFO);
+			setDescriptionList(Message.ERROR_NO_USER_INFO);
 			return false;
 		}
 
 		if (userInfo.getSurname() == null || !userInfo.getSurname().matches(CHARACTER_PATTERN)) {
-			setDescriptionList(ERROR_SURNAME);
+			setDescriptionList(Message.ERROR_SURNAME);
 		}
 		if (userInfo.getName() == null || !userInfo.getName().matches(CHARACTER_PATTERN)) {
-			setDescriptionList(ERROR_NAME);
+			setDescriptionList(Message.ERROR_NAME);
 		}
 		if (userInfo.getPatronymic() == null || !userInfo.getPatronymic().matches(CHARACTER_PATTERN)) {
-			setDescriptionList(ERROR_PATRONYMIC);
+			setDescriptionList(Message.ERROR_PATRONYMIC);
 		}
 		if (userInfo.getDateBirth() == null || !userInfo.getDateBirth().matches(DATE_PATTERN)) {
-			setDescriptionList(ERROR_DATE_OF_BIRTH);
+			setDescriptionList(Message.ERROR_DATE_OF_BIRTH);
 		}
 		if (!numberPassportValidation(userInfo.getPersonalNumberPassport())) {
-			setDescriptionList(ERROR_PERSONAL_NUMBER_PASSPORT);
+			setDescriptionList(Message.ERROR_PERSONAL_NUMBER_PASSPORT);
 		}
 		if (userInfo.getPhone() == null || !userInfo.getPhone().matches(PHONE_PATTERN)) {
-			setDescriptionList(ERROR_PHONE);
+			setDescriptionList(Message.ERROR_PHONE);
 		}
 
 		return descriptionList == null;

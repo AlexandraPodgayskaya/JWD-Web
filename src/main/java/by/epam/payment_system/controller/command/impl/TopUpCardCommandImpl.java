@@ -15,25 +15,21 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import by.epam.payment_system.controller.command.Attribute;
 import by.epam.payment_system.controller.command.Command;
-import by.epam.payment_system.controller.command.GoToPage;
-import by.epam.payment_system.controller.command.Parameter;
+import by.epam.payment_system.controller.util.GoToPage;
+import by.epam.payment_system.controller.util.URIConstructor;
 import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.TransactionService;
 import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.TransactionDataServiceException;
+import by.epam.payment_system.util.Message;
+import by.epam.payment_system.util.ParameterConstraint;
 
 public class TopUpCardCommandImpl implements Command {
 
 	private static final Logger logger = LogManager.getLogger();
-
-	private static final String MESSAGE_TOP_UP_CARD_OK = "local.message.top_up_card_ok";
-	private static final String ERROR_SESSION_TIMED_OUT = "local.error.session_timed_out";
-	private static final String ERROR_LOGOUT = "local.error.logout";
-	private static final String ERROR_IPOSSIBLE_OPERATION = "local.error.impossible_operation";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,21 +39,21 @@ public class TopUpCardCommandImpl implements Command {
 		if (session == null) {
 			logger.info("session timed out");
 			session = request.getSession(true);
-			session.setAttribute(Attribute.ERROR_MESSAGE, ERROR_SESSION_TIMED_OUT);
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_SESSION_TIMED_OUT);
 			response.sendRedirect(GoToPage.INDEX_PAGE);
 			return;
 		}
 
-		if (session.getAttribute(Attribute.USER_LOGIN) == null) {
+		if (session.getAttribute(ParameterConstraint.USER_LOGIN) == null) {
 			logger.info("there was log out");
-			session.setAttribute(Attribute.ERROR_MESSAGE, ERROR_LOGOUT);
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_LOGOUT);
 			response.sendRedirect(GoToPage.INDEX_PAGE);
 			return;
 		}
 
-		if (session.getAttribute(Attribute.USER_TYPE) == UserType.ADMIN) {
+		if (session.getAttribute(ParameterConstraint.USER_TYPE) == UserType.ADMIN) {
 			logger.info("impossible operation for " + UserType.ADMIN);
-			session.setAttribute(Attribute.ERROR_MESSAGE, Arrays.asList(ERROR_IPOSSIBLE_OPERATION));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 			return;
 		}
@@ -73,18 +69,18 @@ public class TopUpCardCommandImpl implements Command {
 		TransactionService transactionService = factory.getTransactionService();
 		try {
 			transactionService.topUpCard(transferDetails);
-			session.setAttribute(Attribute.PAGE, GoToPage.MAIN_PAGE);
-			session.setAttribute(Attribute.INFO_MESSAGE, MESSAGE_TOP_UP_CARD_OK);
+			session.setAttribute(ParameterConstraint.PAGE, GoToPage.MAIN_PAGE);
+			session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_TOP_UP_CARD_OK);
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (TransactionDataServiceException e) {
 			logger.error("incorrect data for transaction", e);
-			session.setAttribute(Attribute.ERROR_MESSAGE, e.getErrorDescription());
-			response.sendRedirect(GoToPage.TOP_UP_CARD_PAGE + Parameter.SET_NUMBER_CARD
-					+ transferDetails.get(Parameter.RECIPIENT_CARD_NUMBER) + Parameter.SET_CURRENCY
-					+ transferDetails.get(Parameter.CURRENCY));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, e.getErrorDescription());
+			response.sendRedirect(GoToPage.TOP_UP_CARD_PAGE + URIConstructor.SET_NUMBER_CARD
+					+ transferDetails.get(ParameterConstraint.RECIPIENT_CARD_NUMBER) + URIConstructor.SET_CURRENCY
+					+ transferDetails.get(ParameterConstraint.CURRENCY));
 		} catch (ImpossibleOperationServiceException e) {
 			logger.error("impossible operation", e);
-			session.setAttribute(Attribute.ERROR_MESSAGE, Arrays.asList(ERROR_IPOSSIBLE_OPERATION));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);

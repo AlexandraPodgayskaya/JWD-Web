@@ -18,20 +18,19 @@ import by.epam.payment_system.entity.TransactionType;
 
 public class SQLAccountDAO implements AccountDAO {
 
-	private static final String SELECT_ACCOUNT_SQL = "SELECT * FROM ACCOUNTS JOIN CURRENCIES ON ACCOUNTS.CURRENCY_ID=CURRENCIES.ID WHERE NUMBER_ACCOUNT=? ";
+	private static final String SELECT_ACCOUNT_SQL = "SELECT * FROM ACCOUNTS WHERE NUMBER_ACCOUNT=? ";
 	private static final String INCREASE_BALANCE_SQL = "UPDATE ACCOUNTS SET BALANCE=BALANCE + ? WHERE NUMBER_ACCOUNT=?";
 	private static final String DECREASE_BALANCE_SQL = "UPDATE ACCOUNTS SET BALANCE=BALANCE - ? WHERE NUMBER_ACCOUNT=?";
 	private static final String COLUMN_BALANCE = "balance";
 	private static final String COLUMN_CURRENCY = "currency";
-	private static final String COLUMN_CURRENCY_ID = "currency_id";
 	private static final String COLUMN_OWNER = "owner";
 
 	private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 	@Override
-	public Optional <Account> getAccount(String numberAccount) throws DAOException {
+	public Optional<Account> getAccount(String numberAccount) throws DAOException {
 
-		Optional <Account> accountOptional = Optional.empty();
+		Optional<Account> accountOptional = Optional.empty();
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SELECT_ACCOUNT_SQL);) {
 
@@ -40,11 +39,10 @@ public class SQLAccountDAO implements AccountDAO {
 
 			if (resultSet.next()) {
 				BigDecimal balance = resultSet.getBigDecimal(COLUMN_BALANCE);
-				int currencyId = resultSet.getInt(COLUMN_CURRENCY_ID);
 				String currencyAccount = resultSet.getString(COLUMN_CURRENCY);
 				Currency currency = Currency.valueOf(currencyAccount.toUpperCase());
 				int owner = resultSet.getInt(COLUMN_OWNER);
-				Account account = new Account(numberAccount, balance, currencyId, currency, owner);
+				Account account = new Account(numberAccount, balance, currency, owner);
 				accountOptional = Optional.of(account);
 			}
 

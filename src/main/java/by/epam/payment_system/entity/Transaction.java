@@ -12,7 +12,6 @@ public class Transaction implements Serializable {
 	private TransactionType typeTransaction;
 	private String amount;
 	private Currency currency;
-	private int currencyId;
 	private Timestamp dateTime;
 	private String bankCode;
 	private String senderOrRecipientAccount;
@@ -25,24 +24,24 @@ public class Transaction implements Serializable {
 	}
 
 	public Transaction(String transactionAccount, String numberCard, TransactionType typeTransaction, String amount,
-			int currencyId, String senderOrRecipientAccount, String purposePayment) {
+			Currency currency, String senderOrRecipientAccount, String purposePayment) {
 		this.transactionAccount = transactionAccount;
 		this.numberCard = numberCard;
 		this.typeTransaction = typeTransaction;
+		this.currency = currency;
 		this.amount = amount;
-		this.currencyId = currencyId;
 		this.senderOrRecipientAccount = senderOrRecipientAccount;
 		this.purposePayment = purposePayment;
 	}
 
 	public Transaction(String transactionAccount, String numberCard, TransactionType typeTransaction, String amount,
-			int currencyId, String bankCode, String senderOrRecipientAccount, String ynp, String name,
+			Currency currency, String bankCode, String senderOrRecipientAccount, String ynp, String name,
 			String purposePayment) {
 		this.transactionAccount = transactionAccount;
 		this.numberCard = numberCard;
 		this.typeTransaction = typeTransaction;
 		this.amount = amount;
-		this.currencyId = currencyId;
+		this.currency = currency;
 		this.bankCode = bankCode;
 		this.senderOrRecipientAccount = senderOrRecipientAccount;
 		this.ynp = ynp;
@@ -88,14 +87,6 @@ public class Transaction implements Serializable {
 
 	public void setCurrency(Currency currency) {
 		this.currency = currency;
-	}
-
-	public int getCurrencyId() {
-		return currencyId;
-	}
-
-	public void setCurrencyId(int currencyId) {
-		this.currencyId = currencyId;
 	}
 
 	public Timestamp getDateTime() {
@@ -153,7 +144,6 @@ public class Transaction implements Serializable {
 		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
 		result = prime * result + ((bankCode == null) ? 0 : bankCode.hashCode());
 		result = prime * result + ((currency == null) ? 0 : currency.hashCode());
-		result = prime * result + currencyId;
 		result = prime * result + ((dateTime == null) ? 0 : dateTime.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((numberCard == null) ? 0 : numberCard.hashCode());
@@ -185,8 +175,6 @@ public class Transaction implements Serializable {
 		} else if (!bankCode.equals(other.bankCode))
 			return false;
 		if (currency != other.currency)
-			return false;
-		if (currencyId != other.currencyId)
 			return false;
 		if (dateTime == null) {
 			if (other.dateTime != null)
@@ -232,9 +220,9 @@ public class Transaction implements Serializable {
 	public String toString() {
 		return "Transaction [transactionAccount=" + transactionAccount + ", numberCard=" + numberCard
 				+ ", typeTransaction=" + typeTransaction + ", amount=" + amount + ", currency=" + currency
-				+ ", currencyId=" + currencyId + ", dateTime=" + dateTime + ", bankCode=" + bankCode
-				+ ", senderOrRecipientAccount=" + senderOrRecipientAccount + ", ynp=" + ynp + ", name=" + name
-				+ ", purposePayment=" + purposePayment + "]";
+				+ ", dateTime=" + dateTime + ", bankCode=" + bankCode + ", senderOrRecipientAccount="
+				+ senderOrRecipientAccount + ", ynp=" + ynp + ", name=" + name + ", purposePayment=" + purposePayment
+				+ "]";
 	}
 
 }

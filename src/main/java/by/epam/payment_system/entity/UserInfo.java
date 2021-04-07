@@ -9,13 +9,13 @@ public class UserInfo implements Serializable {
 	private int id;
 	private String login;
 	private String password;
+	private UserType userType;
 	private String surname;
 	private String name;
 	private String patronymic;
 	private String dateBirth;
 	private String personalNumberPassport;
 	private String phone;
-	private int typeUserId;
 
 	public UserInfo() {
 
@@ -54,6 +54,14 @@ public class UserInfo implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public UserType getUserType() {
+		return userType;
+	}
+
+	public void setUserType(UserType userType) {
+		this.userType = userType;
 	}
 
 	public String getSurname() {
@@ -104,14 +112,6 @@ public class UserInfo implements Serializable {
 		this.phone = phone;
 	}
 
-	public int getTypeUserId() {
-		return typeUserId;
-	}
-
-	public void setTypeUserId(int typeUserId) {
-		this.typeUserId = typeUserId;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -125,7 +125,7 @@ public class UserInfo implements Serializable {
 		result = prime * result + ((personalNumberPassport == null) ? 0 : personalNumberPassport.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
-		result = prime * result + typeUserId;
+		result = prime * result + ((userType == null) ? 0 : userType.hashCode());
 		return result;
 	}
 
@@ -180,16 +180,16 @@ public class UserInfo implements Serializable {
 				return false;
 		} else if (!surname.equals(other.surname))
 			return false;
-		if (typeUserId != other.typeUserId)
+		if (userType != other.userType)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "UserInfo [id=" + id + ", login=" + login + ", password=" + password + ", surname=" + surname + ", name="
-				+ name + ", patronymic=" + patronymic + ", dateBirth=" + dateBirth + ", personalNumberPassport="
-				+ personalNumberPassport + ", phone=" + phone + ", typeUserId=" + typeUserId + "]";
+		return "UserInfo [id=" + id + ", login=" + login + ", password=" + password + ", userType=" + userType
+				+ ", surname=" + surname + ", name=" + name + ", patronymic=" + patronymic + ", dateBirth=" + dateBirth
+				+ ", personalNumberPassport=" + personalNumberPassport + ", phone=" + phone + "]";
 	}
 
 }

@@ -6,23 +6,21 @@ import java.math.BigDecimal;
 public class Account implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private String numberAccount;
-    private BigDecimal balance;
-    private Currency currency;
-    private int currencyId;
-    private int ownerId;
+	private BigDecimal balance;
+	private Currency currency;
+	private int ownerId;
 
-    public Account() {
-    }
+	public Account() {
+	}
 
-    public Account(String numberAccount, BigDecimal balance, int currencyId, Currency currency, int ownerId) {
-        this.numberAccount = numberAccount;
-        this.balance = balance;
-        this.currencyId = currencyId;
-        this.currency = currency;
-        this.ownerId = ownerId;
-    }
+	public Account(String numberAccount, BigDecimal balance, Currency currency, int ownerId) {
+		this.numberAccount = numberAccount;
+		this.balance = balance;
+		this.currency = currency;
+		this.ownerId = ownerId;
+	}
 
 	public String getNumberAccount() {
 		return numberAccount;
@@ -48,14 +46,6 @@ public class Account implements Serializable {
 		this.currency = currency;
 	}
 
-	public int getCurrencyId() {
-		return currencyId;
-	}
-
-	public void setCurrencyId(int currencyId) {
-		this.currencyId = currencyId;
-	}
-
 	public int getOwnerId() {
 		return ownerId;
 	}
@@ -70,7 +60,6 @@ public class Account implements Serializable {
 		int result = 1;
 		result = prime * result + ((balance == null) ? 0 : balance.hashCode());
 		result = prime * result + ((currency == null) ? 0 : currency.hashCode());
-		result = prime * result + currencyId;
 		result = prime * result + ((numberAccount == null) ? 0 : numberAccount.hashCode());
 		result = prime * result + ownerId;
 		return result;
@@ -92,8 +81,6 @@ public class Account implements Serializable {
 			return false;
 		if (currency != other.currency)
 			return false;
-		if (currencyId != other.currencyId)
-			return false;
 		if (numberAccount == null) {
 			if (other.numberAccount != null)
 				return false;
@@ -107,8 +94,7 @@ public class Account implements Serializable {
 	@Override
 	public String toString() {
 		return "Account [numberAccount=" + numberAccount + ", balance=" + balance + ", currency=" + currency
-				+ ", currencyId=" + currencyId + ", ownerId=" + ownerId + "]";
+				+ ", ownerId=" + ownerId + "]";
 	}
 
-	
 }

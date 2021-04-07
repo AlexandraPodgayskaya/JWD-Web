@@ -13,22 +13,20 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.builder.AbstractUserInfoBuilder;
 import by.epam.payment_system.controller.builder.UserInfoBuilder;
-import by.epam.payment_system.controller.command.Attribute;
 import by.epam.payment_system.controller.command.Command;
-import by.epam.payment_system.controller.command.GoToPage;
+import by.epam.payment_system.controller.util.GoToPage;
 import by.epam.payment_system.entity.UserInfo;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.UserService;
 import by.epam.payment_system.service.exception.BusyLoginServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.UserInfoFormatServiceException;
+import by.epam.payment_system.util.Message;
+import by.epam.payment_system.util.ParameterConstraint;
 
 public class RegisterCommandImpl implements Command {
 
 	private static final Logger logger = LogManager.getLogger();
-
-	private static final String MESSAGE_REGISTRATION_OK = "local.message.registration_ok";
-	private static final String ERROR_BUSY_LOGIN = "local.error.login_is_busy";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -42,16 +40,16 @@ public class RegisterCommandImpl implements Command {
 		HttpSession session = request.getSession(true);
 		try {
 			Integer id = userService.registration(userInfo);
-			session.setAttribute(Attribute.INFO_MESSAGE, MESSAGE_REGISTRATION_OK);
-			session.setAttribute(Attribute.PAGE, GoToPage.CLIENT_DATA_PAGE + String.valueOf(id));
+			session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_REGISTRATION_OK);
+			session.setAttribute(ParameterConstraint.PAGE, GoToPage.CLIENT_DATA_PAGE + String.valueOf(id));
 			response.sendRedirect(GoToPage.CLIENT_DATA_PAGE + String.valueOf(id));
 		} catch (UserInfoFormatServiceException e) {
 			logger.error("wrong user info format", e);
-			session.setAttribute(Attribute.ERROR_MESSAGE, e.getErrorDescription());
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, e.getErrorDescription());
 			response.sendRedirect(GoToPage.REGISTRATION_PAGE);
 		} catch (BusyLoginServiceException e) {
 			logger.error("login is busy", e);
-			session.setAttribute(Attribute.ERROR_MESSAGE, Arrays.asList(ERROR_BUSY_LOGIN));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_BUSY_LOGIN));
 			response.sendRedirect(GoToPage.REGISTRATION_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);

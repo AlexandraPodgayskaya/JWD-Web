@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import by.epam.payment_system.controller.command.Command;
-import by.epam.payment_system.controller.command.GoToPage;
+import by.epam.payment_system.controller.util.GoToPage;
 
 public class DefaultCommandImpl implements Command {
 

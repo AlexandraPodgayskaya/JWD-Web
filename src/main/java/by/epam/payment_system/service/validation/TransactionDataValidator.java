@@ -8,19 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 import by.epam.payment_system.entity.Currency;
+import by.epam.payment_system.util.Message;
+import by.epam.payment_system.util.ParameterConstraint;
 
 public class TransactionDataValidator {
 
-	private static final String SENDER_CARD_NUMBER = "senderCardNumber";
-	private static final String SENDER_EXPIRATION_DATE = "senderExpirationDate";
-	private static final String SENDER_CVV_CODE = "senderCvvCode";
-	private static final String AMOUNT = "amount";
-	private static final String CURRENCY = "currency";
-	private static final String RECIPIENT_YNP = "recipientYNP";
-	private static final String RECIPIENT = "recipientName";
-	private static final String RECIPIENT_CARD_NUMBER = "recipientCardNumber";
-	private static final String RECIPIENT_BANK_CODE = "BIC";
-	private static final String RECIPIENT_IBAN_ACCOUNT = "IBAN";
 	private static final String NUMBER_CARD_PATTERN = "^[0-9]{16}$";
 	private static final String EXPIRATION_DATE_PATTERN = "^(0\\d|1[012])\\/(\\d{2})$";
 	private static final String CVV_CODE_PATTERN = "^[0-9]{3}$";
@@ -29,16 +21,6 @@ public class TransactionDataValidator {
 	private static final String BIC_PATTERN = "^[A-Z0-9]{8}$";
 	private static final String IBAN_PATTERN = "^BY[0-9]{2}[A-Z]{4}[0-9]{20}$";
 	private static final String DATE_FORMAT = "MM/yy";
-	private static final String ERROR_NO_TRANSFER_DETAILS = "local.error.no_transfer_details";
-	private static final String ERROR_NO_PAYMENT_DETAILS = "local.error.no_payment_details";
-	private static final String ERROR_NUMBER_CARD = "local.error.number_card";
-	private static final String ERROR_EXPIRATION_DATE = "local.error.expiration_date";
-	private static final String ERROR_CVV_CODE = "local.error.cvv_code";
-	private static final String ERROR_SUM = "local.error.sum";
-	private static final String ERROR_CURRENCY = "local.error.currency";
-	private static final String ERROR_YNP = "local.error.ynp";
-	private static final String ERROR_RECIPIENT = "local.error.recipient";
-	private static final String ERROR_BIC = "local.error.bic";
 
 	private List<String> descriptionList;
 
@@ -56,56 +38,56 @@ public class TransactionDataValidator {
 	public final boolean topUpCardValidation(Map<String, String> transferDetails) {
 
 		if (transferDetails == null) {
-			setDescriptionList(ERROR_NO_TRANSFER_DETAILS);
+			setDescriptionList(Message.ERROR_NO_TRANSFER_DETAILS);
 			return false;
 		}
 
-		if (transferDetails.get(SENDER_CARD_NUMBER) == null
-				|| !transferDetails.get(SENDER_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
-			setDescriptionList(ERROR_NUMBER_CARD);
+		if (transferDetails.get(ParameterConstraint.SENDER_CARD_NUMBER) == null
+				|| !transferDetails.get(ParameterConstraint.SENDER_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
+			setDescriptionList(Message.ERROR_NUMBER_CARD);
 		}
 
-		if (transferDetails.get(SENDER_EXPIRATION_DATE) != null
-				&& transferDetails.get(SENDER_EXPIRATION_DATE).matches(EXPIRATION_DATE_PATTERN)) {
+		if (transferDetails.get(ParameterConstraint.SENDER_EXPIRATION_DATE) != null
+				&& transferDetails.get(ParameterConstraint.SENDER_EXPIRATION_DATE).matches(EXPIRATION_DATE_PATTERN)) {
 
-			String expirationDate = transferDetails.get(SENDER_EXPIRATION_DATE);
+			String expirationDate = transferDetails.get(ParameterConstraint.SENDER_EXPIRATION_DATE);
 			SimpleDateFormat format = new SimpleDateFormat();
 			format.applyPattern(DATE_FORMAT);
 			try {
 				Date date = format.parse(expirationDate);
 				Date currentDate = new Date();
 				if (date.before(currentDate)) {
-					setDescriptionList(ERROR_EXPIRATION_DATE);
+					setDescriptionList(Message.ERROR_EXPIRATION_DATE);
 				}
 			} catch (ParseException e) {
-				setDescriptionList(ERROR_EXPIRATION_DATE);
+				setDescriptionList(Message.ERROR_EXPIRATION_DATE);
 			}
 		} else {
-			setDescriptionList(ERROR_EXPIRATION_DATE);
+			setDescriptionList(Message.ERROR_EXPIRATION_DATE);
+		}
+		
+		if (transferDetails.get(ParameterConstraint.SENDER_CVV_CODE) == null
+				|| !transferDetails.get(ParameterConstraint.SENDER_CVV_CODE).matches(CVV_CODE_PATTERN)) {
+			setDescriptionList(Message.ERROR_CVV_CODE);
 		}
 
-		if (transferDetails.get(SENDER_CVV_CODE) == null
-				|| !transferDetails.get(SENDER_CVV_CODE).matches(CVV_CODE_PATTERN)) {
-			setDescriptionList(ERROR_CVV_CODE);
+		if (transferDetails.get(ParameterConstraint.AMOUNT) == null || !transferDetails.get(ParameterConstraint.AMOUNT).matches(SUM_PATTERN)) {
+			setDescriptionList(Message.ERROR_SUM);
 		}
 
-		if (transferDetails.get(AMOUNT) == null || !transferDetails.get(AMOUNT).matches(SUM_PATTERN)) {
-			setDescriptionList(ERROR_SUM);
-		}
-
-		if (transferDetails.get(CURRENCY) != null) {
+		if (transferDetails.get(ParameterConstraint.CURRENCY) != null) {
 			try {
-				Currency.valueOf(transferDetails.get(CURRENCY));
+				Currency.valueOf(transferDetails.get(ParameterConstraint.CURRENCY));
 			} catch (IllegalArgumentException e) {
-				setDescriptionList(ERROR_CURRENCY);
+				setDescriptionList(Message.ERROR_CURRENCY);
 			}
 		} else {
-			setDescriptionList(ERROR_CURRENCY);
+			setDescriptionList(Message.ERROR_CURRENCY);
 		}
 
-		if (transferDetails.get(RECIPIENT_CARD_NUMBER) == null
-				|| !transferDetails.get(RECIPIENT_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
-			setDescriptionList(ERROR_NUMBER_CARD);
+		if (transferDetails.get(ParameterConstraint.RECIPIENT_CARD_NUMBER) == null
+				|| !transferDetails.get(ParameterConstraint.RECIPIENT_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
+			setDescriptionList(Message.ERROR_NUMBER_CARD);
 		}
 
 		return descriptionList == null;
@@ -114,47 +96,45 @@ public class TransactionDataValidator {
 	public final boolean paymentValidation(Map<String, String> paymentDetails) {
 		
 		if (paymentDetails == null) {
-			setDescriptionList(ERROR_NO_PAYMENT_DETAILS);
+			setDescriptionList(Message.ERROR_NO_PAYMENT_DETAILS);
 			return false;
 		}
 
-		if (paymentDetails.get(SENDER_CARD_NUMBER) == null
-				|| !paymentDetails.get(SENDER_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
-			setDescriptionList(ERROR_NUMBER_CARD);
+		if (paymentDetails.get(ParameterConstraint.SENDER_CARD_NUMBER) == null
+				|| !paymentDetails.get(ParameterConstraint.SENDER_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
+			setDescriptionList(Message.ERROR_NUMBER_CARD);
 		}
 
-		if (paymentDetails.get(RECIPIENT_YNP) == null || !paymentDetails.get(RECIPIENT_YNP).matches(YNP_PATTERN)) {
-			setDescriptionList(ERROR_YNP);
+		if (paymentDetails.get(ParameterConstraint.RECIPIENT_YNP) == null || !paymentDetails.get(ParameterConstraint.RECIPIENT_YNP).matches(YNP_PATTERN)) {
+			setDescriptionList(Message.ERROR_YNP);
 		}
 
-		if (paymentDetails.get(RECIPIENT) == null) {
-			setDescriptionList(ERROR_RECIPIENT);
+		if (paymentDetails.get(ParameterConstraint.RECIPIENT) == null) {
+			setDescriptionList(Message.ERROR_RECIPIENT);
 		}
 
-		if (paymentDetails.get(RECIPIENT_BANK_CODE) == null
-				|| !paymentDetails.get(RECIPIENT_BANK_CODE).matches(BIC_PATTERN)) {
-			System.out.println(paymentDetails.get(RECIPIENT_BANK_CODE));
-			System.out.println(paymentDetails.get(RECIPIENT_BANK_CODE).matches(BIC_PATTERN));
-			setDescriptionList(ERROR_BIC);
+		if (paymentDetails.get(ParameterConstraint.RECIPIENT_BANK_CODE) == null
+				|| !paymentDetails.get(ParameterConstraint.RECIPIENT_BANK_CODE).matches(BIC_PATTERN)) {
+			setDescriptionList(Message.ERROR_BIC);
 		}
 
-		if (paymentDetails.get(RECIPIENT_IBAN_ACCOUNT) == null
-				|| !paymentDetails.get(RECIPIENT_IBAN_ACCOUNT).matches(IBAN_PATTERN)) {
-			setDescriptionList(ERROR_BIC);
+		if (paymentDetails.get(ParameterConstraint.RECIPIENT_IBAN_ACCOUNT) == null
+				|| !paymentDetails.get(ParameterConstraint.RECIPIENT_IBAN_ACCOUNT).matches(IBAN_PATTERN)) {
+			setDescriptionList(Message.ERROR_IBAN);
 		}
 
-		if (paymentDetails.get(AMOUNT) == null || !paymentDetails.get(AMOUNT).matches(SUM_PATTERN)) {
-			setDescriptionList(ERROR_SUM);
+		if (paymentDetails.get(ParameterConstraint.AMOUNT) == null || !paymentDetails.get(ParameterConstraint.AMOUNT).matches(SUM_PATTERN)) {
+			setDescriptionList(Message.ERROR_SUM);
 		}
 
-		if (paymentDetails.get(CURRENCY) != null) {
+		if (paymentDetails.get(ParameterConstraint.CURRENCY) != null) {
 			try {
-				Currency.valueOf(paymentDetails.get(CURRENCY));
+				Currency.valueOf(paymentDetails.get(ParameterConstraint.CURRENCY));
 			} catch (IllegalArgumentException e) {
-				setDescriptionList(ERROR_CURRENCY);
+				setDescriptionList(Message.ERROR_CURRENCY);
 			}
 		} else {
-			setDescriptionList(ERROR_CURRENCY);
+			setDescriptionList(Message.ERROR_CURRENCY);
 		}
 
 		return descriptionList == null;

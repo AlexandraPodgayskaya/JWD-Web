@@ -1,4 +1,4 @@
-package by.epam.payment_system.service.util.encryption;
+package by.epam.payment_system.service.util;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;

@@ -17,9 +17,9 @@ import by.epam.payment_system.entity.TransactionType;
 
 public class SQLTransactionLogDAO implements TransactionLogDAO {
 
-	private static final String INSERT_TRANSACTION_SQL = "INSERT INTO TRANSACTION_LOG (ACCOUNT, NUMBER_CARD, TYPE_TRANSACTION, SUM, CURRENCY_ID, DATA_AND_TIME, BANK_CODE, SENDER_OR_RECIPIENT_ACCOUNT, YNP, NAME, PURPOSE_OF_PAYMENT) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
-	private static final String SELECT_CARD_TRANSACTIONS_SQL = "SELECT * FROM TRANSACTION_LOG JOIN CURRENCIES ON TRANSACTION_LOG.CURRENCY_ID=CURRENCIES.ID WHERE NUMBER_CARD=? ";
-	private static final String SELECT_ACCOUNT_TRANSACTIONS_SQL = "SELECT * FROM TRANSACTION_LOG JOIN CURRENCIES ON TRANSACTION_LOG.CURRENCY_ID=CURRENCIES.ID WHERE ACCOUNT=? ";
+	private static final String INSERT_TRANSACTION_SQL = "INSERT INTO TRANSACTION_LOG (ACCOUNT, NUMBER_CARD, TYPE_TRANSACTION, SUM, CURRENCY, DATA_AND_TIME, BANK_CODE, SENDER_OR_RECIPIENT_ACCOUNT, YNP, NAME, PURPOSE_OF_PAYMENT) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+	private static final String SELECT_CARD_TRANSACTIONS_SQL = "SELECT * FROM TRANSACTION_LOG WHERE NUMBER_CARD=? ";
+	private static final String SELECT_ACCOUNT_TRANSACTIONS_SQL = "SELECT * FROM TRANSACTION_LOG WHERE ACCOUNT=? ";
 	private static final String COLUMN_ACCOUNT = "account";
 	private static final String COLUMN_NUMBER_CARD = "number_card";
 	private static final String COLUMN_TYPE_TRANSACTION = "type_transaction";
@@ -44,7 +44,7 @@ public class SQLTransactionLogDAO implements TransactionLogDAO {
 			statement.setString(2, transaction.getNumberCard());
 			statement.setString(3, String.valueOf(transaction.getTypeTransaction()));
 			statement.setString(4, transaction.getAmount());
-			statement.setInt(5, transaction.getCurrencyId());
+			statement.setString(5, String.valueOf(transaction.getCurrency()));
 			statement.setTimestamp(6, transaction.getDateTime());
 			statement.setString(7, transaction.getBankCode());
 			statement.setString(8, transaction.getSenderOrRecipientAccount());

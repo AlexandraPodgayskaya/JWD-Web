@@ -16,9 +16,9 @@ import by.epam.payment_system.entity.UserType;
 
 public class SQLUserDAO implements UserDAO {
 
-	private static final String SELECT_USER_SQL = "SELECT USERS.ID, TYPE FROM USERS JOIN USER_TYPES ON USERS.TYPE_ID=USER_TYPES.ID WHERE LOGIN=? AND PASSWORD=? ";
+	private static final String SELECT_USER_SQL = "SELECT * FROM USERS WHERE LOGIN=? AND PASSWORD=? ";
 	private static final String SELECT_ID_SQL = "SELECT ID FROM USERS WHERE LOGIN=? ";
-	private static final String INSERT_USER_SQL = "INSERT INTO USERS (LOGIN, PASSWORD, TYPE_ID) VALUES(?, ?, ?) ";
+	private static final String INSERT_USER_SQL = "INSERT INTO USERS (LOGIN, PASSWORD, TYPE) VALUES(?, ?, ?) ";
 	private static final String UPDATE_LOGIN_SQL = "UPDATE USERS SET LOGIN=? WHERE ID=? ";
 	private static final String COLUMN_USER_ID = "id";
 	private static final String COLUMN_USER_TYPE = "type";
@@ -33,7 +33,7 @@ public class SQLUserDAO implements UserDAO {
 
 			statement.setString(1, registrationInfo.getLogin());
 			statement.setString(2, registrationInfo.getPassword());
-			statement.setInt(3, registrationInfo.getTypeUserId());
+			statement.setString(3, String.valueOf(registrationInfo.getUserType()));
 			statement.executeUpdate();
 
 		} catch (ConnectionPoolException | SQLException e) {

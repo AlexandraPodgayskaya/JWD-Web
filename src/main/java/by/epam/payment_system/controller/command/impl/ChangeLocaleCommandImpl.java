@@ -7,10 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import by.epam.payment_system.controller.command.Attribute;
 import by.epam.payment_system.controller.command.Command;
-import by.epam.payment_system.controller.command.GoToPage;
-import by.epam.payment_system.controller.command.Parameter;
+import by.epam.payment_system.controller.util.GoToPage;
+import by.epam.payment_system.util.ParameterConstraint;
 
 public class ChangeLocaleCommandImpl implements Command {
 
@@ -18,14 +17,14 @@ public class ChangeLocaleCommandImpl implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession session = request.getSession(true);
-		session.setAttribute(Attribute.LOCALE, request.getParameter(Parameter.COMMAND));
+		session.setAttribute(ParameterConstraint.LOCALE, request.getParameter(ParameterConstraint.COMMAND));
 
 		String page;
 
-		if (request.getParameter(Parameter.PAGE) != null) {
-			page = request.getParameter(Parameter.PAGE);
-		} else if (session.getAttribute(Attribute.PAGE) != null) {
-			page = (String) session.getAttribute(Attribute.PAGE);
+		if (request.getParameter(ParameterConstraint.PAGE) != null) {
+			page = request.getParameter(ParameterConstraint.PAGE);
+		} else if (session.getAttribute(ParameterConstraint.PAGE) != null) {
+			page = (String) session.getAttribute(ParameterConstraint.PAGE);
 		} else {
 			page = GoToPage.INDEX_PAGE;
 		}

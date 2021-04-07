@@ -69,7 +69,7 @@
 
 		<div class="card_type">
 			<p>${enter_data}</p>
-			<form action="Controller" method="post" enctype="multipart/form-data">
+			<form action="Controller" method="post">
 				<div>
                     <label>${card_type}: <input type="text" name="cardType" required placeholder="${card_type}" value="" /></label>
                 </div>

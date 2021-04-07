@@ -19,6 +19,7 @@
     <fmt:message bundle="${loc}" key="local.menu.card_application" var="menu_card_application"/>
     <fmt:message bundle="${loc}" key="local.enter_recipient_data" var="enter_data"/>
     <fmt:message bundle="${loc}" key="local.amount" var="amount"/>
+    <fmt:message bundle="${loc}" key="local.currency" var="currency"/>
     <fmt:message bundle="${loc}" key="local.card_number" var="card_number"/>
     <fmt:message bundle="${loc}" key="local.ynp" var="ynp"/>
     <fmt:message bundle="${loc}" key="local.recipient_bic" var="recipient_bic"/>
