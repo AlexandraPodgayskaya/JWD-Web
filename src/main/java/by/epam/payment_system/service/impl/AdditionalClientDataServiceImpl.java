@@ -80,4 +80,30 @@ public class AdditionalClientDataServiceImpl implements AdditionalClientDataServ
 		}
 		return userInfoOptional.get();
 	}
+
+	@Override
+	public void changeData(UserInfo userInfo) throws ServiceException {
+		UserDataValidator validator = new UserDataValidator();
+
+		if (!validator.additionalDataValidation(userInfo)) {
+			throw new UserInfoFormatServiceException("user data format error", validator.getDescriptionList());
+		}
+
+		AdditionalClientDataDAO additionalClientDataDAO = factory.getAdditionalClientDataDAO();
+		Optional<UserInfo> userInfoOptional;
+		try {
+			userInfoOptional = additionalClientDataDAO.findDataById(userInfo.getId());
+
+			if (userInfoOptional.isEmpty()) {
+				additionalClientDataDAO.create(userInfo);
+			} else {
+				if (!additionalClientDataDAO.update(userInfo)) {
+					throw new ServiceException("client data change error");
+				}
+			}
+		} catch (DAOException e) {
+			throw new ServiceException("client data change error", e);
+		}
+
+	}
 }

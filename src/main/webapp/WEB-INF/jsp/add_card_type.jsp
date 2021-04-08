@@ -22,6 +22,7 @@
     <meta charset="UTF-8">
     <title>${tittle}</title>
     <link rel="stylesheet" href="css/add_card_type/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/common/header.css" type="text/css" />
     <link rel="stylesheet" href="css/common/footer.css" type="text/css" />
     <link rel="stylesheet" href="css/common/error_info.css" type="text/css" />
 </head>
@@ -33,14 +34,24 @@
         <a href="Controller?command=logout">${logout}</a>
         <nav>
             <ul>
+                <c:if test="${sessionScope.locale == 'en'}">
+                <li class="active">
+                </c:if>
+                <c:if test="${sessionScope.locale != 'en'}">
                 <li>
+                </c:if>
                     <form action="Controller" method="post" class="locale">
                         <input type="hidden" name="command" value="en"/>
                         <input type="hidden" name="page" value="${pageContext.request.requestURI}"/>
                         <input type="submit" value="${en_button}"/>
                     </form>
                 </li>
+                <c:if test="${sessionScope.locale == 'ru'}">
+                <li class="active">
+                </c:if>
+                <c:if test="${sessionScope.locale != 'ru'}">
                 <li>
+                </c:if>
                     <form action="Controller" method="post" class="locale">
                         <input type="hidden" name="command" value="ru"/>
                         <input type="hidden" name="page" value="${pageContext.request.requestURI}"/>
@@ -53,7 +64,7 @@
                         <input type="submit" value="${menu_cards}"/>
                     </form>
                 </li>
-                <li>
+                <li class="active">
                    <form action="AddCardType" method="get">
                         <input type="submit" value="${add_card_type}"/>
                     </form>

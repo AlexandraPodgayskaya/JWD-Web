@@ -17,6 +17,7 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 	private static final String INSERT_ADDITIONAL_CLIENT_DATA_SQL = "INSERT INTO CLIENT_DETAILS (USER_ID, SURNAME, NAME, PATRONYMIC, DATE_OF_BIRTH, PERSONAL_NUMBER_PASSPORT, PHONE) VALUES(?, ?, ?, ?, ?, ?, ?) ";
 	private static final String SELECT_CLIENT_DATA_BY_PASSPORT_SQL = "SELECT * FROM CLIENT_DETAILS WHERE PERSONAL_NUMBER_PASSPORT=? ";
 	private static final String SELECT_CLIENT_DATA_BY_USER_ID_SQL = "SELECT * FROM CLIENT_DETAILS WHERE USER_ID=? ";
+	private static final String UPDATE_ADDITIONAL_CLIENT_DATA_SQL = "UPDATE CLIENT_DETAILS SET SURNAME=?, NAME=?, PATRONYMIC=?, DATE_OF_BIRTH=?, PERSONAL_NUMBER_PASSPORT=?, PHONE=? WHERE USER_ID=? ";
 	private static final String COLUMN_USER_ID = "user_id";
 	private static final String COLUMN_SURNAME = "surname";
 	private static final String COLUMN_NAME = "name";
@@ -105,5 +106,25 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 		}
 
 		return userInfoOptional;
+	}
+
+	@Override
+	public boolean update(UserInfo userInfo) throws DAOException {
+		try (Connection connection = connectionPool.takeConnection();
+				PreparedStatement statement = connection.prepareStatement(UPDATE_ADDITIONAL_CLIENT_DATA_SQL)) {
+
+			statement.setString(1, userInfo.getSurname());
+			statement.setString(2, userInfo.getName());
+			statement.setString(3, userInfo.getPatronymic());
+			statement.setString(4, userInfo.getDateBirth());
+			statement.setString(5, userInfo.getPersonalNumberPassport());
+			statement.setString(6, userInfo.getPhone());
+			statement.setInt(7, userInfo.getId());
+
+			return statement.executeUpdate() != 0;
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(e);
+		}
 	}
 }

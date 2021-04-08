@@ -6,12 +6,12 @@ public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private int id;
+	private Integer id;
 	private String login;
 	private String password;
 	private UserType type;
 
-	public User(int id, String login, String password, UserType type) {
+	public User(Integer id, String login, String password, UserType type) {
 		this.id = id;
 		this.login = login;
 		this.password = password;
@@ -54,7 +54,7 @@ public class User implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
@@ -70,7 +70,10 @@ public class User implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		if (login == null) {
 			if (other.login != null)
@@ -91,6 +94,5 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [id=" + id + ", login=" + login + ", password=" + password + ", type=" + type + "]";
 	}
-	
 
 }

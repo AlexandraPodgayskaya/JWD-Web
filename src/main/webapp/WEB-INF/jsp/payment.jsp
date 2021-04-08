@@ -28,6 +28,7 @@
     <fmt:message bundle="${loc}" key="local.purpose_of_payment" var="purpose_of_payment"/>
     <fmt:message bundle="${loc}" key="local.command.make_payment" var="command_make_payment"/>
     <fmt:message bundle="${loc}" key="local.payment_card" var="payment_card"/>
+    <fmt:message bundle="${loc}" key="local.balance" var="balance"/>
     <fmt:message bundle="${loc}" key="local.command.pay" var="command_pay"/>
     <fmt:message bundle="${loc}" key="local.password" var="password"/>
     <fmt:message bundle="${loc}" key="local.confirm_operation" var="confirm_operation"/>
@@ -39,6 +40,7 @@
     <fmt:message bundle="${loc}" key="local.save" var="save"/>
     <title>${title}</title>
     <link rel="stylesheet" href="css/payment/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/common/header.css" type="text/css" />
     <link rel="stylesheet" href="css/common/footer.css" type="text/css" />
     <link rel="stylesheet" href="css/common/error_info.css" type="text/css" />
 </head>
@@ -50,13 +52,23 @@
         <a href="Controller?command=logout">${logout}</a>
         <nav>
             <ul>
+                <c:if test="${sessionScope.locale == 'en'}">
+                <li class="active">
+                </c:if>
+                <c:if test="${sessionScope.locale != 'en'}">
                 <li>
+                </c:if>
                     <form action="Controller" method="post" class="locale">
                         <input type="hidden" name="command" value="en"/>
                         <input type="submit" value="${en_button}"/>
                     </form>
                 </li>
+                <c:if test="${sessionScope.locale == 'ru'}">
+                <li class="active">
+                </c:if>
+                <c:if test="${sessionScope.locale != 'ru'}">
                 <li>
+                </c:if>
                     <form action="Controller" method="post" class="locale">
                         <input type="hidden" name="command" value="ru"/>
                         <input type="submit" value="${ru_button}"/>
@@ -68,7 +80,7 @@
                         <input type="submit" value="${menu_profile}"/>
                     </form>
                 </li>
-                <li>
+                <li class="active">
                     <form action="Controller" method="post">
                         <input type="hidden" name="command" value="go_to_main_page"/>
                         <input type="submit" value="${menu_cards}"/>
@@ -89,7 +101,7 @@
 
     <section>
 		<div>
-            <p><a href="Controller?command=go_to_main_page">${menu_cards}</a> > ${payment_card}: ${requestScope.numberCard} ${requestScope.balance} ${requestScope.currency} </p>
+            <p><a href="Controller?command=go_to_main_page">${menu_cards}</a> > ${payment_card} № ${requestScope.numberCard}. ${balance}: ${requestScope.balance} ${requestScope.currency} </p>
         </div>
 
 		<div class ="transfer">

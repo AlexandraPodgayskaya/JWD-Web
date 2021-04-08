@@ -36,25 +36,23 @@ public class ChangeClientDataCommandImpl implements Command {
 
 		AbstractUserInfoBuilder builder = new AdditionalUserClientInfoBuilder();
 		builder.buildUserInfo(request);
-		UserInfo additionalClientInfo = builder.getUserInfo();
+		UserInfo userInfo = builder.getUserInfo();
 
 		ServiceFactory factory = ServiceFactory.getInstance();
 		AdditionalClientDataService additionalClientDataService = factory.getAdditionalClientDataService();
 
 		HttpSession session = request.getSession(true);
 		try {
-			additionalClientDataService.addData(additionalClientInfo);
+			additionalClientDataService.changeData(userInfo);
 			session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_PROFILE_SAVED);
-			session.setAttribute(ParameterConstraint.PAGE, GoToPage.INDEX_PAGE);
-			response.sendRedirect(GoToPage.INDEX_PAGE);
+			response.sendRedirect(GoToPage.EDIT_PROFILE_PAGE);
 		} catch (UserInfoFormatServiceException e) {
 			logger.error("wrong user info format", e);
 			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, e.getErrorDescription());
-			response.sendRedirect(GoToPage.CLIENT_DATA_PAGE + additionalClientInfo.getId());
+			response.sendRedirect(GoToPage.EDIT_PROFILE_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);
 			response.sendRedirect(GoToPage.ERROR_PAGE);
 		}
 	}
-
 }

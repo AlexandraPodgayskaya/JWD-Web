@@ -57,6 +57,10 @@ ul li input[type="submit"]:hover{
 	text-decoration: underline;
 }
 
+.active input[type="submit"]{
+	text-decoration: underline;
+}
+
 h1{
 	text-align: center;
 	color: #fff;

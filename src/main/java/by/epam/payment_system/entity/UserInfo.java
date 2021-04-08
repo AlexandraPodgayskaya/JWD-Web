@@ -6,7 +6,7 @@ public class UserInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private int id;
+	private Integer id;
 	private String login;
 	private String password;
 	private UserType userType;
@@ -26,17 +26,17 @@ public class UserInfo implements Serializable {
 		this.password = password;
 	}
 
-	public UserInfo(int id, String login, String password) {
+	public UserInfo(Integer id, String login, String password) {
 		this.id = id;
 		this.login = login;
 		this.password = password;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -117,7 +117,7 @@ public class UserInfo implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dateBirth == null) ? 0 : dateBirth.hashCode());
-		result = prime * result + id;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
@@ -143,7 +143,10 @@ public class UserInfo implements Serializable {
 				return false;
 		} else if (!dateBirth.equals(other.dateBirth))
 			return false;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		if (login == null) {
 			if (other.login != null)

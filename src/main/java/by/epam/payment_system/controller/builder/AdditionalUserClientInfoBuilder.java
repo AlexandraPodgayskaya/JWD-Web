@@ -8,7 +8,12 @@ public class AdditionalUserClientInfoBuilder extends AbstractUserInfoBuilder {
 
 	@Override
 	public void buildUserInfo(HttpServletRequest request) {
-		userInfo.setId(Integer.valueOf(request.getParameter(ParameterConstraint.USER_ID)));
+		
+		String id = request.getParameter(ParameterConstraint.USER_ID);
+		if (id != null) {
+			userInfo.setId(Integer.valueOf(request.getParameter(ParameterConstraint.USER_ID)));
+		}
+		
 		userInfo.setLogin(request.getParameter(ParameterConstraint.LOGIN));
 		userInfo.setPassword(request.getParameter(ParameterConstraint.PASSWORD));
 		userInfo.setSurname(request.getParameter(ParameterConstraint.SURNAME));

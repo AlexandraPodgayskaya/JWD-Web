@@ -51,6 +51,11 @@ public class UserDataValidator {
 			setDescriptionList(Message.ERROR_NO_USER_INFO);
 			return false;
 		}
+		
+		if (userInfo.getId() == null) {
+			setDescriptionList(Message.ERROR_COMMON);
+			return false;
+		}
 
 		if (userInfo.getSurname() == null || !userInfo.getSurname().matches(CHARACTER_PATTERN)) {
 			setDescriptionList(Message.ERROR_SURNAME);

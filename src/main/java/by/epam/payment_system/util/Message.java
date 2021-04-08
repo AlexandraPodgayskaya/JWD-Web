@@ -15,6 +15,7 @@ public final class Message {
 	public static final String INFO_CLOSING_OK = "local.message.closing_card_ok";
 	public static final String INFO_CLIENT_NOT_FOUND = "local.message.client_not_found";
 	public static final String ERROR_SESSION_TIMED_OUT = "local.error.session_timed_out";
+	public static final String ERROR_COMMON = "local.error.common_error";
 	public static final String ERROR_LOGOUT = "local.error.logout";
 	public static final String ERROR_IMPOSSIBLE_OPERATION = "local.error.impossible_operation";
 	public static final String ERROR_CARD_TYPE = "local.error.card_type";

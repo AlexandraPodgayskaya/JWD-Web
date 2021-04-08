@@ -51,12 +51,7 @@ public class GoToMainPageCommandImpl implements Command {
 		}
 
 		try {
-			if (id == null) {
-				cardList = Collections.emptyList();
-			} else {
-				cardList = cardService.takeCards(id);
-			}
-
+			cardList = id != null ? cardService.takeCards(id) : Collections.emptyList();
 			request.setAttribute(ParameterConstraint.CARD_LIST, cardList);
 			session.setAttribute(ParameterConstraint.PAGE, GoToPage.MAIN_PAGE);
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(GoToPage.FORWARD_MAIN_PAGE);

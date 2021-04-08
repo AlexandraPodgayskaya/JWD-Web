@@ -45,13 +45,23 @@
         <input type="submit" name="back" value="${back}"/>
     </form>
 	<ul class="clearfix">
+        <c:if test="${sessionScope.locale == 'en'}">
+        <li class="active">
+        </c:if>
+        <c:if test="${sessionScope.locale != 'en'}">
         <li>
+        </c:if>
             <form action="Controller" method="post" class="locale">
                 <input type="hidden" name="command" value="en"/>
                 <input type="submit" value="${en_button}"/>
             </form>
         </li>
+        <c:if test="${sessionScope.locale == 'ru'}">
+        <li class="active">
+        </c:if>
+        <c:if test="${sessionScope.locale != 'ru'}">
         <li>
+        </c:if>
             <form action="Controller" method="post" class="locale">
                 <input type="hidden" name="command" value="ru"/>
                 <input type="submit" value="${ru_button}"/>
@@ -67,31 +77,36 @@
 	<label>${login}:
 		<input type="text" name="login" required placeholder="${login}" value="${sessionScope.userLogin}" />
 	</label>
-	<input type="hidden" name="passwordCheck" id="passwordCheckInput" value=""/>
-    <input type="submit" id="edit-submit-input" value="${change}"/>
+	<input type="hidden" name="passwordCheck" id="passwordCheckForLoginInput" value=""/>
+    <input type="submit" id="edit-login-submit-input" value="${change}"/>
   </form>
-    <button id="edit-button" onclick="openPopup()">${save}</button>
+    <button id="edit-login-button" onclick="openPopup('check-password-for-login-popup')">${save}</button>
 
   <hr/>
 
   <form action="Controller" method="post" name="registration" class="edit clearfix">
     <input type="hidden" name="command" value="change_password"/>
-	<label>${new_password}:
-		<input type="password" name="password" required placeholder="${new_password}" />
-	</label>
-	<label>${repeat_password}:
-		<input type="password" name="passwordRepeat" required placeholder="${repeat_password}" />
-	</label>
-    <input type="hidden" name="passwordCheck" id="passwordCheckInput" value=""/>
-    <input type="submit" id="edit-submit-input" value="${change}"/>
+	<div>
+		<label>${new_password}:
+			<input type="password" name="password" required placeholder="${new_password}" />
+		</label>
+	</div>
+	<div>
+		<label>${repeat_password}:
+			<input type="password" name="passwordRepeat" required placeholder="${repeat_password}" />
+		</label>
+	</div>
+    <input type="hidden" name="passwordCheck" id="passwordCheckForPwdInput" value=""/>
+    <input type="submit" id="edit-password-submit-input" value="${change}"/>
   </form>
-    <button id="edit-button" onclick="openPopup()">${save}</button>
+    <button id="edit-password-button" onclick="openPopup('check-password-for-pwd-popup')">${save}</button>
     
   <hr/>
 
   <p>${profile}</p>
   <form action="Controller" method="post" name="registration" class="edit clearfix">
     <input type="hidden" name="command" value="change_client_data"/>
+    <input type="hidden" name="userId" value="${sessionScope.userId}"/>
     <div>
       <label>${full_name}: <br />
           <input type="text" name="surname" required placeholder="${surname}" value="${userInfo.surname}" />
@@ -137,14 +152,23 @@
       <c:remove var="infoMessage"/>
   </c:if>
 
-    <div class="popup" id="check-password-popup">
+    <div class="popup" id="check-password-for-login-popup">
         <div class="popup-content">
             <p>${enter_password}:</p>
             <input type="password" id="passwordInput" name="password" required placeholder="${password}"/>
-            <button onclick="closePopup()">${continueButton}</button>
-            <button onclick="closePopupWithNoPassword()">${cancelButton}</button>
+            <button onclick="closePopup('passwordInput', 'passwordCheckForLoginInput', 'edit-login-submit-input', 'edit-login-button', 'check-password-for-login-popup')">${continueButton}</button>
+            <button onclick="closePopupWithNoPassword('check-password-for-login-popup')">${cancelButton}</button>
         </div>
     </div>
+
+    <div class="popup" id="check-password-for-pwd-popup">
+            <div class="popup-content">
+                <p>${enter_password}:</p>
+                <input type="password" id="passwordInput2" name="password" required placeholder="${password}"/>
+                <button onclick="closePopup('passwordInput2', 'passwordCheckForPwdInput', 'edit-password-submit-input', 'edit-password-button', 'check-password-for-pwd-popup')">${continueButton}</button>
+                <button onclick="closePopupWithNoPassword('check-password-for-pwd-popup')">${cancelButton}</button>
+            </div>
+        </div>
 
 
 </div>
@@ -152,25 +176,25 @@
 <mytag:copyright/>
 
 <script>
-function openPopup() {
-      var popup = document.getElementById("check-password-popup");
+  function openPopup(popupId) {
+      var popup = document.getElementById(popupId);
       popup.style.visibility = "visible";
   }
 
-    function closePopup() {
-		var passwordInputValue = document.getElementById("passwordInput").value;
-		var passwordCheckInput = document.getElementById("passwordCheckInput");
+    function closePopup(passwordInputId, passwordCheckInputId, editSubmitInputId, editSubmitButtonId, popupId) {
+		var passwordInputValue = document.getElementById(passwordInputId).value;
+		var passwordCheckInput = document.getElementById(passwordCheckInputId);
 		passwordCheckInput.setAttribute("value", passwordInputValue);
-		var paymentSubmitInput = document.getElementById("edit-submit-input");
-		paymentSubmitInput.style.visibility = "visible";
-		var paymentSubmitInput = document.getElementById("edit-button");
-		paymentSubmitInput.style.visibility = "hidden";
-		var popup = document.getElementById("check-password-popup");
+		var editSubmitInput = document.getElementById(editSubmitInputId);
+		editSubmitInput.style.visibility = "visible";
+		var editSubmitButton = document.getElementById(editSubmitButtonId);
+		editSubmitButton.style.visibility = "hidden";
+		var popup = document.getElementById(popupId);
 		popup.style.visibility = "hidden";
     }
 
-	function closePopupWithNoPassword() {
-		var popup = document.getElementById("check-password-popup");
+	function closePopupWithNoPassword(popupId) {
+		var popup = document.getElementById(popupId);
 		popup.style.visibility = "hidden";
     }
 </script>

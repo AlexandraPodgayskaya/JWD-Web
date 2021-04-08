@@ -27,6 +27,7 @@
     <meta charset="UTF-8">
     <title>${tittle}</title>
     <link rel="stylesheet" href="css/open_card/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/common/header.css" type="text/css" />
     <link rel="stylesheet" href="css/common/footer.css" type="text/css" />
     <link rel="stylesheet" href="css/common/error_info.css" type="text/css" />
 </head>
@@ -39,13 +40,23 @@
         <a href="Controller?command=logout">${logout}</a>
         <nav>
             <ul>
+                <c:if test="${sessionScope.locale == 'en'}">
+                <li class="active">
+                </c:if>
+                <c:if test="${sessionScope.locale != 'en'}">
                 <li>
+                </c:if>
                     <form action="Controller" method="post" class="locale">
                         <input type="hidden" name="command" value="en"/>
                         <input type="submit" value="${en_button}"/>
                     </form>
                 </li>
+                <c:if test="${sessionScope.locale == 'ru'}">
+                <li class="active">
+                </c:if>
+                <c:if test="${sessionScope.locale != 'ru'}">
                 <li>
+                </c:if>
                     <form action="Controller" method="post" class="locale">
                         <input type="hidden" name="command" value="ru"/>
                         <input type="submit" value="${ru_button}"/>
@@ -63,7 +74,7 @@
                         <input type="submit" value="${menu_cards}"/>
                     </form>
                 </li>
-                <li>
+                <li class="active">
                     <form action="Controller" method="post">
                         <input type="hidden" name="command" value="go_to_open_card_page"/>
                         <input type="submit" value="${menu_card_application}"/>
@@ -84,47 +95,50 @@
 			<p>${card_opening_data}:</p>
 			<form action="Controller" method="post">
 				<div>
-					<input type="radio" name="type" id="main" onclick="openCloseDiv('info_for_main', 'info_for_additional')" checked/>
-					<label for="main">${main_card}</label>
-					<input type="radio" name="type" id="additional" onclick="openCloseDiv('info_for_additional', 'info_for_main')" />
-					<label for="additional">${additional_card}</label>
+				<c:forEach var="cardStatus" items="${requestScope.cardStatusList}">
+					<input type="radio" name="type" id="${cardStatus}" onclick="openDiv('info_for_${cardStatus}')" checked/>
+					<label for="${cardStatus}">${cardStatus}</label>
+			    </c:forEach>
 				</div>
 
-				<div id="info_for_main">
-					<label for="card_type">${card_type}:</label>
-					<select size="2" id="card_type" name="card_type">
-						<option value="1">visa</option>
-						<option value="2">gold</option>
-					</select>
-					<label for="currency">${currency}:</label>
-					<select size="3" id="currency" name="currency">
-						<option value="1">BYN</option>
-						<option value="2">USD</option>
-						<option value="3">EUR</option>
-					</select>
+				<div>
+					<label>Card type:</label>
+				</div>
+				<div>
+				<c:forEach var="cardType" items="${requestScope.cardTypeList}">
+					<input type="radio" name="cardType" id="${cardType.cardType}" checked/>
+					<label for="${cardType.cardType}"><img src="${cardType.imagePath}"/></label>
+				</c:forEach>
 				</div>
 
-				<div id="info_for_additional">
-					<div>
-						<label for="main_card_number">�������� �������� �����:</label>
-						<select size="2" id="main_card_number" name="main_card_number">
-							<option value="1111 2222 3333 4444">1111 2222 3333 4444, BYN</option>
-							<option value="5555 6666 7777 8888">5555 6666 7777 8888, EUR</option>
-						</select>
-						<label for="card_type">��� �����:</label>
-						<select size="2" id="card_type" name="card_type">
-							<option value="visa">visa</option>
-							<option value="gold">gold</option>
-						</select>
-					</div>
-					<div>
-						<label for="owner">����� �������� ��������� �����:</label>
-						<input type="text" id="owner" name="owner" placeholder="1111111A111PB1"/>
-					</div>
+                <div id="specific_info">
+                    <div id="info_for_main">
+                        <label for="currency">${currency}:</label>
+                        <select size="${requestScope.currencyList.size()}" id="currency" name="currency">
+                            <c:forEach var="currency" items="${requestScope.currencyList}">
+                                <option value="${currency}">${currency}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+
+                    <div id="info_for_additional">
+                        <div>
+                            <label for="main_card_number">Card number:</label>
+                            <select size="${requestScope.cardList.size()}" id="main_card_number" name="main_card_number">
+                                <c:forEach var="card" items="${requestScope.cardList}">
+                                    <option value="${card.numberCard}">${card.numberCard}, ${card.currency}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="owner">Owner passport number:</label>
+                            <input type="text" id="owner" name="owner" placeholder="1111111A111PB1"/>
+                        </div>
+                    </div>
 				</div>
 
 				<input type="hidden" name="command" value=""/>
-				<input type="submit" value="������� �����"/>
+				<input type="submit" value="Open card"/>
 			</form>
 		</div>
 	</section>
@@ -134,11 +148,14 @@
 <mytag:copyright/>
 
 <script>
-    function openCloseDiv(openId, closeId) {
+    function openDiv(openId) {
+	  var closeDivs = document.getElementById("specific_info").children;
+	  for (var i=0, child; child=closeDivs[i]; i++) {
+	    child.style.display = "none";
+	  }
+
       var openDiv = document.getElementById(openId);
       openDiv.style.display = "block";
-	  var closeDiv = document.getElementById(closeId);
-      closeDiv.style.display = "none";
     }
 </script>
 

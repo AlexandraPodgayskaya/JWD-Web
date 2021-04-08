@@ -1,6 +1,6 @@
 package by.epam.payment_system.controller.command;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +32,7 @@ public class CommandProvider {
 
 	private static final Logger logger = LogManager.getLogger();
 
-	private Map<CommandName, Command> commands = new HashMap<>();
+	private Map<CommandName, Command> commands = new EnumMap<>(CommandName.class);
 
 	public CommandProvider() {
 

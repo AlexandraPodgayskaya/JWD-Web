@@ -44,6 +44,10 @@ ul li input[type="submit"]:hover{
 	text-decoration: underline;
 }
 
+.active input[type="submit"]{
+	text-decoration: underline;
+}
+
 h1{
 	font-size: 20px;
 	text-align: center;

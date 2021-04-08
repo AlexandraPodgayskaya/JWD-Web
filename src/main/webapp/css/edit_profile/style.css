@@ -44,6 +44,10 @@ ul li input[type="submit"]:hover{
 	text-decoration: underline;
 }
 
+.active input[type="submit"]{
+	text-decoration: underline;
+}
+
 h1{
 	font-size: 20px;
 	text-align: center;
@@ -148,13 +152,13 @@ footer {
 }
 
 /* POPUP */
-#edit-submit-input {
+#edit-login-submit-input , #edit-password-submit-input {
 	visibility: hidden;
 }
 
-#edit-button {
+#edit-login-button , #edit-password-button {
 	float: none;
-	margin-left: 755px;
+	margin-left: 720px;
 	margin-top: -62px;
 }
 .popup {

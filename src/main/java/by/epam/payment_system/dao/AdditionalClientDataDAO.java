@@ -7,6 +7,8 @@ import by.epam.payment_system.entity.UserInfo;
 public interface AdditionalClientDataDAO {
 
 	void create(UserInfo additionalClientInfo) throws DAOException;
+	
+	boolean update(UserInfo userInfo) throws DAOException;
 
 	Optional <UserInfo> findDataByPassport(String personalNumberPassport) throws DAOException;
 	

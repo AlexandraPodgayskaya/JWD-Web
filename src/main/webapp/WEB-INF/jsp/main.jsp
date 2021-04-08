@@ -39,6 +39,7 @@
         <title>${title}</title>
     </head>
     <link rel="stylesheet" href="css/main/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/common/header.css" type="text/css" />
     <link rel="stylesheet" href="css/common/footer.css" type="text/css" />
     <link rel="stylesheet" href="css/common/error_info.css" type="text/css" />
 </head>
@@ -50,13 +51,23 @@
         <a href="Controller?command=logout">${logout}</a>
         <nav>
             <ul>
+                <c:if test="${sessionScope.locale == 'en'}">
+                <li class="active">
+                </c:if>
+                <c:if test="${sessionScope.locale != 'en'}">
                 <li>
+                </c:if>
                     <form action="Controller" method="post" class="locale">
                         <input type="hidden" name="command" value="en"/>
                         <input type="submit" value="${en_button}"/>
                     </form>
                 </li>
+                <c:if test="${sessionScope.locale == 'ru'}">
+                <li class="active">
+                </c:if>
+                <c:if test="${sessionScope.locale != 'ru'}">
                 <li>
+                </c:if>
                     <form action="Controller" method="post" class="locale">
                         <input type="hidden" name="command" value="ru"/>
                         <input type="submit" value="${ru_button}"/>
@@ -70,7 +81,7 @@
                     </form>
                 </li>
                 </c:if>
-                <li>
+                <li class="active">
                     <form action="Controller" method="post">
                         <input type="hidden" name="command" value="go_to_main_page"/>
                         <input type="submit" value="${menu_cards}"/>
