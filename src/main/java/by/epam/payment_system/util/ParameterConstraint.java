@@ -1,7 +1,7 @@
 package by.epam.payment_system.util;
 
 public final class ParameterConstraint {
-	
+
 	public static final String COMMAND = "command";
 	public static final String PAGE = "page";
 	public static final String NUMBER_CARD = "numberCard";
@@ -40,6 +40,9 @@ public final class ParameterConstraint {
 	public static final String CARD_LIST = "cardList";
 	public static final String TRANSACTION_LIST = "transactionList";
 	public static final String USER_INFO = "userInfo";
+	public static final String CURRENCY_LIST = "currencyList";
+	public static final String CARD_TYPE_LIST = "cardTypeList";
+	public static final String CARD_STATUS_LIST = "cardStatusList";
 
 	private ParameterConstraint() {
 

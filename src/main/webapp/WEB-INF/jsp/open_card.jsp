@@ -106,8 +106,8 @@
 				</div>
 				<div>
 				<c:forEach var="cardType" items="${requestScope.cardTypeList}">
-					<input type="radio" name="cardType" id="${cardType.cardType}" checked/>
-					<label for="${cardType.cardType}"><img src="${cardType.imagePath}"/></label>
+					<input type="radio" name="cardType" id="${cardType.type}" checked/>
+					<label for="${cardType.type}"><img src="${cardType.imagePath}"/></label>
 				</c:forEach>
 				</div>
 

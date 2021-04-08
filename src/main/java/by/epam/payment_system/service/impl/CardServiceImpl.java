@@ -1,5 +1,6 @@
 package by.epam.payment_system.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,10 @@ import by.epam.payment_system.dao.DAOException;
 import by.epam.payment_system.dao.DAOFactory;
 import by.epam.payment_system.entity.Account;
 import by.epam.payment_system.entity.Card;
+import by.epam.payment_system.entity.CardInfo;
+import by.epam.payment_system.entity.CardStatus;
+import by.epam.payment_system.entity.CardType;
+import by.epam.payment_system.entity.Currency;
 import by.epam.payment_system.service.CardService;
 import by.epam.payment_system.service.exception.CardTypeFormatException;
 import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
@@ -111,19 +116,45 @@ public class CardServiceImpl implements CardService {
 	}
 
 	@Override
-	public void addCardType(String cardType, String imagePath) throws ServiceException {
+	public void addCardType(String type, String imagePath) throws ServiceException {
 
-		if (cardType == null || cardType.isEmpty()) {
+		if (type == null || type.isEmpty()) {
 			throw new CardTypeFormatException("card type not specified");
 		}
 
+		CardType cardType = new CardType(type, imagePath);
+
 		CardTypeDAO cardTypeDAO = factory.getCardTypeDAO();
 		try {
-			cardTypeDAO.create(cardType, imagePath);
+			cardTypeDAO.create(cardType);
 		} catch (DAOException e) {
 			throw new ServiceException("card type creation error", e);
 		}
 
+	}
+
+	@Override
+	public CardInfo takeAllCardOptions(Integer id) throws ServiceException {
+
+		CardInfo cardInfo = new CardInfo();
+
+		List<Card> cardList = takeCards(id);
+		cardList.removeIf(card -> card.getStatus() == CardStatus.ADDITIONAL);
+		cardInfo.setCardList(cardList);
+
+		CardTypeDAO cardTypeDAO = factory.getCardTypeDAO();
+		List<CardType> cardTypeList;
+
+		try {
+			cardTypeList = cardTypeDAO.findAll();
+			cardInfo.setCardTypeList(cardTypeList);
+			cardInfo.setCardStatusList(Arrays.asList(CardStatus.values()));
+			cardInfo.setCurrencyList(Arrays.asList(Currency.values()));
+		} catch (DAOException e) {
+			throw new ServiceException("card type search error", e);
+		}
+
+		return cardInfo;
 	}
 
 }

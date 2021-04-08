@@ -61,8 +61,8 @@
                     </form>
                 </li>
                 <li>
-                    <form action="profile.html" method="post">
-                        <input type="hidden" name="command" value=""/>
+                    <form action="Controller" method="post">
+                        <input type="hidden" name="command" value="go_to_edit_profile_page"/>
                         <input type="submit" value="${menu_profile}"/>
                     </form>
                 </li>
@@ -73,8 +73,8 @@
                     </form>
                 </li>
                 <li>
-                    <form action="cart_application.html" method="post">
-                        <input type="hidden" name="command" value=""/>
+                    <form action="Controller" method="post">
+                        <input type="hidden" name="command" value="go_to_open_card_page"/>
                         <input type="submit" value="${menu_card_application}"/>
                     </form>
                 </li>
