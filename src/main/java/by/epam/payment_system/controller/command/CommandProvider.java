@@ -23,6 +23,7 @@ import by.epam.payment_system.controller.command.impl.GoToTopUpCardPageCommandIm
 import by.epam.payment_system.controller.command.impl.LoginCommandImpl;
 import by.epam.payment_system.controller.command.impl.LogoutCommandImpl;
 import by.epam.payment_system.controller.command.impl.MakePaymentCommandImpl;
+import by.epam.payment_system.controller.command.impl.OpenCardCommandImpl;
 import by.epam.payment_system.controller.command.impl.RegisterCommandImpl;
 import by.epam.payment_system.controller.command.impl.SaveAdditionalClientDataCommandImpl;
 import by.epam.payment_system.controller.command.impl.ShowTransactionLogCommandImpl;
@@ -61,6 +62,7 @@ public class CommandProvider {
 		commands.put(CommandName.CHANGE_PASSWORD, new ChangePasswordCommandImpl());
 		commands.put(CommandName.CHANGE_CLIENT_DATA, new ChangeClientDataCommandImpl());
 		commands.put(CommandName.GO_TO_OPEN_CARD_PAGE, new GoToOpenCardPageCommandImpl());
+		commands.put(CommandName.OPEN_CARD, new OpenCardCommandImpl());
 	}
 
 	public Command takeCommand(String name) {

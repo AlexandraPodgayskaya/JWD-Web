@@ -96,7 +96,7 @@
 			<form action="Controller" method="post">
 				<div>
 				<c:forEach var="cardStatus" items="${requestScope.cardStatusList}">
-					<input type="radio" name="type" id="${cardStatus}" onclick="openDiv('info_for_${cardStatus}')" checked/>
+					<input type="radio" name="cardStatus" id="${cardStatus}" onclick="openDiv('info_for_${cardStatus}')" checked/>
 					<label for="${cardStatus}">${cardStatus}</label>
 			    </c:forEach>
 				</div>
@@ -106,7 +106,7 @@
 				</div>
 				<div>
 				<c:forEach var="cardType" items="${requestScope.cardTypeList}">
-					<input type="radio" name="cardType" id="${cardType.type}" checked/>
+					<input type="radio" name="cardTypeId" id="${cardType.id}" checked/>
 					<label for="${cardType.type}"><img src="${cardType.imagePath}"/></label>
 				</c:forEach>
 				</div>
@@ -137,7 +137,7 @@
                     </div>
 				</div>
 
-				<input type="hidden" name="command" value=""/>
+				<input type="hidden" name="command" value="open_card"/>
 				<input type="submit" value="Open card"/>
 			</form>
 		</div>

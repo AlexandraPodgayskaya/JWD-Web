@@ -13,8 +13,8 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.util.GoToPage;
+import by.epam.payment_system.controller.util.OperationControl;
 import by.epam.payment_system.controller.util.SessionControl;
-import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.service.CardService;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.exception.CardTypeFormatException;
@@ -31,25 +31,21 @@ public class AddCardTypeCommandImpl implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		if (!SessionControl.isExist(request, response)) {
-			return;
-		}
-
-		HttpSession session = request.getSession(true);
-
-		if (session.getAttribute(ParameterConstraint.USER_TYPE) == UserType.CLIENT) {
-			logger.info("impossible operation for " + UserType.CLIENT);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));
-			response.sendRedirect(GoToPage.MAIN_PAGE);
+		if (!SessionControl.isExist(request, response) || !OperationControl.calledAdmin(request, response)) {
 			return;
 		}
 
 		String cardType = request.getParameter(ParameterConstraint.CARD_TYPE);
-		String imagePath = IMAGE_FOLDER + request.getParameter(ParameterConstraint.IMAGE);
+
+		String imagePath = null;
+		if (request.getParameter(ParameterConstraint.IMAGE) != null) {
+			imagePath = IMAGE_FOLDER + request.getParameter(ParameterConstraint.IMAGE);
+		}
 
 		ServiceFactory factory = ServiceFactory.getInstance();
 		CardService cardService = factory.getCardService();
 
+		HttpSession session = request.getSession(true);
 		try {
 			cardService.addCardType(cardType, imagePath);
 			session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_CARD_TYPE_ADDED);

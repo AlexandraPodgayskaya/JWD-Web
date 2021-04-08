@@ -14,6 +14,7 @@ import by.epam.payment_system.dao.connectionpool.ConnectionPool;
 import by.epam.payment_system.dao.connectionpool.ConnectionPoolException;
 import by.epam.payment_system.entity.Card;
 import by.epam.payment_system.entity.CardStatus;
+import by.epam.payment_system.entity.CardType;
 
 public class SQLCardDAO implements CardDAO {
 
@@ -62,8 +63,8 @@ public class SQLCardDAO implements CardDAO {
 				cardStatus = CardStatus.valueOf(status.toUpperCase());
 				isBlocked = resultSet.getBoolean(COLUMN_IS_BLOCKED);
 				isClosed = resultSet.getBoolean(COLUMN_IS_CLOSED);
-				card = new Card(numberCard, numberAccount, typeCard, imagePath, cardStatus, userId, isBlocked,
-						isClosed);
+				card = new Card(numberCard, numberAccount, new CardType(typeCard, imagePath), cardStatus, userId,
+						isBlocked, isClosed);
 				cardList.add(card);
 			}
 
@@ -110,8 +111,8 @@ public class SQLCardDAO implements CardDAO {
 				int owner = resultSet.getInt(COLUMN_OWNER);
 				boolean isBlocked = resultSet.getBoolean(COLUMN_IS_BLOCKED);
 				boolean isClosed = resultSet.getBoolean(COLUMN_IS_CLOSED);
-				Card card = new Card(numberCard, numberAccount, typeCard, imagePath, cardStatus, owner, isBlocked,
-						isClosed);
+				Card card = new Card(numberCard, numberAccount, new CardType(typeCard, imagePath), cardStatus, owner,
+						isBlocked, isClosed);
 
 				cardOptional = Optional.of(card);
 			}

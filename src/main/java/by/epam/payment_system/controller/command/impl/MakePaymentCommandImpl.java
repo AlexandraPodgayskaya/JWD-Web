@@ -17,9 +17,9 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.util.GoToPage;
+import by.epam.payment_system.controller.util.OperationControl;
 import by.epam.payment_system.controller.util.SessionControl;
 import by.epam.payment_system.controller.util.URIConstructor;
-import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.TransactionService;
 import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
@@ -36,16 +36,8 @@ public class MakePaymentCommandImpl implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		if (!SessionControl.isExist(request, response)) {
-			return;
-		}
 
-		HttpSession session = request.getSession(true);
-		if (session.getAttribute(ParameterConstraint.USER_TYPE) == UserType.ADMIN) {
-			logger.info("impossible operation for " + UserType.ADMIN);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));
-			response.sendRedirect(GoToPage.MAIN_PAGE);
+		if (!SessionControl.isExist(request, response) || !OperationControl.calledClient(request, response)) {
 			return;
 		}
 
@@ -56,7 +48,9 @@ public class MakePaymentCommandImpl implements Command {
 			paymentDetails.put(parameter, request.getParameter(parameter));
 		}
 
-		paymentDetails.put(ParameterConstraint.USER_LOGIN, (String) session.getAttribute(ParameterConstraint.USER_LOGIN));
+		HttpSession session = request.getSession(true);
+		paymentDetails.put(ParameterConstraint.USER_LOGIN,
+				(String) session.getAttribute(ParameterConstraint.USER_LOGIN));
 
 		ServiceFactory factory = ServiceFactory.getInstance();
 		TransactionService transactionService = factory.getTransactionService();

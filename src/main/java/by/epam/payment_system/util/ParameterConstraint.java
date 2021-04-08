@@ -5,6 +5,7 @@ public final class ParameterConstraint {
 	public static final String COMMAND = "command";
 	public static final String PAGE = "page";
 	public static final String NUMBER_CARD = "numberCard";
+	public static final String NUMBER_ACCOUNT = "numberAccount";
 	public static final String NUMBER_PASSPORT = "clientPassportNumber";
 	public static final String CURRENCY = "currency";
 	public static final String BALANCE = "balance";
@@ -26,9 +27,11 @@ public final class ParameterConstraint {
 	public static final String NAME = "name";
 	public static final String PATRONYMIC = "patronymic";
 	public static final String DATE_OF_BIRTH = "date_of_birth";
-	public static final String PERSONAL_NUMBER_PASSPORT = "personal_number_passport";
+	public static final String PERSONAL_NUMBER_PASSPORT = "personalNumberPassport";
 	public static final String PHONE = "phone";
 	public static final String CARD_TYPE = "cardType";
+	public static final String CARD_TYPE_ID = "cardTypeId";
+	public static final String CARD_STATUS = "cardStatus";
 	public static final String IMAGE = "image";
 	public static final String INFO_MESSAGE = "infoMessage";
 	public static final String ERROR_MESSAGE = "errorMessageList";

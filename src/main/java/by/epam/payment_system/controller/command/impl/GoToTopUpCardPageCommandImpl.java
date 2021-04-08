@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.util.GoToPage;
+import by.epam.payment_system.controller.util.OperationControl;
 import by.epam.payment_system.controller.util.SessionControl;
 import by.epam.payment_system.controller.util.URIConstructor;
 import by.epam.payment_system.util.ParameterConstraint;
@@ -19,7 +20,7 @@ public class GoToTopUpCardPageCommandImpl implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		if (!SessionControl.isExist(request, response)) {
+		if (!SessionControl.isExist(request, response) || !OperationControl.calledClient(request, response)) {
 			return;
 		}
 

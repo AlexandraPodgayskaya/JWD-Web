@@ -116,12 +116,12 @@
     </div>
     <div>
       <label>${date_of_birth}:
-		<input type="text" name="date_of_birth" required placeholder="XX.XX.XXXX" value="${userInfo.dateBirth}" />
+		<input type="text" name="dateBirth" required placeholder="XX.XX.XXXX" value="${userInfo.dateBirth}" />
       </label>
     </div>
 	<div>
 		<label>${personal_number_passport}:
-			<input type="text" name="personal_number_passport" id="passport" required placeholder="1111111A111PB1" value="${userInfo.personalNumberPassport}" />
+			<input type="text" name="personalNumberPassport" id="passport" required placeholder="1111111A111PB1" value="${userInfo.personalNumberPassport}" />
 		</label>
 	</div>
     <div>

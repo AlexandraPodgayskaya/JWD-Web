@@ -16,6 +16,10 @@ public final class SessionControl {
 
 	private static final Logger logger = LogManager.getLogger();
 	
+	private SessionControl() {
+
+	}
+	
 	public static boolean isExist (HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		HttpSession session = request.getSession(false);
@@ -38,7 +42,4 @@ public final class SessionControl {
 		return true;
 	}
 	
-	private SessionControl() {
-
-	}
 }

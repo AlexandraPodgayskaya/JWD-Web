@@ -136,8 +136,8 @@
         <c:if test="${card.isBlocked == false}">
             <div class ="cart">
                 <p>${card.numberCard}</p>
-                <c:if test="${card.imagePath != null}">
-                <img id="cart_type_img" src="${card.imagePath}"/>
+                <c:if test="${card.cardType.imagePath != null}">
+                <img id="cart_type_img" src="${card.cardType.imagePath}"/>
                 </c:if>
                 <p>${card.balance} ${card.currency}</p>
                 <c:if test="${card.status == 'MAIN'}">
@@ -196,8 +196,8 @@
 		    <div class ="cart blocked">
                 <img src="img/zamok.png"/>
                 <p>${card.numberCard}</p>
-                <c:if test="${card.imagePath != null}">
-                <img id="cart_type_img" src="${card.imagePath}"/>
+                <c:if test="${card.cardType.imagePath != null}">
+                <img id="cart_type_img" src="${card.cardType.imagePath}"/>
                 </c:if>
                 <p>${card.balance} ${card.currency}</p>
                 <c:if test="${card.status == 'MAIN'}">
@@ -227,8 +227,8 @@
 				<img src="img/close-img.png"/>
 		        <p><b>${closed}</b></p>
                 <p>${card.numberCard}</p>
-                <c:if test="${card.imagePath != null}">
-                <img id="cart_type_img" src="${card.imagePath}"/>
+                <c:if test="${card.cardType.imagePath != null}">
+                <img id="cart_type_img" src="${card.cardType.imagePath}"/>
                 </c:if>
                 <p>${card.balance} ${card.currency}</p>
                 <c:if test="${card.status == 'MAIN'}">

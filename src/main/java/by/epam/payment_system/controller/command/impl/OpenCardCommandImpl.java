@@ -1,8 +1,8 @@
 package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
+import java.util.Arrays;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,13 +15,15 @@ import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.util.GoToPage;
 import by.epam.payment_system.controller.util.OperationControl;
 import by.epam.payment_system.controller.util.SessionControl;
-import by.epam.payment_system.entity.CardInfo;
+import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.service.CardService;
 import by.epam.payment_system.service.ServiceFactory;
+import by.epam.payment_system.service.exception.CardTypeFormatException;
 import by.epam.payment_system.service.exception.ServiceException;
+import by.epam.payment_system.util.Message;
 import by.epam.payment_system.util.ParameterConstraint;
 
-public class GoToOpenCardPageCommandImpl implements Command {
+public class OpenCardCommandImpl implements Command {
 
 	private static final Logger logger = LogManager.getLogger();
 
@@ -32,21 +34,26 @@ public class GoToOpenCardPageCommandImpl implements Command {
 			return;
 		}
 
-		HttpSession session = request.getSession(true);
+		String cardStatus = request.getParameter(ParameterConstraint.CARD_STATUS);
+		String cardTypeId = request.getParameter(ParameterConstraint.CARD_TYPE_ID);
+		String currency = request.getParameter(ParameterConstraint.CARD_TYPE_ID);
+		String numberAccount = request.getParameter(ParameterConstraint.NUMBER_ACCOUNT);
+		String numberPassport = request.getParameter(ParameterConstraint.PERSONAL_NUMBER_PASSPORT);
 
 		ServiceFactory factory = ServiceFactory.getInstance();
 		CardService cardService = factory.getCardService();
-		Integer id = (Integer) session.getAttribute(ParameterConstraint.USER_ID);
 
+		HttpSession session = request.getSession(true);
 		try {
-			CardInfo cardInfo = cardService.takeAllCardOptions(id);
-			request.setAttribute(ParameterConstraint.CARD_LIST, cardInfo.getCardList());
-			request.setAttribute(ParameterConstraint.CARD_TYPE_LIST, cardInfo.getCardTypeList());
-			request.setAttribute(ParameterConstraint.CARD_STATUS_LIST, cardInfo.getCardStatusList());
-			request.setAttribute(ParameterConstraint.CURRENCY_LIST, cardInfo.getCurrencyList());
-			session.setAttribute(ParameterConstraint.PAGE, GoToPage.OPEN_CARD_PAGE);
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher(GoToPage.FORWARD_OPEN_CARD_PAGE);
-			requestDispatcher.forward(request, response);
+
+			cardService.addCardType(cardStatus, cardTypeId);
+			session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_CARD_TYPE_ADDED);
+			session.setAttribute(ParameterConstraint.PAGE, GoToPage.MAIN_PAGE);
+			response.sendRedirect(GoToPage.MAIN_PAGE);
+		} catch (CardTypeFormatException e) {
+			logger.error("wrong card type format", e);
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_CARD_TYPE));
+			response.sendRedirect(GoToPage.ADD_CARD_TYPE_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);
 			response.sendRedirect(GoToPage.ERROR_PAGE);

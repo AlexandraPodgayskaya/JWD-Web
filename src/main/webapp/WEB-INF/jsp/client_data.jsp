@@ -75,12 +75,12 @@
     </div>
     <div>
         <label>${date_of_birth}:
-            <input type="text" name="date_of_birth" required placeholder="XX.XX.XXXX" />
+            <input type="text" name="dateBirth" required placeholder="XX.XX.XXXX" />
         </label>
     </div>
     <div>
         <label>${personal_number_passport}:
-            <input type="text" name="personal_number_passport" id="passport" required placeholder="1111111A111PB1" />
+            <input type="text" name="personalNumberPassport" id="passport" required placeholder="1111111A111PB1" />
         </label>
     </div>
     <div>

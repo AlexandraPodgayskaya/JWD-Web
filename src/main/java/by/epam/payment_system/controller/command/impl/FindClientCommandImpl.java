@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.util.GoToPage;
+import by.epam.payment_system.controller.util.OperationControl;
 import by.epam.payment_system.controller.util.SessionControl;
 import by.epam.payment_system.entity.UserInfo;
 import by.epam.payment_system.service.AdditionalClientDataService;
@@ -28,10 +29,10 @@ public class FindClientCommandImpl implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		if (!SessionControl.isExist(request, response)) {
+		if (!SessionControl.isExist(request, response) || !OperationControl.calledAdmin(request, response)) {
 			return;
 		}
-		
+
 		HttpSession session = request.getSession(true);
 
 		session.removeAttribute(ParameterConstraint.FOUND_CLIENT_INFO);
