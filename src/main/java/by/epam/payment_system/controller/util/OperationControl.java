@@ -21,22 +21,11 @@ public final class OperationControl {
 	private OperationControl() {
 	}
 
-	public static boolean calledClient (HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public static boolean isAllowedToUser(HttpServletRequest request, HttpServletResponse response, UserType userType)
+			throws IOException {
 		HttpSession session = request.getSession(true);
-		if (session.getAttribute(ParameterConstraint.USER_TYPE) == UserType.ADMIN) {
+		if (session.getAttribute(ParameterConstraint.USER_TYPE) != userType) {
 			logger.info("impossible operation for " + UserType.ADMIN);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));
-			response.sendRedirect(GoToPage.MAIN_PAGE);
-			return false;
-		}
-
-		return true;
-	}
-	
-	public static boolean calledAdmin (HttpServletRequest request, HttpServletResponse response) throws IOException {
-		HttpSession session = request.getSession(true);
-		if (session.getAttribute(ParameterConstraint.USER_TYPE) == UserType.CLIENT) {
-			logger.info("impossible operation for " + UserType.CLIENT);
 			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 			return false;

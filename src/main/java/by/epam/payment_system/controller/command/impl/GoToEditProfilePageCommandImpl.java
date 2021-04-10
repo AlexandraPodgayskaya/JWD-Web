@@ -16,6 +16,7 @@ import by.epam.payment_system.controller.util.GoToPage;
 import by.epam.payment_system.controller.util.OperationControl;
 import by.epam.payment_system.controller.util.SessionControl;
 import by.epam.payment_system.entity.UserInfo;
+import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.service.AdditionalClientDataService;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.exception.NoSuchUserServiceException;
@@ -29,7 +30,8 @@ public class GoToEditProfilePageCommandImpl implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		if (!SessionControl.isExist(request, response) || !OperationControl.calledClient(request, response)) {
+		if (!SessionControl.isExist(request, response)
+				|| !OperationControl.isAllowedToUser(request, response, UserType.CLIENT)) {
 			return;
 		}
 

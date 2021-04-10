@@ -16,7 +16,9 @@ public interface CardService {
 
 	void closeCard(String numberCard) throws ServiceException;
 
-	void addCardType(String cardType, String imagePath) throws ServiceException;
+	void openMainCard(Card card) throws ServiceException;
+
+	void openAdditionalCard(Card card, String personalNumberPassport, Integer userId) throws ServiceException;
 
 	CardInfo takeAllCardOptions(Integer id) throws ServiceException;
 

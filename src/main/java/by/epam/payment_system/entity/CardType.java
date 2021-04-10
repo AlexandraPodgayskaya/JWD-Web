@@ -14,6 +14,10 @@ public class CardType implements Serializable {
 
 	}
 
+	public CardType(Integer id) {
+		this.id = id;
+	}
+
 	public CardType(String type, String imagePath) {
 		this.type = type;
 		this.imagePath = imagePath;

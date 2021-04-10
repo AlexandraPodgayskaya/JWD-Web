@@ -6,7 +6,6 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import by.epam.payment_system.controller.command.impl.AddCardTypeCommandImpl;
 import by.epam.payment_system.controller.command.impl.BlockCardCommandImpl;
 import by.epam.payment_system.controller.command.impl.ChangeClientDataCommandImpl;
 import by.epam.payment_system.controller.command.impl.ChangeLocaleCommandImpl;
@@ -20,13 +19,16 @@ import by.epam.payment_system.controller.command.impl.GoToMainPageCommandImpl;
 import by.epam.payment_system.controller.command.impl.GoToOpenCardPageCommandImpl;
 import by.epam.payment_system.controller.command.impl.GoToPaymentPageCommandImpl;
 import by.epam.payment_system.controller.command.impl.GoToTopUpCardPageCommandImpl;
+import by.epam.payment_system.controller.command.impl.GoToTransferPageCommandImpl;
 import by.epam.payment_system.controller.command.impl.LoginCommandImpl;
 import by.epam.payment_system.controller.command.impl.LogoutCommandImpl;
 import by.epam.payment_system.controller.command.impl.MakePaymentCommandImpl;
-import by.epam.payment_system.controller.command.impl.OpenCardCommandImpl;
+import by.epam.payment_system.controller.command.impl.OpenAdditionalCardCommandImpl;
+import by.epam.payment_system.controller.command.impl.OpenMainCardCommandImpl;
 import by.epam.payment_system.controller.command.impl.RegisterCommandImpl;
 import by.epam.payment_system.controller.command.impl.SaveAdditionalClientDataCommandImpl;
-import by.epam.payment_system.controller.command.impl.ShowTransactionLogCommandImpl;
+import by.epam.payment_system.controller.command.impl.ShowAccountTransactionLogCommandImpl;
+import by.epam.payment_system.controller.command.impl.ShowCardTransactionLogCommandImpl;
 import by.epam.payment_system.controller.command.impl.TopUpCardCommandImpl;
 import by.epam.payment_system.controller.command.impl.UnBlockCardCommandImpl;
 
@@ -52,17 +54,18 @@ public class CommandProvider {
 		commands.put(CommandName.GO_TO_PAYMENT_PAGE, new GoToPaymentPageCommandImpl());
 		commands.put(CommandName.CLOSE_CARD, new CloseCardCommandImpl());
 		commands.put(CommandName.PAY, new MakePaymentCommandImpl());
-		commands.put(CommandName.SHOW_ACCOUNT_LOG, new ShowTransactionLogCommandImpl());
-		commands.put(CommandName.SHOW_CARD_LOG, new ShowTransactionLogCommandImpl());
+		commands.put(CommandName.SHOW_ACCOUNT_LOG, new ShowAccountTransactionLogCommandImpl());
+		commands.put(CommandName.SHOW_CARD_LOG, new ShowCardTransactionLogCommandImpl());
 		commands.put(CommandName.DEFAULT_COMMAND, new DefaultCommandImpl());
 		commands.put(CommandName.CLIENT_SEARCH, new FindClientCommandImpl());
-		commands.put(CommandName.ADD_CARD_TYPE, new AddCardTypeCommandImpl());
 		commands.put(CommandName.GO_TO_EDIT_PROFILE_PAGE, new GoToEditProfilePageCommandImpl());
 		commands.put(CommandName.CHANGE_LOGIN, new ChangeLoginCommandImpl());
 		commands.put(CommandName.CHANGE_PASSWORD, new ChangePasswordCommandImpl());
 		commands.put(CommandName.CHANGE_CLIENT_DATA, new ChangeClientDataCommandImpl());
 		commands.put(CommandName.GO_TO_OPEN_CARD_PAGE, new GoToOpenCardPageCommandImpl());
-		commands.put(CommandName.OPEN_CARD, new OpenCardCommandImpl());
+		commands.put(CommandName.OPEN_MAIN_CARD, new OpenMainCardCommandImpl());
+		commands.put(CommandName.OPEN_ADDITIONAL_CARD, new OpenAdditionalCardCommandImpl());
+		commands.put(CommandName.GO_TO_TRANSFER_PAGE, new GoToTransferPageCommandImpl());
 	}
 
 	public Command takeCommand(String name) {

@@ -51,7 +51,7 @@ public class UserDataValidator {
 			setDescriptionList(Message.ERROR_NO_USER_INFO);
 			return false;
 		}
-		
+
 		if (userInfo.getId() == null) {
 			setDescriptionList(Message.ERROR_COMMON);
 			return false;
@@ -79,21 +79,21 @@ public class UserDataValidator {
 		return descriptionList == null;
 	}
 
-	public final boolean numberPassportValidation(String personalNumberPassport) {
+	public final static boolean numberPassportValidation(String personalNumberPassport) {
 		if (personalNumberPassport == null) {
 			return false;
 		}
 		return personalNumberPassport.matches(PERSONAL_NUMBER_PASSPORT_PATTERN);
 	}
 
-	public final boolean loginValidation(String login) {
+	public final static boolean loginValidation(String login) {
 		if (login == null) {
 			return false;
 		}
 		return login.matches(LOGIN_PATTERN);
 	}
 
-	public final boolean passwordValidation(String password) {
+	public final static boolean passwordValidation(String password) {
 		if (password == null) {
 			return false;
 		}

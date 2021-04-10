@@ -14,6 +14,7 @@ public final class Message {
 	public static final String INFO_PASSWORD_CHANGED = "local.message.password_changed";
 	public static final String INFO_CLOSING_OK = "local.message.closing_card_ok";
 	public static final String INFO_CLIENT_NOT_FOUND = "local.message.client_not_found";
+	public static final String INFO_CARD_IS_OPEN = "local.message.card_is_open";
 	public static final String ERROR_SESSION_TIMED_OUT = "local.error.session_timed_out";
 	public static final String ERROR_COMMON = "local.error.common_error";
 	public static final String ERROR_LOGOUT = "local.error.logout";
@@ -46,7 +47,9 @@ public final class Message {
 	public static final String ERROR_DATE_OF_BIRTH = "local.error.date_of_birth";
 	public static final String ERROR_PERSONAL_NUMBER_PASSPORT = "local.error.personal_number_passport";
 	public static final String ERROR_PHONE = "local.error.phone";
-
+	public static final String ERROR_PROFILE_NOT_COMPLETED = "local.error.profile_not_completed";
+	public static final String ERROR_INCORRECT_DATA = "local.error.incorrect_data";
+	
 	private Message() {
 
 	}

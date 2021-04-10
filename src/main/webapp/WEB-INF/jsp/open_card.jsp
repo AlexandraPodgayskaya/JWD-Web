@@ -24,6 +24,11 @@
     <fmt:message bundle="${loc}" key="local.additional_card" var="additional_card"/>
     <fmt:message bundle="${loc}" key="local.card_type" var="card_type"/>
     <fmt:message bundle="${loc}" key="local.currency" var="currency"/>
+    <fmt:message bundle="${loc}" key="local.main_card" var="main_card"/>
+    <fmt:message bundle="${loc}" key="local.additional_card" var="additional_card"/>
+    <fmt:message bundle="${loc}" key="local.card_type" var="card_type"/>
+    <fmt:message bundle="${loc}" key="local.main_card_number" var="main_card_number"/>
+    <fmt:message bundle="${loc}" key="local.owner_passport" var="owner_passport"/>
     <meta charset="UTF-8">
     <title>${tittle}</title>
     <link rel="stylesheet" href="css/open_card/style.css" type="text/css" />
@@ -93,54 +98,72 @@
 
 		<div class ="open_card">
 			<p>${card_opening_data}:</p>
-			<form action="Controller" method="post">
+			<div>
+                <input type="radio" name="cardStatus" id="main" value="main" onclick="openCloseDiv('info_for_main', 'info_for_additional')" checked/>
+                <label for="main">${main_card}</label>
+                <c:if test="${!requestScope.cardList.isEmpty()}">
+                    <input type="radio" name="cardStatus" id="additional" name="additional" onclick="openCloseDiv('info_for_additional', 'info_for_main')"/>
+                    <label for="additional">${additional_card}</label>
+                </c:if>
+            </div>
+			<form action="Controller" method="post" id="info_for_main">
 				<div>
-				<c:forEach var="cardStatus" items="${requestScope.cardStatusList}">
-					<input type="radio" name="cardStatus" id="${cardStatus}" onclick="openDiv('info_for_${cardStatus}')" checked/>
-					<label for="${cardStatus}">${cardStatus}</label>
-			    </c:forEach>
-				</div>
-
-				<div>
-					<label>Card type:</label>
+					<label>${card_type}:</label>
 				</div>
 				<div>
 				<c:forEach var="cardType" items="${requestScope.cardTypeList}">
-					<input type="radio" name="cardTypeId" id="${cardType.id}" checked/>
-					<label for="${cardType.type}"><img src="${cardType.imagePath}"/></label>
+					<input type="radio" name="cardTypeId" id="${cardType.type}" value="${cardType.id}" required>
+					<label for="${cardType.type}">${cardType.type} <img src="${cardType.imagePath}"/></label>
 				</c:forEach>
 				</div>
-
-                <div id="specific_info">
-                    <div id="info_for_main">
-                        <label for="currency">${currency}:</label>
-                        <select size="${requestScope.currencyList.size()}" id="currency" name="currency">
-                            <c:forEach var="currency" items="${requestScope.currencyList}">
-                                <option value="${currency}">${currency}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-
-                    <div id="info_for_additional">
-                        <div>
-                            <label for="main_card_number">Card number:</label>
-                            <select size="${requestScope.cardList.size()}" id="main_card_number" name="main_card_number">
-                                <c:forEach var="card" items="${requestScope.cardList}">
-                                    <option value="${card.numberCard}">${card.numberCard}, ${card.currency}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="owner">Owner passport number:</label>
-                            <input type="text" id="owner" name="owner" placeholder="1111111A111PB1"/>
-                        </div>
-                    </div>
+				<div>
+                    <label for="currency">${currency}:</label>
+                    <select size="${requestScope.currencyList.size()}" id="currency" name="currency" required>
+                        <c:forEach var="currency" items="${requestScope.currencyList}">
+                            <option value="${currency}">${currency}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <input type="hidden" name="command" value="open_main_card"/>
+                <input type="submit" value="Open card"/>
+            </form>
+            <form action="Controller" method="post" id="info_for_additional">
+                <div>
+					<label>${card_type}:</label>
 				</div>
-
-				<input type="hidden" name="command" value="open_card"/>
+                <div>
+				<c:forEach var="cardType" items="${requestScope.cardTypeList}">
+					<input type="radio" name="cardTypeId" id="${cardType.type}" value="${cardType.id}" required>
+					<label for="${cardType.type}">${cardType.type} <img src="${cardType.imagePath}"/></label>
+				</c:forEach>
+				</div>
+				<div>
+                    <label for="main_card_number">${main_card_number}:</label>
+                    <select size="${requestScope.cardList.size()}" id="main_card_number" name="numberAccount" required>
+                        <c:forEach var="card" items="${requestScope.cardList}">
+                            <option value="${card.numberAccount}">${card.numberCard}, ${card.currency}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div>
+                    <label for="owner">${owner_passport}:</label>
+                    <input type="text" id="owner" name="personalNumberPassport" placeholder="1111111A111PB1" required />
+                </div>
+				<input type="hidden" name="command" value="open_additional_card"/>
 				<input type="submit" value="Open card"/>
 			</form>
 		</div>
+		
+		<c:if test="${errorMessageList != null}">
+         <c:forEach var="errorMessageKey" items="${errorMessageList}">
+         <fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
+            <div class="error">
+                <h4>${error}</h4>
+            </div>
+         </c:forEach>
+         <c:remove var="errorMessageList"/>
+        </c:if>
+    
 	</section>
 
 </div>
@@ -148,14 +171,11 @@
 <mytag:copyright/>
 
 <script>
-    function openDiv(openId) {
-	  var closeDivs = document.getElementById("specific_info").children;
-	  for (var i=0, child; child=closeDivs[i]; i++) {
-	    child.style.display = "none";
-	  }
-
+    function openCloseDiv(openId, closeId) {
       var openDiv = document.getElementById(openId);
       openDiv.style.display = "block";
+      var closeDiv = document.getElementById(closeId);
+      closeDiv.style.display = "none";
     }
 </script>
 

@@ -11,7 +11,11 @@ public interface CardDAO {
 
 	boolean updateBlocking(Card card) throws DAOException;
 
-	Optional <Card> findCardData(String numberCard) throws DAOException;
+	Optional<Card> findCardData(String numberCard) throws DAOException;
 
 	boolean setClosed(String numberCard) throws DAOException;
+
+	Optional<Long> getLastCardNumber() throws DAOException;
+
+	void create(Card card) throws DAOException;
 }

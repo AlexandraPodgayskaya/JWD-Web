@@ -25,16 +25,12 @@ import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.util.Message;
 import by.epam.payment_system.util.ParameterConstraint;
 
-public class ShowTransactionLogCommandImpl implements Command {
+public class ShowCardTransactionLogCommandImpl implements Command {
 
 	private static final Logger logger = LogManager.getLogger();
 
-	private static final String COMMAND_SHOW_ACCOUNT_LOG = "show_account_log";
-	private static final String COMMAND_SHOW_CARD_LOG = "show_card_log";
-
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		if (!SessionControl.isExist(request, response)) {
 			return;
 		}
@@ -44,21 +40,8 @@ public class ShowTransactionLogCommandImpl implements Command {
 
 		HttpSession session = request.getSession(true);
 		try {
-			List<Transaction> transactionList;
-			if (request.getParameter(ParameterConstraint.COMMAND) != null
-					&& request.getParameter(ParameterConstraint.COMMAND).equals(COMMAND_SHOW_CARD_LOG)) {
-				transactionList = transactionService.takeCardTransactions(request.getParameter(ParameterConstraint.NUMBER_CARD));
-
-			} else if (request.getParameter(ParameterConstraint.COMMAND) != null
-					&& request.getParameter(ParameterConstraint.COMMAND).equals(COMMAND_SHOW_ACCOUNT_LOG)) {
-				transactionList = transactionService
-						.takeAccountTransactions(request.getParameter(ParameterConstraint.NUMBER_CARD));
-			} else {
-				logger.info("incorrect command name");
-				session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));
-				response.sendRedirect(GoToPage.MAIN_PAGE);
-				return;
-			}
+			List<Transaction> transactionList = transactionService
+					.takeCardTransactions(request.getParameter(ParameterConstraint.NUMBER_CARD));
 
 			if (transactionList.isEmpty()) {
 				logger.info("transaction log is empty");
@@ -69,7 +52,7 @@ public class ShowTransactionLogCommandImpl implements Command {
 
 			request.setAttribute(ParameterConstraint.TRANSACTION_LIST, transactionList);
 			request.setAttribute(ParameterConstraint.COMMAND, request.getParameter(ParameterConstraint.COMMAND));
-			session.setAttribute(ParameterConstraint.PAGE, GoToPage.TRANSACTION_LOG_PAGE + request.getParameter(ParameterConstraint.COMMAND)
+			session.setAttribute(ParameterConstraint.PAGE, GoToPage.CARD_TRANSACTION_LOG_PAGE
 					+ URIConstructor.SET_NUMBER_CARD + request.getParameter(ParameterConstraint.NUMBER_CARD));
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(GoToPage.FORWARD_TRANSACTION_LOG_PAGE);
 			requestDispatcher.forward(request, response);

@@ -38,10 +38,8 @@ public class AdditionalClientDataServiceImpl implements AdditionalClientDataServ
 	@Override
 	public UserInfo search(String personalNumberPassport) throws ServiceException {
 
-		UserDataValidator validator = new UserDataValidator();
-
-		if (!validator.numberPassportValidation(personalNumberPassport)) {
-			throw new NoSuchUserServiceException("personal number passport format error");
+		if (!UserDataValidator.numberPassportValidation(personalNumberPassport)) {
+			throw new UserInfoFormatServiceException("personal number passport format error");
 		}
 
 		AdditionalClientDataDAO additionalClientDataDAO = factory.getAdditionalClientDataDAO();

@@ -2,11 +2,9 @@ package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,34 +15,25 @@ import org.apache.logging.log4j.Logger;
 
 import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.util.GoToPage;
-import by.epam.payment_system.controller.util.OperationControl;
 import by.epam.payment_system.controller.util.SessionControl;
-import by.epam.payment_system.entity.UserType;
+import by.epam.payment_system.controller.util.URIConstructor;
+import by.epam.payment_system.entity.Transaction;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.TransactionService;
 import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
-import by.epam.payment_system.service.exception.TransactionDataServiceException;
 import by.epam.payment_system.util.Message;
 import by.epam.payment_system.util.ParameterConstraint;
 
-public class TopUpCardCommandImpl implements Command {
+public class ShowAccountTransactionLogCommandImpl implements Command {
 
 	private static final Logger logger = LogManager.getLogger();
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		if (!SessionControl.isExist(request, response)
-				|| !OperationControl.isAllowedToUser(request, response, UserType.CLIENT)) {
+		if (!SessionControl.isExist(request, response)) {
 			return;
-		}
-
-		Enumeration<String> parameters = request.getParameterNames();
-		Map<String, String> transferDetails = new HashMap<>();
-
-		for (String parameter : Collections.list(parameters)) {
-			transferDetails.put(parameter, request.getParameter(parameter));
 		}
 
 		ServiceFactory factory = ServiceFactory.getInstance();
@@ -52,15 +41,25 @@ public class TopUpCardCommandImpl implements Command {
 
 		HttpSession session = request.getSession(true);
 		try {
-			transactionService.topUpCard(transferDetails);
-			session.setAttribute(ParameterConstraint.PAGE, GoToPage.MAIN_PAGE);
-			session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_TOP_UP_CARD_OK);
-			response.sendRedirect(GoToPage.MAIN_PAGE);
-		} catch (TransactionDataServiceException e) {
-			logger.error("incorrect data for transaction", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, e.getErrorDescription());
-			response.sendRedirect((String) session.getAttribute(ParameterConstraint.PAGE));
-		} catch (ImpossibleOperationServiceException e) {
+			List<Transaction> transactionList = transactionService
+					.takeAccountTransactions(request.getParameter(ParameterConstraint.NUMBER_CARD));
+
+			if (transactionList.isEmpty()) {
+				logger.info("transaction log is empty");
+				session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_LOG_IS_EMPTY);
+				response.sendRedirect(GoToPage.MAIN_PAGE);
+				return;
+			}
+
+			request.setAttribute(ParameterConstraint.TRANSACTION_LIST, transactionList);
+			request.setAttribute(ParameterConstraint.COMMAND, request.getParameter(ParameterConstraint.COMMAND));
+			session.setAttribute(ParameterConstraint.PAGE, GoToPage.ACCOUNT_TRANSACTION_LOG_PAGE
+					+ URIConstructor.SET_NUMBER_CARD + request.getParameter(ParameterConstraint.NUMBER_CARD));
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher(GoToPage.FORWARD_TRANSACTION_LOG_PAGE);
+			requestDispatcher.forward(request, response);
+		} catch (
+
+		ImpossibleOperationServiceException e) {
 			logger.error("impossible operation", e);
 			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));
 			response.sendRedirect(GoToPage.MAIN_PAGE);

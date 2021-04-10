@@ -16,7 +16,7 @@ import by.epam.payment_system.controller.util.URIConstructor;
 import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.util.ParameterConstraint;
 
-public class GoToTopUpCardPageCommandImpl implements Command {
+public class GoToTransferPageCommandImpl implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -28,14 +28,18 @@ public class GoToTopUpCardPageCommandImpl implements Command {
 
 		request.setAttribute(ParameterConstraint.NUMBER_CARD, request.getParameter(ParameterConstraint.NUMBER_CARD));
 		request.setAttribute(ParameterConstraint.CURRENCY, request.getParameter(ParameterConstraint.CURRENCY));
+		request.setAttribute(ParameterConstraint.BALANCE, request.getParameter(ParameterConstraint.BALANCE));
 
 		HttpSession session = request.getSession(true);
-		session.setAttribute(ParameterConstraint.PAGE,
-				GoToPage.TOP_UP_CARD_PAGE + URIConstructor.SET_NUMBER_CARD
-						+ request.getParameter(ParameterConstraint.NUMBER_CARD) + URIConstructor.SET_CURRENCY
-						+ request.getParameter(ParameterConstraint.CURRENCY));
 
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher(GoToPage.FORWARD_TOP_UP_CARD_PAGE);
+		session.setAttribute(ParameterConstraint.PAGE,
+				GoToPage.PAYMENT_PAGE + URIConstructor.SET_NUMBER_CARD
+						+ request.getParameter(ParameterConstraint.NUMBER_CARD) + URIConstructor.SET_CURRENCY
+						+ request.getParameter(ParameterConstraint.CURRENCY) + URIConstructor.SET_BALANCE
+						+ request.getParameter(ParameterConstraint.BALANCE));
+
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher(GoToPage.FORWARD_TRANSFER_PAGE);
 		requestDispatcher.forward(request, response);
 	}
+
 }

@@ -10,12 +10,18 @@ public class Account implements Serializable {
 	private String numberAccount;
 	private BigDecimal balance;
 	private Currency currency;
-	private int ownerId;
+	private Integer ownerId;
 
 	public Account() {
 	}
 
-	public Account(String numberAccount, BigDecimal balance, Currency currency, int ownerId) {
+	public Account(String numberAccount, Currency currency, Integer ownerId) {
+		this.numberAccount = numberAccount;
+		this.currency = currency;
+		this.ownerId = ownerId;
+	}
+
+	public Account(String numberAccount, BigDecimal balance, Currency currency, Integer ownerId) {
 		this.numberAccount = numberAccount;
 		this.balance = balance;
 		this.currency = currency;
@@ -46,11 +52,11 @@ public class Account implements Serializable {
 		this.currency = currency;
 	}
 
-	public int getOwnerId() {
+	public Integer getOwnerId() {
 		return ownerId;
 	}
 
-	public void setOwnerId(int ownerId) {
+	public void setOwnerId(Integer ownerId) {
 		this.ownerId = ownerId;
 	}
 
@@ -61,7 +67,7 @@ public class Account implements Serializable {
 		result = prime * result + ((balance == null) ? 0 : balance.hashCode());
 		result = prime * result + ((currency == null) ? 0 : currency.hashCode());
 		result = prime * result + ((numberAccount == null) ? 0 : numberAccount.hashCode());
-		result = prime * result + ownerId;
+		result = prime * result + ((ownerId == null) ? 0 : ownerId.hashCode());
 		return result;
 	}
 
@@ -86,7 +92,10 @@ public class Account implements Serializable {
 				return false;
 		} else if (!numberAccount.equals(other.numberAccount))
 			return false;
-		if (ownerId != other.ownerId)
+		if (ownerId == null) {
+			if (other.ownerId != null)
+				return false;
+		} else if (!ownerId.equals(other.ownerId))
 			return false;
 		return true;
 	}

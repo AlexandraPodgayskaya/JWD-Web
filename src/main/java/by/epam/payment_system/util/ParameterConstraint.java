@@ -26,7 +26,7 @@ public final class ParameterConstraint {
 	public static final String SURNAME = "surname";
 	public static final String NAME = "name";
 	public static final String PATRONYMIC = "patronymic";
-	public static final String DATE_OF_BIRTH = "date_of_birth";
+	public static final String DATE_OF_BIRTH = "dateBirth";
 	public static final String PERSONAL_NUMBER_PASSPORT = "personalNumberPassport";
 	public static final String PHONE = "phone";
 	public static final String CARD_TYPE = "cardType";

@@ -90,3 +90,7 @@ body {
 	font: normal 16px Cambria;
 	line-height: 35px;
 }
+
+#transfer_to_other {
+	display: none;
+}

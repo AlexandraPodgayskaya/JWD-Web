@@ -144,7 +144,6 @@
 				</div>
 				
 				<input type="hidden" name="senderCardNumber" value="${requestScope.numberCard}"/>
-				<input type="hidden" name="balance" value="${requestScope.balance}"/>
 				<input type="hidden" name="currency" value="${requestScope.currency}"/>
 				<input type="hidden" name="passwordCheck" id="passwordCheckInput" value=""/>
 				<input type="hidden" name="command" value="pay"/>

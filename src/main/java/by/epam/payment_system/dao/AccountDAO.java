@@ -7,8 +7,12 @@ import by.epam.payment_system.entity.Transaction;
 
 public interface AccountDAO {
 
-	Optional <Account> getAccount(String numberAccount) throws DAOException;
+	Optional<Account> getAccount(String numberAccount) throws DAOException;
+
+	Optional<Long> getLastAccountNumber() throws DAOException;
 
 	boolean updateBalance(Transaction transaction) throws DAOException;
+
+	void create(Account account) throws DAOException;
 
 }

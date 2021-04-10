@@ -1,7 +1,6 @@
 package by.epam.payment_system.dao.impl;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,28 +15,12 @@ import by.epam.payment_system.entity.CardType;
 
 public class SQLCardTypeDAO implements CardTypeDAO {
 
-	private static final String INSERT_CARD_TYPE_SQL = "INSERT INTO CARD_TYPES (TYPE, IMAGE_PATH) VALUES(?, ?) ";
 	private static final String SELECT_CARD_TYPES_SQL = "SELECT * FROM CARD_TYPES";
 	private static final String COLUMN_ID = "id";
 	private static final String COLUMN_TYPE = "type";
 	private static final String COLUMN_IMAGE_PATH = "image_path";
 
 	private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
-
-	@Override
-	public void create(CardType cardType) throws DAOException {
-		try (Connection connection = connectionPool.takeConnection();
-				PreparedStatement statement = connection.prepareStatement(INSERT_CARD_TYPE_SQL)) {
-
-			statement.setString(1, cardType.getType());
-			statement.setString(2, cardType.getImagePath());
-
-			statement.executeUpdate();
-
-		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-		}
-	}
 
 	@Override
 	public List<CardType> findAll() throws DAOException {

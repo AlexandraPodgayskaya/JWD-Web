@@ -15,14 +15,20 @@ import by.epam.payment_system.entity.CardInfo;
 import by.epam.payment_system.entity.CardStatus;
 import by.epam.payment_system.entity.CardType;
 import by.epam.payment_system.entity.Currency;
+import by.epam.payment_system.entity.UserInfo;
+import by.epam.payment_system.service.AdditionalClientDataService;
 import by.epam.payment_system.service.CardService;
-import by.epam.payment_system.service.exception.CardTypeFormatException;
+import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 
 public class CardServiceImpl implements CardService {
 
 	private static final DAOFactory factory = DAOFactory.getInstance();
+
+	private static final int FIRST_ACCOUNT_NUMBER = 21081001;
+	private static final long FIRST_CARD_NUMBER = 5489333344441111L;
+	private static final int INCREMENT = 1;
 
 	@Override
 	public List<Card> takeCards(Integer userId) throws ServiceException {
@@ -116,24 +122,6 @@ public class CardServiceImpl implements CardService {
 	}
 
 	@Override
-	public void addCardType(String type, String imagePath) throws ServiceException {
-
-		if (type == null || type.isEmpty()) {
-			throw new CardTypeFormatException("card type not specified");
-		}
-
-		CardType cardType = new CardType(type, imagePath);
-
-		CardTypeDAO cardTypeDAO = factory.getCardTypeDAO();
-		try {
-			cardTypeDAO.create(cardType);
-		} catch (DAOException e) {
-			throw new ServiceException("card type creation error", e);
-		}
-
-	}
-
-	@Override
 	public CardInfo takeAllCardOptions(Integer id) throws ServiceException {
 
 		CardInfo cardInfo = new CardInfo();
@@ -155,6 +143,68 @@ public class CardServiceImpl implements CardService {
 		}
 
 		return cardInfo;
+	}
+
+	@Override
+	public void openMainCard(Card card) throws ServiceException {
+		if (card == null) {
+			throw new ImpossibleOperationServiceException("no card data to open");
+		}
+
+		ServiceFactory serviceFactory = ServiceFactory.getInstance();
+		AdditionalClientDataService additionalClientDataService = serviceFactory.getAdditionalClientDataService();
+		additionalClientDataService.getData(card.getOwnerId());
+
+		AccountDAO accountDAO = factory.getAccountDAO();
+		CardDAO cardDAO = factory.getCardDAO();
+		try {
+			Optional<Long> lastAccountOptional = accountDAO.getLastAccountNumber();
+			Long newAccountNumber = lastAccountOptional.isEmpty() ? FIRST_ACCOUNT_NUMBER
+					: Long.sum(lastAccountOptional.get(), INCREMENT);
+			Account account = new Account(String.valueOf(newAccountNumber), card.getCurrency(), card.getOwnerId());
+			accountDAO.create(account);
+			card.setNumberAccount(String.valueOf(newAccountNumber));
+
+			Optional<Long> lastCardOptional = cardDAO.getLastCardNumber();
+			Long newCardNumber = lastCardOptional.isEmpty() ? FIRST_CARD_NUMBER
+					: Long.sum(lastCardOptional.get(), INCREMENT);
+			card.setNumberCard(String.valueOf(newCardNumber));
+
+			cardDAO.create(card);
+		} catch (DAOException e) {
+			throw new ServiceException("card openning error", e);
+		}
+	}
+
+	@Override
+	public void openAdditionalCard(Card card, String personalNumberPassport, Integer userId) throws ServiceException {
+		if (card == null || card.getNumberAccount() == null || card.getCardType() == null
+				|| card.getCardType().getId() == null) {
+			throw new ImpossibleOperationServiceException("no card data to open");
+		}
+
+		ServiceFactory serviceFactory = ServiceFactory.getInstance();
+		AdditionalClientDataService additionalClientDataService = serviceFactory.getAdditionalClientDataService();
+		UserInfo userInfo = additionalClientDataService.search(personalNumberPassport);
+		card.setOwnerId(userInfo.getId());
+
+		AccountDAO accountDAO = factory.getAccountDAO();
+		CardDAO cardDAO = factory.getCardDAO();
+		try {
+			Optional<Account> accountOptional = accountDAO.getAccount(card.getNumberAccount());
+			if (accountOptional.isEmpty() || !accountOptional.get().getOwnerId().equals(userId)) {
+				throw new ImpossibleOperationServiceException("impossible operation for an account");
+			}
+
+			Optional<Long> lastCardOptional = cardDAO.getLastCardNumber();
+			Long newCardNumber = lastCardOptional.isEmpty() ? FIRST_CARD_NUMBER
+					: Long.sum(lastCardOptional.get(), INCREMENT);
+			card.setNumberCard(String.valueOf(newCardNumber));
+			cardDAO.create(card);
+		} catch (DAOException e) {
+			throw new ServiceException("card openning error", e);
+		}
+
 	}
 
 }

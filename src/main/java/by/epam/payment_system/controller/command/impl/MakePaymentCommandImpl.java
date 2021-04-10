@@ -19,7 +19,7 @@ import by.epam.payment_system.controller.command.Command;
 import by.epam.payment_system.controller.util.GoToPage;
 import by.epam.payment_system.controller.util.OperationControl;
 import by.epam.payment_system.controller.util.SessionControl;
-import by.epam.payment_system.controller.util.URIConstructor;
+import by.epam.payment_system.entity.UserType;
 import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.TransactionService;
 import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
@@ -37,7 +37,8 @@ public class MakePaymentCommandImpl implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		if (!SessionControl.isExist(request, response) || !OperationControl.calledClient(request, response)) {
+		if (!SessionControl.isExist(request, response)
+				|| !OperationControl.isAllowedToUser(request, response, UserType.CLIENT)) {
 			return;
 		}
 
@@ -62,24 +63,15 @@ public class MakePaymentCommandImpl implements Command {
 		} catch (WrongPasswordServiceException e) {
 			logger.error("wrong password", e);
 			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_WRONG_PASSWORD));
-			response.sendRedirect(GoToPage.PAYMENT_PAGE + URIConstructor.SET_NUMBER_CARD
-					+ paymentDetails.get(ParameterConstraint.SENDER_CARD_NUMBER) + URIConstructor.SET_CURRENCY
-					+ paymentDetails.get(ParameterConstraint.CURRENCY) + URIConstructor.SET_BALANCE
-					+ paymentDetails.get(ParameterConstraint.BALANCE));
+			response.sendRedirect((String) session.getAttribute(ParameterConstraint.PAGE));
 		} catch (TransactionDataServiceException e) {
 			logger.error("incorrect data for payment", e);
 			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, e.getErrorDescription());
-			response.sendRedirect(GoToPage.PAYMENT_PAGE + URIConstructor.SET_NUMBER_CARD
-					+ paymentDetails.get(ParameterConstraint.SENDER_CARD_NUMBER) + URIConstructor.SET_CURRENCY
-					+ paymentDetails.get(ParameterConstraint.CURRENCY) + URIConstructor.SET_BALANCE
-					+ paymentDetails.get(ParameterConstraint.BALANCE));
+			response.sendRedirect((String) session.getAttribute(ParameterConstraint.PAGE));
 		} catch (NotEnoughMoneyServiceException e) {
 			logger.error("not enough money for payment", e);
 			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_NOT_ENOUGH_MONEY));
-			response.sendRedirect(GoToPage.PAYMENT_PAGE + URIConstructor.SET_NUMBER_CARD
-					+ paymentDetails.get(ParameterConstraint.SENDER_CARD_NUMBER) + URIConstructor.SET_CURRENCY
-					+ paymentDetails.get(ParameterConstraint.CURRENCY) + URIConstructor.SET_BALANCE
-					+ paymentDetails.get(ParameterConstraint.BALANCE));
+			response.sendRedirect((String) session.getAttribute(ParameterConstraint.PAGE));
 		} catch (ImpossibleOperationServiceException e) {
 			logger.error("impossible operation", e);
 			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));

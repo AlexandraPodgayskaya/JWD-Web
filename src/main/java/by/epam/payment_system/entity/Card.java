@@ -11,7 +11,7 @@ public class Card implements Serializable {
 	private String numberAccount;
 	private CardType cardType;
 	private CardStatus status;
-	private int ownerId;
+	private Integer ownerId;
 	private boolean isBlocked;
 	private boolean isClosed;
 	private BigDecimal balance;
@@ -21,7 +21,7 @@ public class Card implements Serializable {
 
 	}
 
-	public Card(String numberCard, String numberAccount, CardType cardType, CardStatus status, int ownerId,
+	public Card(String numberCard, String numberAccount, CardType cardType, CardStatus status, Integer ownerId,
 			boolean isBlocked, boolean isClosed) {
 		this.numberCard = numberCard;
 		this.numberAccount = numberAccount;
@@ -35,6 +35,19 @@ public class Card implements Serializable {
 	public Card(String numberCard, boolean blocking) {
 		this.numberCard = numberCard;
 		this.isBlocked = blocking;
+	}
+
+	public Card(CardType cardType, CardStatus status, Integer ownerId, Currency currency) {
+		this.cardType = cardType;
+		this.status = status;
+		this.ownerId = ownerId;
+		this.currency = currency;
+	}
+
+	public Card(String numberAccount, CardType cardType, CardStatus status) {
+		this.numberAccount = numberAccount;
+		this.cardType = cardType;
+		this.status = status;
 	}
 
 	public String getNumberCard() {
@@ -69,11 +82,11 @@ public class Card implements Serializable {
 		this.status = status;
 	}
 
-	public int getOwnerId() {
+	public Integer getOwnerId() {
 		return ownerId;
 	}
 
-	public void setOwnerId(int ownerId) {
+	public void setOwnerId(Integer ownerId) {
 		this.ownerId = ownerId;
 	}
 
@@ -120,7 +133,7 @@ public class Card implements Serializable {
 		result = prime * result + (isClosed ? 1231 : 1237);
 		result = prime * result + ((numberAccount == null) ? 0 : numberAccount.hashCode());
 		result = prime * result + ((numberCard == null) ? 0 : numberCard.hashCode());
-		result = prime * result + ownerId;
+		result = prime * result + ((ownerId == null) ? 0 : ownerId.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		return result;
 	}
@@ -160,7 +173,10 @@ public class Card implements Serializable {
 				return false;
 		} else if (!numberCard.equals(other.numberCard))
 			return false;
-		if (ownerId != other.ownerId)
+		if (ownerId == null) {
+			if (other.ownerId != null)
+				return false;
+		} else if (!ownerId.equals(other.ownerId))
 			return false;
 		if (status != other.status)
 			return false;

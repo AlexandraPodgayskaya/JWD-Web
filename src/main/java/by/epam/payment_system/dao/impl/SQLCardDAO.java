@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,8 @@ public class SQLCardDAO implements CardDAO {
 
 	private static final String SELECT_CARDS_SQL = "SELECT * FROM CARDS JOIN CARD_TYPES ON CARDS.TYPE_CARD_ID=CARD_TYPES.ID WHERE OWNER=? ";
 	private static final String SELECT_CARD_DATA_SQL = "SELECT * FROM CARDS JOIN CARD_TYPES ON CARDS.TYPE_CARD_ID=CARD_TYPES.ID WHERE NUMBER_CARD=? ";
+	private static final String SELECT_LAST_CARD_NUMBER_SQL = "SELECT MAX(NUMBER_CARD) AS last_card FROM CARDS";
+	private static final String INSERT_CARD_SQL = "INSERT INTO CARDS (NUMBER_CARD, ACCOUNT, TYPE_CARD_ID, STATUS, OWNER) VALUES(?, ?, ?, ?, ?)";
 	private static final String UPDATE_IS_BLOCKED_SQL = "UPDATE CARDS SET IS_BLOCKED=? WHERE NUMBER_CARD=? AND IS_CLOSED=FALSE";
 	private static final String UPDATE_IS_CLOSED_SQL = "UPDATE CARDS SET IS_CLOSED=TRUE WHERE NUMBER_CARD=? ";
 	private static final String COLUMN_NUMBER_CARD = "number_card";
@@ -30,6 +33,7 @@ public class SQLCardDAO implements CardDAO {
 	private static final String COLUMN_IMAGE = "image_path";
 	private static final String COLUMN_IS_BLOCKED = "is_blocked";
 	private static final String COLUMN_IS_CLOSED = "is_closed";
+	private static final String COLUMN_LAST_CARD = "last_card";
 
 	private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
@@ -137,5 +141,43 @@ public class SQLCardDAO implements CardDAO {
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
 		}
+	}
+
+	@Override
+	public Optional<Long> getLastCardNumber() throws DAOException {
+		Optional<Long> lastCardOptional = Optional.empty();
+		try (Connection connection = connectionPool.takeConnection();
+				Statement statement = connection.createStatement()) {
+
+			ResultSet resultSet = statement.executeQuery(SELECT_LAST_CARD_NUMBER_SQL);
+
+			if (resultSet.next()) {
+				Long lastCardNumber = resultSet.getLong(COLUMN_LAST_CARD);
+				lastCardOptional = Optional.of(lastCardNumber);
+			}
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(e);
+		}
+		return lastCardOptional;
+	}
+
+	@Override
+	public void create(Card card) throws DAOException {
+		try (Connection connection = connectionPool.takeConnection();
+				PreparedStatement statement = connection.prepareStatement(INSERT_CARD_SQL);) {
+
+			statement.setString(1, card.getNumberCard());
+			statement.setString(2, card.getNumberAccount());
+			statement.setInt(3, card.getCardType().getId());
+			statement.setString(4, String.valueOf(card.getStatus()));
+			statement.setInt(5, card.getOwnerId());
+
+			statement.executeUpdate();
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(e);
+		}
+
 	}
 }

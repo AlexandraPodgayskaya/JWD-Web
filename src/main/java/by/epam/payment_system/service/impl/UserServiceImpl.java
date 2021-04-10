@@ -96,9 +96,7 @@ public class UserServiceImpl implements UserService {
 			throw new WrongPasswordServiceException("wrong password");
 		}
 
-		UserDataValidator userValidator = new UserDataValidator();
-
-		if (!userValidator.loginValidation(newLogin)) {
+		if (!UserDataValidator.loginValidation(newLogin)) {
 			throw new UserInfoFormatServiceException("new login format error");
 		}
 
@@ -126,9 +124,7 @@ public class UserServiceImpl implements UserService {
 			throw new WrongPasswordServiceException("wrong password for confirmation");
 		}
 
-		UserDataValidator userValidator = new UserDataValidator();
-
-		if (!userValidator.passwordValidation(newPassword)) {
+		if (!UserDataValidator.passwordValidation(newPassword)) {
 			throw new UserInfoFormatServiceException("new password format error");
 		}
 
