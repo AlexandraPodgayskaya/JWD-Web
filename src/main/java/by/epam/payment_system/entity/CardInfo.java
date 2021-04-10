@@ -9,7 +9,6 @@ public class CardInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private List<Card> cardList;
-	private List<CardStatus> cardStatusList;
 	private List<Currency> currencyList;
 	private List<CardType> cardTypeList;
 
@@ -23,14 +22,6 @@ public class CardInfo implements Serializable {
 
 	public void setCardList(List<Card> cardList) {
 		this.cardList = cardList;
-	}
-
-	public List<CardStatus> getCardStatusList() {
-		return Collections.unmodifiableList(cardStatusList);
-	}
-
-	public void setCardStatusList(List<CardStatus> cardStatusList) {
-		this.cardStatusList = cardStatusList;
 	}
 
 	public List<Currency> getCurrencyList() {
@@ -53,10 +44,9 @@ public class CardInfo implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cardStatusList == null) ? 0 : cardStatusList.hashCode());
+		result = prime * result + ((cardList == null) ? 0 : cardList.hashCode());
 		result = prime * result + ((cardTypeList == null) ? 0 : cardTypeList.hashCode());
 		result = prime * result + ((currencyList == null) ? 0 : currencyList.hashCode());
-		result = prime * result + ((cardList == null) ? 0 : cardList.hashCode());
 		return result;
 	}
 
@@ -69,10 +59,10 @@ public class CardInfo implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		CardInfo other = (CardInfo) obj;
-		if (cardStatusList == null) {
-			if (other.cardStatusList != null)
+		if (cardList == null) {
+			if (other.cardList != null)
 				return false;
-		} else if (!cardStatusList.equals(other.cardStatusList))
+		} else if (!cardList.equals(other.cardList))
 			return false;
 		if (cardTypeList == null) {
 			if (other.cardTypeList != null)
@@ -84,18 +74,13 @@ public class CardInfo implements Serializable {
 				return false;
 		} else if (!currencyList.equals(other.currencyList))
 			return false;
-		if (cardList == null) {
-			if (other.cardList != null)
-				return false;
-		} else if (!cardList.equals(other.cardList))
-			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "CardInfo [mainCardList=" + cardList + ", cardStatusList=" + cardStatusList + ", currencyList="
-				+ currencyList + ", cardTypeList=" + cardTypeList + "]";
+		return "CardInfo [cardList=" + cardList + ", currencyList=" + currencyList + ", cardTypeList=" + cardTypeList
+				+ "]";
 	}
 
 }

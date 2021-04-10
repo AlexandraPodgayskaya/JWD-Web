@@ -21,6 +21,13 @@
     <fmt:message bundle="${loc}" key="local.transfer_card" var="transfer_card"/>
     <fmt:message bundle="${loc}" key="local.your_card" var="your_card"/>
     <fmt:message bundle="${loc}" key="local.payment_system_card" var="payment_system_card"/>
+    <fmt:message bundle="${loc}" key="local.amount" var="amount"/>
+    <fmt:message bundle="${loc}" key="local.recipient_card_number" var="recipient_card_number"/>
+    <fmt:message bundle="${loc}" key="local.card_number" var="card_number"/>
+    <fmt:message bundle="${loc}" key="local.balance" var="balance"/>
+    <fmt:message bundle="${loc}" key="local.transfer_data" var="transfer_data"/>
+    <fmt:message bundle="${loc}" key="local.transfer_amount" var="transfer_amount"/>
+    <fmt:message bundle="${loc}" key="local.command.transfer" var="transfer"/>
     <meta charset="UTF-8">
     <title>${tittle}</title>
     <link rel="stylesheet" href="css/transfer/style.css" type="text/css" />
@@ -89,34 +96,37 @@
         </div>
 
 		<div class ="open_card">
-			<p>${card_opening_data}:</p>
+			<p>${transfer_data}:</p>
 			<form action="Controller" method="post">
 				<div>
+				  <c:if test="${!requestScope.cardList.isEmpty()}">
                     <input type="radio" name="transferType" id="transfer_to_me_input" onclick="openCloseDiv('transfer_to_me', 'transfer_to_other')" checked/>
                     <label for="transfer_to_me_input">${your_card}</label>
-                    <input type="radio" name="transferType" id="transfer_to_other_input" onclick="openCloseDiv('transfer_to_other', 'transfer_to_me')" />
+                  </c:if>
+                    <input type="radio" name="transferType" id="transfer_to_other_input" onclick="openCloseDiv('transfer_to_other', 'transfer_to_me')"/>
                     <label for="transfer_to_other_input">${payment_system_card}</label>
                 </div>
 
+
 				<div id="transfer_to_me">
-                    <label for="recipient_card_number">����� ����������</label>
-                    <select size="2" id="recipient_card_number" name="recipientCardNumber">
-                        <option value="1000 2000 3000 4000">1000 2000 3000 4000</option>
-                        <option value="1111 2222 3333 4444">1111 2222 3333 4444</option>
+                    <label for="recipient_card_number">${recipient_card_number}:</label>
+                    <select size="${requestScope.cardList.size()}" id="recipient_card_number" name="recipientCardNumber" required>
+                        <c:forEach var="card" items="${requestScope.cardList}">
+                            <option value="${card.numberCard}">${card.numberCard}, ${card.currency}</option>
+                        </c:forEach>
                     </select>
                 </div>
                 <div id="transfer_to_other">
-                    <label for="recipient_card_number2">����� ����� ����������</label>
-                    <input type="text" name="recipient_card_number" id="recipientCardNumber" placeholder="����� ����� ����������"/>
+                    <label for="recipient_card_number2">${recipient_card_number}:</label>
+                    <input type="text" name="recipientCardNumber" id="recipientCardNumber2" required placeholder="${card_number}" value=""/>
                 </div>
                 <div>
-                    <label for="amount">����� ��������</label>
-                    <input type="text" name="amount" id="amount" placeholder="����� ��������"/>
-                    <input type="text" name="currency" placeholder="BYN" disabled/>
+                    <label for="amount">${transfer_amount}:</label>
+                    <input type="text" name="amount" id="amount" required placeholder="${amount} 0.00" value=""/>
+                    <input type="text" name="currency" placeholder="${requestScope.currency}" disabled/>
                 </div>
-                <input type="hidden" name="action" value=""/>
-                <input type="hidden" name="page" value=""/>
-                <input type="submit" value="���������"/>
+                <input type="hidden" name="command" value="transfer"/>
+                <input type="submit" value="${transfer}"/>
 			</form>
 		</div>
 	</section>

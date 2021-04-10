@@ -23,7 +23,7 @@
     <fmt:message bundle="${loc}" key="local.amount" var="amount"/>
     <fmt:message bundle="${loc}" key="local.expiration_date" var="expiration_date"/>
     <fmt:message bundle="${loc}" key="local.sender_card_data" var="sender_card_data"/>
-    <fmt:message bundle="${loc}" key="local.recipient_card_data" var="recipient_card_data"/>
+    <fmt:message bundle="${loc}" key="local.recipient_card_number" var="recipient_card_number"/>
     <fmt:message bundle="${loc}" key="local.card_number" var="card_number"/>
     <title>${title}</title>
     <link rel="stylesheet" href="css/transfer/style.css" type="text/css" />
@@ -107,7 +107,7 @@
                     <input type="hidden" name="currency" value="${requestScope.currency}"/>
                  </div>
                  <div>
-                    <label>${recipient_card_data}: <input type="text" name="recipientCardNumber" value="${requestScope.numberCard}" disabled/></label>
+                    <label>${recipient_card_number}: <input type="text" name="recipientCardNumber" value="${requestScope.numberCard}" disabled/></label>
                     <input type="hidden" name="recipientCardNumber" value="${requestScope.numberCard}"/>
                  </div>
 

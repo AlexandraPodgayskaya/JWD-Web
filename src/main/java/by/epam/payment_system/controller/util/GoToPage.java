@@ -11,7 +11,7 @@ public final class GoToPage {
 	public static final String OPEN_CARD_PAGE = "Controller?command=go_to_open_card_page";
 	public static final String ACCOUNT_TRANSACTION_LOG_PAGE = "Controller?command=show_account_log";
 	public static final String CARD_TRANSACTION_LOG_PAGE = "Controller?command=show_card_log";
-	public static final String CARD_TRANSFER_PAGE = "Controller?command=go_to_transfer_page";
+	public static final String TRANSFER_PAGE = "Controller?command=go_to_transfer_page";
 	public static final String CLIENT_DATA_PAGE = "UserData?userId=";
 	public static final String REGISTRATION_PAGE = "Registration";
 	public static final String ADD_CARD_TYPE_PAGE = "AddCardType";

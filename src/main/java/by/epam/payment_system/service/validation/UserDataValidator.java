@@ -1,6 +1,7 @@
 package by.epam.payment_system.service.validation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import by.epam.payment_system.entity.UserInfo;
@@ -18,7 +19,7 @@ public class UserDataValidator {
 	private List<String> descriptionList;
 
 	public List<String> getDescriptionList() {
-		return descriptionList;
+		return Collections.unmodifiableList(descriptionList);
 	}
 
 	private void setDescriptionList(String description) {

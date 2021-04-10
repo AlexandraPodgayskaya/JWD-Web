@@ -10,6 +10,8 @@ public interface CardService {
 
 	List<Card> takeCards(Integer userId) throws ServiceException;
 
+	List<Card> takeCardsForTransfer(Integer userId, String numberAccount, String currency) throws ServiceException;
+
 	void blockCard(String numberCard) throws ServiceException;
 
 	void unblockCard(String numberCard) throws ServiceException;

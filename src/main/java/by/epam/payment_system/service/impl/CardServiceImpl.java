@@ -123,7 +123,9 @@ public class CardServiceImpl implements CardService {
 
 	@Override
 	public CardInfo takeAllCardOptions(Integer id) throws ServiceException {
-
+		if (id == null) {
+			throw new ImpossibleOperationServiceException("no data to take all card options");
+		}
 		CardInfo cardInfo = new CardInfo();
 
 		List<Card> cardList = takeCards(id);
@@ -136,7 +138,6 @@ public class CardServiceImpl implements CardService {
 		try {
 			cardTypeList = cardTypeDAO.findAll();
 			cardInfo.setCardTypeList(cardTypeList);
-			cardInfo.setCardStatusList(Arrays.asList(CardStatus.values()));
 			cardInfo.setCurrencyList(Arrays.asList(Currency.values()));
 		} catch (DAOException e) {
 			throw new ServiceException("card type search error", e);
@@ -205,6 +206,26 @@ public class CardServiceImpl implements CardService {
 			throw new ServiceException("card openning error", e);
 		}
 
+	}
+
+	@Override
+	public List<Card> takeCardsForTransfer(Integer userId, String numberAccount, String currency)
+			throws ServiceException {
+		if (userId == null || numberAccount == null || currency == null) {
+			throw new ImpossibleOperationServiceException("incorrect data");
+		}
+
+		List<Card> cardList = takeCards(userId);
+
+		try {
+			cardList.removeIf(card -> numberAccount.equals(card.getNumberAccount())
+					|| card.getCurrency() != Currency.valueOf(currency.toUpperCase()) || card.getIsBlocked() == true
+					|| card.getIsClosed() == true);
+		} catch (IllegalArgumentException e) {
+			throw new ServiceException("incorrect currency", e);
+		}
+
+		return cardList;
 	}
 
 }

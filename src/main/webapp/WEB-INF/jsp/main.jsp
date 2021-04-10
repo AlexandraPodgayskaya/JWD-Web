@@ -156,6 +156,7 @@
                 <form action="Controller" method="post">
                     <input type="hidden" name="command" value="go_to_transfer_page"/>
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
+                    <input type="hidden" name="numberAccount" value="${card.numberAccount}"/>
                     <input type="hidden" name="currency" value="${card.currency}"/>
                     <input type="hidden" name="balance" value="${card.balance}"/>
                     <input type="submit" value="${make_transfer}"/>

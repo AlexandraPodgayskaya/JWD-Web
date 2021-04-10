@@ -44,7 +44,6 @@ public class GoToOpenCardPageCommandImpl implements Command {
 			CardInfo cardInfo = cardService.takeAllCardOptions(id);
 			request.setAttribute(ParameterConstraint.CARD_LIST, cardInfo.getCardList());
 			request.setAttribute(ParameterConstraint.CARD_TYPE_LIST, cardInfo.getCardTypeList());
-			request.setAttribute(ParameterConstraint.CARD_STATUS_LIST, cardInfo.getCardStatusList());
 			request.setAttribute(ParameterConstraint.CURRENCY_LIST, cardInfo.getCurrencyList());
 			session.setAttribute(ParameterConstraint.PAGE, GoToPage.OPEN_CARD_PAGE);
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(GoToPage.FORWARD_OPEN_CARD_PAGE);

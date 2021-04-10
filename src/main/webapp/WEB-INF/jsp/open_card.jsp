@@ -29,6 +29,7 @@
     <fmt:message bundle="${loc}" key="local.card_type" var="card_type"/>
     <fmt:message bundle="${loc}" key="local.main_card_number" var="main_card_number"/>
     <fmt:message bundle="${loc}" key="local.owner_passport" var="owner_passport"/>
+    <fmt:message bundle="${loc}" key="local.command.open_card" var="open_card"/>
     <meta charset="UTF-8">
     <title>${tittle}</title>
     <link rel="stylesheet" href="css/open_card/style.css" type="text/css" />
@@ -125,7 +126,7 @@
                     </select>
                 </div>
                 <input type="hidden" name="command" value="open_main_card"/>
-                <input type="submit" value="Open card"/>
+                <input type="submit" value="${open_card}"/>
             </form>
             <form action="Controller" method="post" id="info_for_additional">
                 <div>
@@ -150,7 +151,7 @@
                     <input type="text" id="owner" name="personalNumberPassport" placeholder="1111111A111PB1" required />
                 </div>
 				<input type="hidden" name="command" value="open_additional_card"/>
-				<input type="submit" value="Open card"/>
+				<input type="submit" value="${open_card}"/>
 			</form>
 		</div>
 		
