@@ -28,6 +28,8 @@
     <fmt:message bundle="${loc}" key="local.transfer_data" var="transfer_data"/>
     <fmt:message bundle="${loc}" key="local.transfer_amount" var="transfer_amount"/>
     <fmt:message bundle="${loc}" key="local.command.transfer" var="transfer"/>
+    <fmt:message bundle="${loc}" key="local.enter_password" var="enter_password"/>
+    <fmt:message bundle="${loc}" key="local.password" var="password"/>
     <meta charset="UTF-8">
     <title>${tittle}</title>
     <link rel="stylesheet" href="css/transfer/style.css" type="text/css" />
@@ -124,6 +126,10 @@
                     <label for="amount">${transfer_amount}:</label>
                     <input type="text" name="amount" id="amount" required placeholder="${amount} 0.00" value=""/>
                     <input type="text" name="currency" placeholder="${requestScope.currency}" disabled/>
+                </div>
+                <div>
+                    <label for="password">${enter_password}:</label>
+                    <input type="password" name="passwordCheck" id="password" required placeholder="${password}" value=""/>
                 </div>
                 <input type="hidden" name="command" value="transfer"/>
                 <input type="submit" value="${transfer}"/>

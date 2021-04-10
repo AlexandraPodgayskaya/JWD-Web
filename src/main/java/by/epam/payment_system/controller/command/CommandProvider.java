@@ -30,6 +30,7 @@ import by.epam.payment_system.controller.command.impl.SaveAdditionalClientDataCo
 import by.epam.payment_system.controller.command.impl.ShowAccountTransactionLogCommandImpl;
 import by.epam.payment_system.controller.command.impl.ShowCardTransactionLogCommandImpl;
 import by.epam.payment_system.controller.command.impl.TopUpCardCommandImpl;
+import by.epam.payment_system.controller.command.impl.TransferCommandImpl;
 import by.epam.payment_system.controller.command.impl.UnBlockCardCommandImpl;
 
 public class CommandProvider {
@@ -66,6 +67,7 @@ public class CommandProvider {
 		commands.put(CommandName.OPEN_MAIN_CARD, new OpenMainCardCommandImpl());
 		commands.put(CommandName.OPEN_ADDITIONAL_CARD, new OpenAdditionalCardCommandImpl());
 		commands.put(CommandName.GO_TO_TRANSFER_PAGE, new GoToTransferPageCommandImpl());
+		commands.put(CommandName.TRANSFER, new TransferCommandImpl());
 	}
 
 	public Command takeCommand(String name) {

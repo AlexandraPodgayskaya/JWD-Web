@@ -114,7 +114,6 @@ public final class ConnectionPool {
 		return connection;
 	}
 
-
 	private class ConnectionWrapper implements Connection {
 		private Connection connection;
 
@@ -137,6 +136,7 @@ public final class ConnectionPool {
 			}
 
 			if (!connection.getAutoCommit()) {
+				connection.rollback();
 				connection.setAutoCommit(true);
 			}
 

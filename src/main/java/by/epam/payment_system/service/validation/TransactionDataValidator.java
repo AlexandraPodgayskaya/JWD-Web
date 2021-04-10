@@ -37,16 +37,8 @@ public class TransactionDataValidator {
 
 	public final boolean topUpCardValidation(Map<String, String> transferDetails) {
 
-		if (transferDetails == null) {
-			setDescriptionList(Message.ERROR_NO_TRANSFER_DETAILS);
-			return false;
-		}
-
-		if (transferDetails.get(ParameterConstraint.SENDER_CARD_NUMBER) == null
-				|| !transferDetails.get(ParameterConstraint.SENDER_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
-			setDescriptionList(Message.ERROR_NUMBER_CARD);
-		}
-
+		transferValidation(transferDetails);
+		
 		if (transferDetails.get(ParameterConstraint.SENDER_EXPIRATION_DATE) != null
 				&& transferDetails.get(ParameterConstraint.SENDER_EXPIRATION_DATE).matches(EXPIRATION_DATE_PATTERN)) {
 
@@ -65,36 +57,17 @@ public class TransactionDataValidator {
 		} else {
 			setDescriptionList(Message.ERROR_EXPIRATION_DATE);
 		}
-		
+
 		if (transferDetails.get(ParameterConstraint.SENDER_CVV_CODE) == null
 				|| !transferDetails.get(ParameterConstraint.SENDER_CVV_CODE).matches(CVV_CODE_PATTERN)) {
 			setDescriptionList(Message.ERROR_CVV_CODE);
-		}
-
-		if (transferDetails.get(ParameterConstraint.AMOUNT) == null || !transferDetails.get(ParameterConstraint.AMOUNT).matches(SUM_PATTERN)) {
-			setDescriptionList(Message.ERROR_SUM);
-		}
-
-		if (transferDetails.get(ParameterConstraint.CURRENCY) != null) {
-			try {
-				Currency.valueOf(transferDetails.get(ParameterConstraint.CURRENCY));
-			} catch (IllegalArgumentException e) {
-				setDescriptionList(Message.ERROR_CURRENCY);
-			}
-		} else {
-			setDescriptionList(Message.ERROR_CURRENCY);
-		}
-
-		if (transferDetails.get(ParameterConstraint.RECIPIENT_CARD_NUMBER) == null
-				|| !transferDetails.get(ParameterConstraint.RECIPIENT_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
-			setDescriptionList(Message.ERROR_NUMBER_CARD);
 		}
 
 		return descriptionList == null;
 	}
 
 	public final boolean paymentValidation(Map<String, String> paymentDetails) {
-		
+
 		if (paymentDetails == null) {
 			setDescriptionList(Message.ERROR_NO_PAYMENT_DETAILS);
 			return false;
@@ -105,7 +78,8 @@ public class TransactionDataValidator {
 			setDescriptionList(Message.ERROR_NUMBER_CARD);
 		}
 
-		if (paymentDetails.get(ParameterConstraint.RECIPIENT_YNP) == null || !paymentDetails.get(ParameterConstraint.RECIPIENT_YNP).matches(YNP_PATTERN)) {
+		if (paymentDetails.get(ParameterConstraint.RECIPIENT_YNP) == null
+				|| !paymentDetails.get(ParameterConstraint.RECIPIENT_YNP).matches(YNP_PATTERN)) {
 			setDescriptionList(Message.ERROR_YNP);
 		}
 
@@ -123,7 +97,8 @@ public class TransactionDataValidator {
 			setDescriptionList(Message.ERROR_IBAN);
 		}
 
-		if (paymentDetails.get(ParameterConstraint.AMOUNT) == null || !paymentDetails.get(ParameterConstraint.AMOUNT).matches(SUM_PATTERN)) {
+		if (paymentDetails.get(ParameterConstraint.AMOUNT) == null
+				|| !paymentDetails.get(ParameterConstraint.AMOUNT).matches(SUM_PATTERN)) {
 			setDescriptionList(Message.ERROR_SUM);
 		}
 
@@ -139,4 +114,39 @@ public class TransactionDataValidator {
 
 		return descriptionList == null;
 	}
+
+	public final boolean transferValidation(Map<String, String> transferDetails) {
+
+		if (transferDetails == null) {
+			setDescriptionList(Message.ERROR_NO_TRANSFER_DETAILS);
+			return false;
+		}
+
+		if (transferDetails.get(ParameterConstraint.SENDER_CARD_NUMBER) == null
+				|| !transferDetails.get(ParameterConstraint.SENDER_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
+			setDescriptionList(Message.ERROR_NUMBER_CARD);
+		}
+
+		if (transferDetails.get(ParameterConstraint.RECIPIENT_CARD_NUMBER) == null
+				|| !transferDetails.get(ParameterConstraint.RECIPIENT_CARD_NUMBER).matches(NUMBER_CARD_PATTERN)) {
+			setDescriptionList(Message.ERROR_NUMBER_CARD);
+		}
+		if (transferDetails.get(ParameterConstraint.AMOUNT) == null
+				|| !transferDetails.get(ParameterConstraint.AMOUNT).matches(SUM_PATTERN)) {
+			setDescriptionList(Message.ERROR_SUM);
+		}
+
+		if (transferDetails.get(ParameterConstraint.CURRENCY) != null) {
+			try {
+				Currency.valueOf(transferDetails.get(ParameterConstraint.CURRENCY));
+			} catch (IllegalArgumentException e) {
+				setDescriptionList(Message.ERROR_CURRENCY);
+			}
+		} else {
+			setDescriptionList(Message.ERROR_CURRENCY);
+		}
+
+		return false;
+	}
+
 }

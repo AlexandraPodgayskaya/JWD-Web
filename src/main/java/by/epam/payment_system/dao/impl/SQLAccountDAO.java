@@ -16,6 +16,7 @@ import by.epam.payment_system.entity.Account;
 import by.epam.payment_system.entity.Currency;
 import by.epam.payment_system.entity.Transaction;
 import by.epam.payment_system.entity.TransactionType;
+import by.epam.payment_system.entity.Transfer;
 
 public class SQLAccountDAO implements AccountDAO {
 
@@ -58,18 +59,19 @@ public class SQLAccountDAO implements AccountDAO {
 
 	@Override
 	public boolean updateBalance(Transaction transaction) throws DAOException {
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
-		Connection connection = null;
-		PreparedStatement statement = null;
 
-		try {
-			connection = connectionPool.takeConnection();
+		String operation;
+		if (transaction.getTypeTransaction() == TransactionType.RECEIPT) {
+			operation = INCREASE_BALANCE_SQL;
+		} else if (transaction.getTypeTransaction() == TransactionType.EXPENDITURE) {
+			operation = DECREASE_BALANCE_SQL;
+		} else {
+			throw new DAOException("not data for update");
+		}
 
-			if (transaction.getTypeTransaction() == TransactionType.RECEIPT) {
-				statement = connection.prepareStatement(INCREASE_BALANCE_SQL);
-			} else if (transaction.getTypeTransaction() == TransactionType.EXPENDITURE) {
-				statement = connection.prepareStatement(DECREASE_BALANCE_SQL);
-			}
+		try (Connection connection = connectionPool.takeConnection();
+				PreparedStatement statement = connection.prepareStatement(operation)) {
+
 			statement.setString(1, transaction.getAmount());
 			statement.setString(2, transaction.getTransactionAccount());
 
@@ -116,4 +118,35 @@ public class SQLAccountDAO implements AccountDAO {
 		}
 
 	}
+
+	@Override
+	public boolean doTransfer(Transfer transfer) throws DAOException {
+		boolean result;
+		try (Connection connection = connectionPool.takeConnection();
+				PreparedStatement descreaseStatement = connection.prepareStatement(DECREASE_BALANCE_SQL);
+				PreparedStatement increaseStatement = connection.prepareStatement(INCREASE_BALANCE_SQL)) {
+			connection.setAutoCommit(false);
+
+			descreaseStatement.setString(1, transfer.getAmount());
+			descreaseStatement.setString(2, transfer.getSenderAccountNumber());
+
+			if (result = descreaseStatement.executeUpdate() != 0) {
+				increaseStatement.setString(1, transfer.getAmount());
+				increaseStatement.setString(2, transfer.getRecipientAccountNumber());
+				if (result = increaseStatement.executeUpdate() != 0) {
+					connection.commit();
+				} else {
+					connection.rollback();
+				}
+			} else {
+				connection.rollback();
+			}
+			connection.setAutoCommit(true);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(e);
+		}
+		return result;
+	}
+
 }

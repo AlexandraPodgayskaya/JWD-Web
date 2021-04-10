@@ -17,6 +17,7 @@ import by.epam.payment_system.entity.CardStatus;
 import by.epam.payment_system.entity.Currency;
 import by.epam.payment_system.entity.Transaction;
 import by.epam.payment_system.entity.TransactionType;
+import by.epam.payment_system.entity.Transfer;
 import by.epam.payment_system.entity.UserInfo;
 import by.epam.payment_system.service.TransactionService;
 import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
@@ -31,6 +32,8 @@ import by.epam.payment_system.util.ParameterConstraint;
 public class TransactionServiceImpl implements TransactionService {
 
 	private static final String TOP_UP_CARD = "Top up card";
+	private static final String TRANSFER_FROM_CARD = "Transfer from the card";
+	private static final String TRANSFER_TO_CARD = "Transfer to the card";
 
 	private static final DAOFactory factory = DAOFactory.getInstance();
 
@@ -42,34 +45,15 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new TransactionDataServiceException("transfer data error", validator.getDescriptionList());
 		}
 
-		CardDAO cardDAO = factory.getCardDAO();
-		String numberCard = transferDetails.get(ParameterConstraint.RECIPIENT_CARD_NUMBER);
+		Card card = takeAllCardData(transferDetails.get(ParameterConstraint.RECIPIENT_CARD_NUMBER));
+		checkIsPossibleTransaction(card, transferDetails.get(ParameterConstraint.CURRENCY));
 
+		Transaction transaction = new Transaction(card.getNumberAccount(), card.getNumberCard(),
+				TransactionType.RECEIPT, transferDetails.get(ParameterConstraint.AMOUNT), card.getCurrency(),
+				transferDetails.get(ParameterConstraint.SENDER_CARD_NUMBER), TOP_UP_CARD);
+
+		AccountDAO accountDAO = factory.getAccountDAO();
 		try {
-			Optional<Card> cardOptional = cardDAO.findCardData(numberCard);
-			if (cardOptional.isEmpty()) {
-				throw new ImpossibleOperationServiceException("can not top up card");
-			}
-			Card card = cardOptional.get();
-			if (card.getIsClosed() || card.getIsBlocked()) {
-				throw new ImpossibleOperationServiceException("can not top up card");
-			}
-
-			AccountDAO accountDAO = factory.getAccountDAO();
-			Optional<Account> accountOptional = accountDAO.getAccount(card.getNumberAccount());
-			if (accountOptional.isEmpty()) {
-				throw new ImpossibleOperationServiceException("can not top up card");
-			}
-			Account account = accountOptional.get();
-
-			if (Currency.valueOf(transferDetails.get(ParameterConstraint.CURRENCY)) != account.getCurrency()) {
-				throw new ImpossibleOperationServiceException("can not top up card");
-			}
-
-			Transaction transaction = new Transaction(account.getNumberAccount(), numberCard, TransactionType.RECEIPT,
-					transferDetails.get(ParameterConstraint.AMOUNT), account.getCurrency(),
-					transferDetails.get(ParameterConstraint.SENDER_CARD_NUMBER), TOP_UP_CARD);
-
 			if (!accountDAO.updateBalance(transaction)) {
 				throw new ImpossibleOperationServiceException("can not top up card");
 			}
@@ -99,41 +83,23 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new TransactionDataServiceException("payment data error", validator.getDescriptionList());
 		}
 
-		CardDAO cardDAO = factory.getCardDAO();
+		Card card = takeAllCardData(paymentDetails.get(ParameterConstraint.SENDER_CARD_NUMBER));
+		checkIsPossibleTransaction(card, paymentDetails.get(ParameterConstraint.CURRENCY));
+
+		if (card.getBalance().compareTo(new BigDecimal(paymentDetails.get(ParameterConstraint.AMOUNT))) < 0) {
+			throw new NotEnoughMoneyServiceException("payment amount is more than balance");
+		}
+
+		Transaction transaction = new Transaction(card.getNumberAccount(), card.getNumberCard(),
+				TransactionType.EXPENDITURE, paymentDetails.get(ParameterConstraint.AMOUNT), card.getCurrency(),
+				paymentDetails.get(ParameterConstraint.RECIPIENT_BANK_CODE),
+				paymentDetails.get(ParameterConstraint.RECIPIENT_IBAN_ACCOUNT),
+				paymentDetails.get(ParameterConstraint.RECIPIENT_YNP),
+				paymentDetails.get(ParameterConstraint.RECIPIENT),
+				paymentDetails.get(ParameterConstraint.PURPOSE_OF_PAYMENT));
+
+		AccountDAO accountDAO = factory.getAccountDAO();
 		try {
-			Optional<Card> cardOptional = cardDAO
-					.findCardData(paymentDetails.get(ParameterConstraint.SENDER_CARD_NUMBER));
-			if (cardOptional.isEmpty()) {
-				throw new ImpossibleOperationServiceException("can not make payment");
-			}
-			Card card = cardOptional.get();
-			if (card.getIsClosed() || card.getIsBlocked()) {
-				throw new ImpossibleOperationServiceException("can not make payment");
-			}
-
-			AccountDAO accountDAO = factory.getAccountDAO();
-			Optional<Account> accountOptional = accountDAO.getAccount(card.getNumberAccount());
-			if (accountOptional.isEmpty()) {
-				throw new ImpossibleOperationServiceException("can not make payment");
-			}
-			Account account = accountOptional.get();
-			if (Currency.valueOf(paymentDetails.get(ParameterConstraint.CURRENCY)) != account.getCurrency()) {
-				throw new ImpossibleOperationServiceException("can not make payment");
-			}
-
-			if (account.getBalance().compareTo(new BigDecimal(paymentDetails.get(ParameterConstraint.AMOUNT))) < 0) {
-				throw new NotEnoughMoneyServiceException("payment amount is more than balance");
-			}
-
-			Transaction transaction = new Transaction(account.getNumberAccount(),
-					paymentDetails.get(ParameterConstraint.SENDER_CARD_NUMBER), TransactionType.EXPENDITURE,
-					paymentDetails.get(ParameterConstraint.AMOUNT), account.getCurrency(),
-					paymentDetails.get(ParameterConstraint.RECIPIENT_BANK_CODE),
-					paymentDetails.get(ParameterConstraint.RECIPIENT_IBAN_ACCOUNT),
-					paymentDetails.get(ParameterConstraint.RECIPIENT_YNP),
-					paymentDetails.get(ParameterConstraint.RECIPIENT),
-					paymentDetails.get(ParameterConstraint.PURPOSE_OF_PAYMENT));
-
 			if (!accountDAO.updateBalance(transaction)) {
 				throw new ImpossibleOperationServiceException("can not make payment");
 			}
@@ -195,5 +161,92 @@ public class TransactionServiceImpl implements TransactionService {
 			throw new ServiceException("search account transactions error", e);
 		}
 		return transactionList;
+	}
+
+	@Override
+	public void makeTransfer(Map<String, String> transferDetails) throws ServiceException {
+		UserInfo userInfo = new UserInfo(transferDetails.get(ParameterConstraint.USER_LOGIN),
+				transferDetails.get(ParameterConstraint.PASSWORD_CHECK));
+
+		if (!PasswordCheck.isCorrect(userInfo)) {
+			throw new WrongPasswordServiceException("wrong password");
+		}
+
+		TransactionDataValidator validator = new TransactionDataValidator();
+		if (!validator.transferValidation(transferDetails)) {
+			throw new TransactionDataServiceException("transfer data error", validator.getDescriptionList());
+		}
+
+		Card senderCard = takeAllCardData(transferDetails.get(ParameterConstraint.SENDER_CARD_NUMBER));
+		checkIsPossibleTransaction(senderCard, transferDetails.get(ParameterConstraint.CURRENCY));
+
+		Card recipientCard = takeAllCardData(transferDetails.get(ParameterConstraint.RECIPIENT_CARD_NUMBER));
+		checkIsPossibleTransaction(recipientCard, transferDetails.get(ParameterConstraint.CURRENCY));
+
+		if (senderCard.getNumberAccount().equals(recipientCard.getNumberAccount())) {
+			throw new ImpossibleOperationServiceException("transfer within one account is not possible");
+		}
+
+		if (senderCard.getBalance().compareTo(new BigDecimal(transferDetails.get(ParameterConstraint.AMOUNT))) < 0) {
+			throw new NotEnoughMoneyServiceException("transfer amount is more than balance");
+		}
+
+		Transaction expenseTransaction = new Transaction(senderCard.getNumberAccount(), senderCard.getNumberCard(),
+				TransactionType.EXPENDITURE, transferDetails.get(ParameterConstraint.AMOUNT), senderCard.getCurrency(),
+				recipientCard.getNumberCard(), TRANSFER_FROM_CARD);
+		Transaction receiptTransaction = new Transaction(recipientCard.getNumberAccount(),
+				recipientCard.getNumberCard(), TransactionType.RECEIPT, transferDetails.get(ParameterConstraint.AMOUNT),
+				senderCard.getCurrency(), recipientCard.getNumberCard(), TRANSFER_TO_CARD);
+		Transfer transfer = new Transfer(senderCard.getNumberAccount(), recipientCard.getNumberAccount(),
+				transferDetails.get(ParameterConstraint.AMOUNT));
+		AccountDAO accountDAO = factory.getAccountDAO();
+		try {
+			if (!accountDAO.doTransfer(transfer)) {
+				throw new ImpossibleOperationServiceException("can not make transfer");
+			}
+
+			expenseTransaction.setDateTime(new Timestamp(System.currentTimeMillis()));
+			receiptTransaction.setDateTime(new Timestamp(System.currentTimeMillis()));
+
+			TransactionLogDAO transactionLogDAO = factory.getTransactionLogDAO();
+			transactionLogDAO.addTransaction(expenseTransaction);
+			transactionLogDAO.addTransaction(receiptTransaction);
+
+		} catch (DAOException e) {
+			throw new ServiceException("transfer error", e);
+		}
+
+	}
+
+	private void checkIsPossibleTransaction(Card card, String currency) throws ServiceException {
+		if (card.getIsClosed() || card.getIsBlocked() || Currency.valueOf(currency) != card.getCurrency()) {
+			throw new ImpossibleOperationServiceException("impossible transaction");
+		}
+	}
+
+	private Card takeAllCardData(String numberCard) throws ServiceException {
+		Card card;
+
+		CardDAO cardDAO = factory.getCardDAO();
+		AccountDAO accountDAO = factory.getAccountDAO();
+
+		try {
+			Optional<Card> cardOptional = cardDAO.findCardData(numberCard);
+			if (cardOptional.isEmpty()) {
+				throw new ImpossibleOperationServiceException("no such card");
+			}
+			card = cardOptional.get();
+			Optional<Account> accountOptional = accountDAO.getAccount(card.getNumberAccount());
+			if (cardOptional.isEmpty()) {
+				throw new ImpossibleOperationServiceException("no such account");
+			}
+			Account account = accountOptional.get();
+			card.setBalance(account.getBalance());
+			card.setCurrency(account.getCurrency());
+
+		} catch (DAOException e) {
+			throw new ServiceException("card search error", e);
+		}
+		return card;
 	}
 }

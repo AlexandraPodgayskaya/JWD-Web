@@ -12,6 +12,8 @@ public interface TransactionService {
 
 	void makePayment(Map<String, String> paymentDetails) throws ServiceException;
 	
+	void makeTransfer(Map<String, String> transferDetails) throws ServiceException;
+	
 	List <Transaction> takeAccountTransactions (String numberCard) throws ServiceException;
 	
 	List <Transaction> takeCardTransactions (String numberCard) throws ServiceException;

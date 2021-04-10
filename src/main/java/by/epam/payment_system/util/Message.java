@@ -6,6 +6,7 @@ public final class Message {
 	public static final String INFO_BLOCKING_OK = "local.message.blocking_ok";
 	public static final String INFO_UNBLOCKING_OK = "local.message.unblocking_ok";
 	public static final String INFO_PAYMENT_OK = "local.message.payment_ok";
+	public static final String INFO_TRANSFER_OK = "local.message.transfer_ok";
 	public static final String INFO_REGISTRATION_OK = "local.message.registration_ok";
 	public static final String INFO_TOP_UP_CARD_OK = "local.message.top_up_card_ok";
 	public static final String INFO_LOG_IS_EMPTY = "local.message.log_is_empty";
