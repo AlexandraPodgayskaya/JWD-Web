@@ -39,15 +39,6 @@
         <servlet-name>ClientData</servlet-name>
         <url-pattern>/UserData</url-pattern>
     </servlet-mapping>
-	
-	 <servlet>
-        <servlet-name>AddCardType</servlet-name>
-        <jsp-file>/WEB-INF/jsp/add_card_type.jsp</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AddCardType</servlet-name>
-        <url-pattern>/AddCardType</url-pattern>
-    </servlet-mapping>
     
 	<error-page>
         <exception-type>java.lang.RuntimeException</exception-type>
