@@ -5,10 +5,12 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Filter for setting the encoding
@@ -18,18 +20,12 @@ import javax.servlet.ServletResponse;
  */
 public class CharsetFilter implements Filter {
 
+	private static final Logger logger = LogManager.getLogger();
+
 	private static final String INIT_PARAMETER = "characterEncoding";
+	private static final String DEFAULT_ENCODING = "UTF-8";
 
 	private String encoding;
-	private ServletContext context;
-
-	/**
-	 * ServletContext destroy
-	 */
-	@Override
-	public void destroy() {
-		context = null;
-	}
 
 	/**
 	 * Initialization of the encoding
@@ -39,8 +35,10 @@ public class CharsetFilter implements Filter {
 	@Override
 	public void init(FilterConfig fConfig) {
 		encoding = fConfig.getInitParameter(INIT_PARAMETER);
-		context = fConfig.getServletContext();
-		context.log("CharsetFilter is initialized.");
+		if (encoding == null) {
+			encoding = DEFAULT_ENCODING;
+		}
+		logger.info("CharsetFilter is initialized.");
 	}
 
 	/**
@@ -57,9 +55,16 @@ public class CharsetFilter implements Filter {
 			throws ServletException, IOException {
 		request.setCharacterEncoding(encoding);
 		response.setCharacterEncoding(encoding);
-		context.log("Charset was set.");
+		logger.info("Charset was set.");
 
 		chain.doFilter(request, response);
 	}
 
+	/**
+	 * Encoding destroy
+	 */
+	@Override
+	public void destroy() {
+		encoding = null;
+	}
 }

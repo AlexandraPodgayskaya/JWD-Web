@@ -70,7 +70,6 @@ public class TransferCommandImpl implements Command {
 		ServiceFactory factory = ServiceFactory.getInstance();
 		TransactionService transactionService = factory.getTransactionService();
 		try {
-			System.out.println(transferDetails);
 			transactionService.makeTransfer(transferDetails);
 			session.setAttribute(ParameterConstraint.PAGE, GoToPage.MAIN_PAGE);
 			session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_TRANSFER_OK);

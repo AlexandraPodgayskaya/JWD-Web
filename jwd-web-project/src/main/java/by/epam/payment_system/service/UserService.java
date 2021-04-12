@@ -20,7 +20,7 @@ public interface UserService {
 	 * @throws ServiceException if credentials is incorrect, password encryption
 	 *                          error or {@link DAOException} occurs
 	 */
-	User authorization(UserInfo loginationInfo) throws ServiceException;
+	User authorization(UserInfo userInfo) throws ServiceException;
 
 	/**
 	 * Add login and password for new user
@@ -30,7 +30,7 @@ public interface UserService {
 	 * @throws ServiceException if credentials is incorrect, login is busy, password
 	 *                          encryption error or {@link DAOException} occurs
 	 */
-	Integer registration(UserInfo registrationInfo) throws ServiceException;
+	Integer registration(UserInfo userInfo) throws ServiceException;
 
 	/**
 	 * Change login
