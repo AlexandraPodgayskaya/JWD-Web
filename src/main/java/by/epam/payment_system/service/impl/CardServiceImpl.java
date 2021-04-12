@@ -1,6 +1,7 @@
 package by.epam.payment_system.service.impl;
 
 import java.util.Arrays;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,14 +23,30 @@ import by.epam.payment_system.service.ServiceFactory;
 import by.epam.payment_system.service.exception.ImpossibleOperationServiceException;
 import by.epam.payment_system.service.exception.ServiceException;
 
+/**
+ * The service is responsible for card operations
+ * 
+ * @author Aleksandra Podgayskaya
+ * @see CardService
+ */
 public class CardServiceImpl implements CardService {
 
+	/**
+	 * Instance of {@link DAOFactory}
+	 */
 	private static final DAOFactory factory = DAOFactory.getInstance();
 
 	private static final int FIRST_ACCOUNT_NUMBER = 21081001;
 	private static final long FIRST_CARD_NUMBER = 5489333344441111L;
 	private static final int INCREMENT = 1;
 
+	/**
+	 * Take all cards by userId
+	 * 
+	 * @param userId {@link Integer} user id
+	 * @return {@link List} of {@link Card} received from database
+	 * @throws ServiceException if userId is null or {@link DAOException} occurs
+	 */
 	@Override
 	public List<Card> takeCards(Integer userId) throws ServiceException {
 
@@ -59,6 +76,44 @@ public class CardServiceImpl implements CardService {
 		return cardList;
 	}
 
+	/**
+	 * Take cards to which you can make a transfer
+	 * 
+	 * @param userId        {@link Integer} user id of the card opening initiator
+	 * @param numberAccount {@link String} sender's account number
+	 * @param currency      {@link String} transfer currency
+	 * @return {@link List} of {@link Card} received from database and sorted for
+	 *         transfer
+	 * @throws ServiceException if parameters are null or
+	 *                          {@link IllegalArgumentException} occurs
+	 */
+	@Override
+	public List<Card> takeCardsForTransfer(Integer userId, String numberAccount, String currency)
+			throws ServiceException {
+		if (userId == null || numberAccount == null || currency == null) {
+			throw new ImpossibleOperationServiceException("incorrect data");
+		}
+
+		List<Card> cardList = takeCards(userId);
+
+		try {
+			cardList.removeIf(card -> numberAccount.equals(card.getNumberAccount())
+					|| card.getCurrency() != Currency.valueOf(currency.toUpperCase()) || card.getIsBlocked() == true
+					|| card.getIsClosed() == true);
+		} catch (IllegalArgumentException e) {
+			throw new ServiceException("incorrect currency", e);
+		}
+
+		return cardList;
+	}
+
+	/**
+	 * Set a lock on a card
+	 * 
+	 * @param numberCard {@link String} card number
+	 * @throws ServiceException if numberCard is null, lock is not set or
+	 *                          {@link DAOException} occurs
+	 */
 	@Override
 	public void blockCard(String numberCard) throws ServiceException {
 
@@ -80,6 +135,13 @@ public class CardServiceImpl implements CardService {
 		}
 	}
 
+	/**
+	 * Unblock a card
+	 * 
+	 * @param numberCard {@link String} card number
+	 * @throws ServiceException if numberCard is null, card is not unlocked or
+	 *                          {@link DAOException} occurs
+	 */
 	@Override
 	public void unblockCard(String numberCard) throws ServiceException {
 		if (numberCard == null) {
@@ -101,6 +163,13 @@ public class CardServiceImpl implements CardService {
 
 	}
 
+	/**
+	 * Close a card
+	 * 
+	 * @param numberCard {@link String} card number
+	 * @throws ServiceException if numberCard is null, card is not closed or
+	 *                          {@link DAOException} occurs
+	 */
 	@Override
 	public void closeCard(String numberCard) throws ServiceException {
 
@@ -121,14 +190,21 @@ public class CardServiceImpl implements CardService {
 
 	}
 
+	/**
+	 * Take all the parameters of the cards and a list of the user's main cards
+	 * 
+	 * @param userId {@link Integer} user id
+	 * @return {@link CardInfo}
+	 * @throws ServiceException if userId is null or {@link DAOException} occurs
+	 */
 	@Override
-	public CardInfo takeAllCardOptions(Integer id) throws ServiceException {
-		if (id == null) {
+	public CardInfo takeAllCardOptions(Integer userId) throws ServiceException {
+		if (userId == null) {
 			throw new ImpossibleOperationServiceException("no data to take all card options");
 		}
 		CardInfo cardInfo = new CardInfo();
 
-		List<Card> cardList = takeCards(id);
+		List<Card> cardList = takeCards(userId);
 		cardList.removeIf(card -> card.getStatus() == CardStatus.ADDITIONAL);
 		cardInfo.setCardList(cardList);
 
@@ -146,6 +222,12 @@ public class CardServiceImpl implements CardService {
 		return cardInfo;
 	}
 
+	/**
+	 * Open main card
+	 * 
+	 * @param card {@link Card} opening data
+	 * @throws ServiceException if card is null or {@link DAOException} occurs
+	 */
 	@Override
 	public void openMainCard(Card card) throws ServiceException {
 		if (card == null) {
@@ -177,6 +259,17 @@ public class CardServiceImpl implements CardService {
 		}
 	}
 
+	/**
+	 * Open additional card
+	 * 
+	 * @param card                   {@link Card} opening data
+	 * @param personalNumberPassport {@link String} personal number passport of the
+	 *                               additional card holder
+	 * @param userId                 {@link Integer} user id of the card opening
+	 *                               initiator.
+	 * @throws ServiceException if data to open a card is null, incorrect account
+	 *                          number or {@link DAOException} occurs
+	 */
 	@Override
 	public void openAdditionalCard(Card card, String personalNumberPassport, Integer userId) throws ServiceException {
 		if (card == null || card.getNumberAccount() == null || card.getCardType() == null
@@ -206,26 +299,6 @@ public class CardServiceImpl implements CardService {
 			throw new ServiceException("card openning error", e);
 		}
 
-	}
-
-	@Override
-	public List<Card> takeCardsForTransfer(Integer userId, String numberAccount, String currency)
-			throws ServiceException {
-		if (userId == null || numberAccount == null || currency == null) {
-			throw new ImpossibleOperationServiceException("incorrect data");
-		}
-
-		List<Card> cardList = takeCards(userId);
-
-		try {
-			cardList.removeIf(card -> numberAccount.equals(card.getNumberAccount())
-					|| card.getCurrency() != Currency.valueOf(currency.toUpperCase()) || card.getIsBlocked() == true
-					|| card.getIsClosed() == true);
-		} catch (IllegalArgumentException e) {
-			throw new ServiceException("incorrect currency", e);
-		}
-
-		return cardList;
 	}
 
 }

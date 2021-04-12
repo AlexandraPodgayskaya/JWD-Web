@@ -13,10 +13,26 @@ import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.exception.UserInfoFormatServiceException;
 import by.epam.payment_system.service.validation.UserDataValidator;
 
+/**
+ * The service is responsible for operations with client data
+ * 
+ * @author Aleksandra Podgayskaya
+ * @see AdditionalClientDataService
+ */
 public class AdditionalClientDataServiceImpl implements AdditionalClientDataService {
 
+	/**
+	 * Instance of {@link DAOFactory}
+	 */
 	private static final DAOFactory factory = DAOFactory.getInstance();
 
+	/**
+	 * Add client details
+	 * 
+	 * @param additionalClientInfo {@link UserInfo} client details
+	 * @throws ServiceException if client details is incorrect or
+	 *                          {@link DAOException} occurs
+	 */
 	@Override
 	public void addData(UserInfo additionalClientInfo) throws ServiceException {
 
@@ -32,31 +48,16 @@ public class AdditionalClientDataServiceImpl implements AdditionalClientDataServ
 		} catch (DAOException e) {
 			throw new ServiceException("additional client data creation error", e);
 		}
-
 	}
-
-	@Override
-	public UserInfo search(String personalNumberPassport) throws ServiceException {
-
-		if (!UserDataValidator.numberPassportValidation(personalNumberPassport)) {
-			throw new UserInfoFormatServiceException("personal number passport format error");
-		}
-
-		AdditionalClientDataDAO additionalClientDataDAO = factory.getAdditionalClientDataDAO();
-
-		Optional<UserInfo> userInfoOptional;
-		try {
-			userInfoOptional = additionalClientDataDAO.findDataByPassport(personalNumberPassport);
-
-			if (userInfoOptional.isEmpty()) {
-				throw new NoSuchUserServiceException("no client data");
-			}
-		} catch (DAOException e) {
-			throw new ServiceException("client data find error", e);
-		}
-		return userInfoOptional.get();
-	}
-
+	
+	/**
+	 * Take client details by user id
+	 * 
+	 * @param userId {@link Integer} user id
+	 * @return {@link UserInfo}
+	 * @throws ServiceException if userId is null, data not found or
+	 *                          {@link DAOException} occurs
+	 */
 	@Override
 	public UserInfo getData(Integer userId) throws ServiceException {
 
@@ -79,6 +80,44 @@ public class AdditionalClientDataServiceImpl implements AdditionalClientDataServ
 		return userInfoOptional.get();
 	}
 
+	/**
+	 * Take client details by personal number passport
+	 * 
+	 * @param personalNumberPassport {@link String} personal number passport of the
+	 *                               client
+	 * @return {@link UserInfo}
+	 * @throws ServiceException if personalNumberPassport is incorrect, client not
+	 *                          found or {@link DAOException} occurs
+	 */
+	@Override
+	public UserInfo search(String personalNumberPassport) throws ServiceException {
+
+		if (!UserDataValidator.numberPassportValidation(personalNumberPassport)) {
+			throw new UserInfoFormatServiceException("personal number passport format error");
+		}
+
+		AdditionalClientDataDAO additionalClientDataDAO = factory.getAdditionalClientDataDAO();
+
+		Optional<UserInfo> userInfoOptional;
+		try {
+			userInfoOptional = additionalClientDataDAO.findDataByPassport(personalNumberPassport);
+
+			if (userInfoOptional.isEmpty()) {
+				throw new NoSuchUserServiceException("no client data");
+			}
+		} catch (DAOException e) {
+			throw new ServiceException("client data find error", e);
+		}
+		return userInfoOptional.get();
+	}
+
+	/**
+	 * Change client details
+	 * 
+	 * @param userInfo {@link UserInfo} client details to change
+	 * @throws ServiceException if client details is incorrect, the data has not
+	 *                          changed or {@link DAOException} occurs
+	 */
 	@Override
 	public void changeData(UserInfo userInfo) throws ServiceException {
 		UserDataValidator validator = new UserDataValidator();

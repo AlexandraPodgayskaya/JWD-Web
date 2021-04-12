@@ -1,73 +1,19 @@
 *{
-	margin:0;
-	padding: 0;
-}
+ 	margin:0;
+ 	padding: 0;
+ }
 
-body {
-	background-color: #ffffff;
-	max-width: 1349px;
-	margin: auto;
-}
-.clearfix {
-	clear:both;
-}
+ body {
+ 	background-color: #ffffff;
+ 	max-width: 1349px;
+ 	margin: auto;
+ }
+ .clearfix {
+ 	clear:both;
+ }
 
-/*  CONTENT  */
-
-.content > section {
-	width: 960px;
-	max-width: 960px;
-	min-width: 950px;
-	margin:auto;
-}
-.content > section h1 {
-	margin: 50px 0 0 0;
-	font: italic 22px Cambria;
-	color: #404040;
-	margin-bottom: 50px;
-}
-
-.content > section > div > p {
-	z-index: auto;
-	font: 18px Cambria;
-	color: #404040;
-	padding: 20px 0 20px;
-	text-align: left;
-}
-
-#picture1, #picture5, #picture9{
-	margin-left: 0;
-}
-
-
-/*  transfer  */
-.transfer{
-	padding: 10px 20px;
-	width: 100%;
-	border-radius: 5px;
-	border: solid 3px #585863;
-
-}
-
-.transfer p {
-	font: normal 16px Cambria;
-	line-height: 35px;
-}
-
-.transfer:first-child {
-	color: #585863;
-}
-
-.transfer form {
-	display: inline-block;
-}
-
-.transfer form input {
-	font: normal 16px Cambria;
-	margin-top: 10px;
-}
-
-.transfer form input[type="submit"] {
+/*  CONTENT : INPUT SUBMIT AND BUTTON  */
+.content input[type="submit"], .content button {
 	border:0;
 	border-radius: 3px;
 	font-weight: bold;
@@ -80,17 +26,110 @@ body {
 	background: -webkit-linear-gradient(top,  #1dabb8 0%,#1dabb8 75%,#0c8a9b 100%); /* Chrome10-25,Safari5.1-6 */
 	background: linear-gradient(to bottom,  #1dabb8 0%,#1dabb8 75%,#0c8a9b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1dabb8', endColorstr='#1dabb8',GradientType=0 ); /* IE6-9 */
+
 }
 
-.transfer form input[type="submit"]:hover {
+.content input[type="submit"]:hover, .content button:hover {
 	background: #198d98;
 }
 
-.transfer label, select {
-	font: normal 16px Cambria;
-	line-height: 35px;
-}
 
-#transfer_to_other {
-	display: none;
-}
+ /*  CONTENT  */
+
+ .content > section {
+ 	width: 960px;
+ 	max-width: 960px;
+ 	min-width: 950px;
+ 	margin:auto;
+ }
+ .content > section h1 {
+ 	margin: 50px 0 0 0;
+ 	font: italic 22px Cambria;
+ 	color: #404040;
+ 	margin-bottom: 50px;
+ }
+
+ .content > section > div > p {
+ 	z-index: auto;
+ 	font: 18px Cambria;
+ 	color: #404040;
+ 	padding: 20px 0 20px;
+ 	text-align: left;
+ }
+
+ #picture1, #picture5, #picture9{
+ 	margin-left: 0;
+ }
+
+
+ /*  transfer  */
+ .transfer{
+ 	padding: 10px 20px;
+ 	width: 100%;
+ 	border-radius: 5px;
+ 	border: solid 3px #585863;
+
+ }
+
+ .transfer p {
+ 	font: normal 16px Cambria;
+ 	line-height: 35px;
+ }
+
+ .transfer:first-child {
+ 	color: #585863;
+ }
+
+ .transfer form {
+ 	display: inline-block;
+ }
+
+ .transfer form input {
+ 	font: normal 16px Cambria;
+ 	margin-top: 10px;
+ }
+
+ .transfer label, select {
+ 	font: normal 16px Cambria;
+ 	line-height: 35px;
+ }
+
+ #transfer_to_other, #transfer_to_me {
+ 	display: none;
+ }
+
+ #transfer-submit-input,  #transfer-submit-input-2 {
+ 	visibility: hidden;
+ }
+
+ #transfer-button,  #transfer-button-2 {
+     margin-left: -425px;
+ }
+
+ /* POPUP */
+ .popup {
+ 	visibility: hidden; /* Hidden by default */
+ 	position: fixed; /* Stay in place */
+ 	z-index: 1; /* Sit on top */
+ 	left: 0;
+ 	top: 0;
+ 	width: 100%; /* Full width */
+ 	height: 100%; /* Full height */
+ 	overflow: auto; /* Enable scroll if needed */
+ 	background-color: rgb(0,0,0); /* Fallback color */
+ 	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+ }
+ .popup-content {
+ 	background-color: #fefefe;
+ 	margin: 15% auto; /* 15% from the top and centered */
+ 	padding: 20px;
+ 	border: 1px solid #888;
+ 	width: 50%;
+ }
+ .popup-content button, form {
+ 	display: inline-block;
+ }
+ .popup-content p {
+ 	font: normal 16px helvetica;
+ 	line-height: 35px;
+ }

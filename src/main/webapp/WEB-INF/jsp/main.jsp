@@ -124,6 +124,23 @@
     </c:if>
 
     <section>
+    <c:if test="${errorMessageList != null}">
+        <c:forEach var="errorMessageKey" items="${errorMessageList}">
+        <fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
+            <div class="error">
+                <h4>${error}</h4>
+            </div>
+        </c:forEach>
+        <c:remove var="errorMessageList"/>
+    </c:if>
+
+    <c:if test="${infoMessage != null}">
+        <fmt:message bundle="${loc}" key="${infoMessage}" var="message"/>
+        <div class="message">
+            <h4>${message}</h4>
+        </div>
+        <c:remove var="infoMessage"/>
+    </c:if>
 	<c:forEach var="card" items="${requestScope.cardList}">
 	  <c:if test="${card.isClosed == false}">
         <c:if test="${card.isBlocked == false}">
@@ -226,25 +243,6 @@
           </c:if>
         </c:if>
 	</c:forEach>
-
-	<c:if test="${errorMessageList != null}">
-        <c:forEach var="errorMessageKey" items="${errorMessageList}">
-        <fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
-            <div class="error">
-                <h4>${error}</h4>
-            </div>
-        </c:forEach>
-        <c:remove var="errorMessageList"/>
-    </c:if>
-
-    <c:if test="${infoMessage != null}">
-        <fmt:message bundle="${loc}" key="${infoMessage}" var="message"/>
-        <div class="message">
-            <h4>${message}</h4>
-        </div>
-        <c:remove var="infoMessage"/>
-    </c:if>
-
     </section>
 
     <div class="popup" id="close-card-popup">

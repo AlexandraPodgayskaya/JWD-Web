@@ -20,16 +20,33 @@ import by.epam.payment_system.service.util.PasswordCheck;
 import by.epam.payment_system.service.util.PasswordEncryption;
 import by.epam.payment_system.service.validation.UserDataValidator;
 
+/**
+ * The service is responsible for user operations
+ * 
+ * @author Aleksandra Podgayskaya
+ * @see UserService
+ */
 public class UserServiceImpl implements UserService {
 
+	/**
+	 * Instance of {@link DAOFactory}
+	 */
 	private static final DAOFactory factory = DAOFactory.getInstance();
 
+	/**
+	 * Check login and password
+	 * 
+	 * @param userInfo {@link UserInfo} credentials
+	 * @return {@link User}
+	 * @throws ServiceException if credentials is incorrect, password encryption
+	 *                          errors or {@link DAOException} occurs
+	 */
 	@Override
 	public User authorization(UserInfo userInfo) throws ServiceException {
 
 		UserDataValidator validator = new UserDataValidator();
 
-		if (!validator.basicDataValidation(userInfo)) {
+		if (!validator.credentialsValidation(userInfo)) {
 			throw new NoSuchUserServiceException("no such user");
 		}
 
@@ -54,12 +71,20 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	/**
+	 * Add login and password for new user
+	 * 
+	 * @param userInfo {@link UserInfo} credentials
+	 * @return {@link Integer} new user's id
+	 * @throws ServiceException if credentials is incorrect, login is busy, password
+	 *                          encryption error or {@link DAOException} occurs
+	 */
 	@Override
 	public Integer registration(UserInfo userInfo) throws ServiceException {
 
 		UserDataValidator validator = new UserDataValidator();
 
-		if (!validator.basicDataValidation(userInfo)) {
+		if (!validator.credentialsValidation(userInfo)) {
 			throw new UserInfoFormatServiceException("user data format error", validator.getDescriptionList());
 		}
 
@@ -89,6 +114,15 @@ public class UserServiceImpl implements UserService {
 		return id;
 	}
 
+	/**
+	 * Change login
+	 * 
+	 * @param userInfo {@link UserInfo} credentials
+	 * @param newLogin {@link String} new login
+	 * @throws ServiceException if wrong password to confirm the operation, new
+	 *                          login is incorrect or busy, login is not changed or
+	 *                          {@link DAOException} occurs
+	 */
 	@Override
 	public void changeLogin(UserInfo userInfo, String newLogin) throws ServiceException {
 
@@ -118,6 +152,16 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	/**
+	 * Change password
+	 * 
+	 * @param userInfo    {@link UserInfo} credentials
+	 * @param newPassword {@link String} new password
+	 * @throws ServiceException if wrong password to confirm the operation, new
+	 *                          password is incorrect, password encryption error,
+	 *                          password is not changed or {@link DAOException}
+	 *                          occurs
+	 */
 	@Override
 	public void changePassword(UserInfo userInfo, String newPassword) throws ServiceException {
 		if (!PasswordCheck.isCorrect(userInfo)) {
@@ -144,6 +188,13 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	/**
+	 * Check if login is free
+	 * 
+	 * @param login {@link String} login
+	 * @return boolean
+	 * @throws ServiceException if {@link DAOException} occurs
+	 */
 	private boolean freeLogin(String login) throws ServiceException {
 		UserDAO userDAO = factory.getUserDAO();
 

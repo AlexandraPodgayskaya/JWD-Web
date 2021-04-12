@@ -11,6 +11,11 @@ import by.epam.payment_system.entity.Currency;
 import by.epam.payment_system.util.Message;
 import by.epam.payment_system.util.ParameterConstraint;
 
+/**
+ * Validate transaction data
+ * 
+ * @author Aleksandra Podgayskaya
+ */
 public class TransactionDataValidator {
 
 	private static final String NUMBER_CARD_PATTERN = "^[0-9]{16}$";
@@ -22,12 +27,25 @@ public class TransactionDataValidator {
 	private static final String IBAN_PATTERN = "^BY[0-9]{2}[A-Z]{4}[0-9]{20}$";
 	private static final String DATE_FORMAT = "MM/yy";
 
+	/**
+	 * Keeps {@link List} of {@link String} error names
+	 */
 	private List<String> descriptionList;
 
+	/**
+	 * Get error names
+	 * 
+	 * @return {@link List} of {@link String} error names
+	 */
 	public List<String> getDescriptionList() {
 		return descriptionList;
 	}
 
+	/**
+	 * Set error
+	 * 
+	 * @param description {@link String} error name
+	 */
 	private void setDescriptionList(String description) {
 		if (descriptionList == null) {
 			descriptionList = new ArrayList<String>();
@@ -35,10 +53,16 @@ public class TransactionDataValidator {
 		descriptionList.add(description);
 	}
 
+	/**
+	 * Validate data for card replenishment
+	 * 
+	 * @param transferDetails {@link Map} data for card replenishment
+	 * @return boolean
+	 */
 	public final boolean topUpCardValidation(Map<String, String> transferDetails) {
 
 		transferValidation(transferDetails);
-		
+
 		if (transferDetails.get(ParameterConstraint.SENDER_EXPIRATION_DATE) != null
 				&& transferDetails.get(ParameterConstraint.SENDER_EXPIRATION_DATE).matches(EXPIRATION_DATE_PATTERN)) {
 
@@ -66,6 +90,12 @@ public class TransactionDataValidator {
 		return descriptionList == null;
 	}
 
+	/**
+	 * Validate payment data
+	 * 
+	 * @param paymentDetails {@link Map} payment data
+	 * @return boolean
+	 */
 	public final boolean paymentValidation(Map<String, String> paymentDetails) {
 
 		if (paymentDetails == null) {
@@ -115,6 +145,12 @@ public class TransactionDataValidator {
 		return descriptionList == null;
 	}
 
+	/**
+	 * Validate data for transfer
+	 * 
+	 * @param transferDetails {@link Map} data for transfer
+	 * @return boolean
+	 */
 	public final boolean transferValidation(Map<String, String> transferDetails) {
 
 		if (transferDetails == null) {
@@ -146,7 +182,7 @@ public class TransactionDataValidator {
 			setDescriptionList(Message.ERROR_CURRENCY);
 		}
 
-		return false;
+		return descriptionList == null;
 	}
 
 }

@@ -12,17 +12,33 @@ import by.epam.payment_system.entity.UserInfo;
 import by.epam.payment_system.service.exception.ServiceException;
 import by.epam.payment_system.service.validation.UserDataValidator;
 
+/**
+ * Checking the password
+ * 
+ * @author Aleksandra Podgayskaya
+ */
 public final class PasswordCheck {
 
+	/**
+	 * Does not create an object of this class
+	 */
 	private PasswordCheck() {
 
 	}
 
+	/**
+	 * Check if the password is correct
+	 * 
+	 * @param userInfo {@link UserInfo} credentials
+	 * @return boolean
+	 * @throws ServiceException if credentials is incorrect, password encryption
+	 *                          errors or {@link DAOException} occurs
+	 */
 	public static boolean isCorrect(UserInfo userInfo) throws ServiceException {
 
 		UserDataValidator userValidator = new UserDataValidator();
 
-		if (!userValidator.basicDataValidation(userInfo)) {
+		if (!userValidator.credentialsValidation(userInfo)) {
 			return false;
 		}
 

@@ -7,6 +7,11 @@ import java.util.List;
 import by.epam.payment_system.entity.UserInfo;
 import by.epam.payment_system.util.Message;
 
+/**
+ * Validate user data
+ * 
+ * @author Aleksandra Podgayskaya
+ */
 public class UserDataValidator {
 
 	private static final String LOGIN_PATTERN = "^[a-zA-Z][a-zA-Z0-9_-]{5,15}$";
@@ -16,12 +21,25 @@ public class UserDataValidator {
 	private static final String PERSONAL_NUMBER_PASSPORT_PATTERN = "^[0-9]{7}[A-Z][0-9]{3}[A-Z]{2}[0-9]$";
 	private static final String PHONE_PATTERN = "^\\+375[0-9]{9}$";
 
+	/**
+	 * Keeps {@link List} of {@link String} error names
+	 */
 	private List<String> descriptionList;
 
+	/**
+	 * Get error names
+	 * 
+	 * @return {@link List} of {@link String} error names
+	 */
 	public List<String> getDescriptionList() {
 		return Collections.unmodifiableList(descriptionList);
 	}
 
+	/**
+	 * Set error
+	 * 
+	 * @param description {@link String} error name
+	 */
 	private void setDescriptionList(String description) {
 		if (descriptionList == null) {
 			descriptionList = new ArrayList<String>();
@@ -29,7 +47,13 @@ public class UserDataValidator {
 		descriptionList.add(description);
 	}
 
-	public final boolean basicDataValidation(UserInfo userInfo) {
+	/**
+	 * Validate credentials
+	 * 
+	 * @param userInfo {@link UserInfo} credentials
+	 * @return boolean
+	 */
+	public final boolean credentialsValidation(UserInfo userInfo) {
 
 		if (userInfo == null) {
 			setDescriptionList(Message.ERROR_NO_USER_INFO);
@@ -46,6 +70,12 @@ public class UserDataValidator {
 		return descriptionList == null;
 	}
 
+	/**
+	 * Validate additional client data
+	 * 
+	 * @param userInfo {@link UserInfo} client details
+	 * @return boolean
+	 */
 	public final boolean additionalDataValidation(UserInfo userInfo) {
 
 		if (userInfo == null) {
@@ -80,6 +110,12 @@ public class UserDataValidator {
 		return descriptionList == null;
 	}
 
+	/**
+	 * Validate personal number passport
+	 * 
+	 * @param personalNumberPassport {@link String} personal number passport
+	 * @return boolean
+	 */
 	public final static boolean numberPassportValidation(String personalNumberPassport) {
 		if (personalNumberPassport == null) {
 			return false;
@@ -87,6 +123,12 @@ public class UserDataValidator {
 		return personalNumberPassport.matches(PERSONAL_NUMBER_PASSPORT_PATTERN);
 	}
 
+	/**
+	 * Validate login
+	 * 
+	 * @param login {@link String} login
+	 * @return boolean
+	 */
 	public final static boolean loginValidation(String login) {
 		if (login == null) {
 			return false;
@@ -94,6 +136,12 @@ public class UserDataValidator {
 		return login.matches(LOGIN_PATTERN);
 	}
 
+	/**
+	 * Validate password
+	 * 
+	 * @param login {@link String} password
+	 * @return boolean
+	 */
 	public final static boolean passwordValidation(String password) {
 		if (password == null) {
 			return false;

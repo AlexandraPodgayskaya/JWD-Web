@@ -29,14 +29,30 @@ import by.epam.payment_system.service.util.PasswordCheck;
 import by.epam.payment_system.service.validation.TransactionDataValidator;
 import by.epam.payment_system.util.ParameterConstraint;
 
+/**
+ * The service is responsible for transactions
+ * 
+ * @author Aleksandra Podgayskaya
+ * @see TransactionService
+ */
 public class TransactionServiceImpl implements TransactionService {
 
 	private static final String TOP_UP_CARD = "Top up card";
 	private static final String TRANSFER_FROM_CARD = "Transfer from the card";
 	private static final String TRANSFER_TO_CARD = "Transfer to the card";
 
+	/**
+	 * Instance of {@link DAOFactory}
+	 */
 	private static final DAOFactory factory = DAOFactory.getInstance();
 
+	/**
+	 * Top up card
+	 * 
+	 * @param transferDetails {@link Map} data for card replenishment
+	 * @throws ServiceException if transferDetails is incorrect, transaction is not
+	 *                          possible or {@link DAOException} occurs
+	 */
 	@Override
 	public void topUpCard(Map<String, String> transferDetails) throws ServiceException {
 
@@ -68,6 +84,14 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 	}
 
+	/**
+	 * Make payment
+	 * 
+	 * @param paymentDetails {@link Map} payment data
+	 * @throws ServiceException if password or paymentDetails are incorrect,
+	 *                          transaction is not possible, amount more than
+	 *                          balance or {@link DAOException} occurs
+	 */
 	@Override
 	public void makePayment(Map<String, String> paymentDetails) throws ServiceException {
 
@@ -115,54 +139,14 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
-	@Override
-	public List<Transaction> takeAccountTransactions(String numberCard) throws ServiceException {
-
-		if (numberCard == null) {
-			throw new ImpossibleOperationServiceException("no card number to take account transactions");
-		}
-
-		CardDAO cardDAO = factory.getCardDAO();
-		TransactionLogDAO transactionLogDAO = factory.getTransactionLogDAO();
-
-		List<Transaction> transactionList;
-		try {
-			Optional<Card> cardOptional = cardDAO.findCardData(numberCard);
-			if (cardOptional.isEmpty()) {
-				throw new ImpossibleOperationServiceException("no such card in payment system");
-			}
-
-			Card card = cardOptional.get();
-			if (card.getStatus() == CardStatus.ADDITIONAL) {
-				throw new ImpossibleOperationServiceException(
-						"it is impossible to show account transactions for owners of additional cards");
-			}
-			transactionList = transactionLogDAO.findAccountTransactions(card.getNumberAccount());
-
-		} catch (DAOException e) {
-			throw new ServiceException("search account transactions error", e);
-		}
-		return transactionList;
-	}
-
-	@Override
-	public List<Transaction> takeCardTransactions(String numberCard) throws ServiceException {
-
-		if (numberCard == null) {
-			throw new ImpossibleOperationServiceException("no card number to take account transactions");
-		}
-
-		TransactionLogDAO transactionLogDAO = factory.getTransactionLogDAO();
-
-		List<Transaction> transactionList;
-		try {
-			transactionList = transactionLogDAO.findCardTransactions(numberCard);
-		} catch (DAOException e) {
-			throw new ServiceException("search account transactions error", e);
-		}
-		return transactionList;
-	}
-
+	/**
+	 * Make transfer
+	 * 
+	 * @param transferDetails {@link Map} data for transfer
+	 * @throws ServiceException if password or transferDetails are incorrect,
+	 *                          transaction is not possible, amount more than
+	 *                          balance or {@link DAOException} occurs
+	 */
 	@Override
 	public void makeTransfer(Map<String, String> transferDetails) throws ServiceException {
 		UserInfo userInfo = new UserInfo(transferDetails.get(ParameterConstraint.USER_LOGIN),
@@ -218,12 +202,90 @@ public class TransactionServiceImpl implements TransactionService {
 
 	}
 
+	/**
+	 * Take all account transactions
+	 * 
+	 * @param numberCard {@link String} number card
+	 * @return {@link List} of {@link Transaction} received from database
+	 * @throws ServiceException if numberCard is null, transaction is not possible
+	 *                          or {@link DAOException} occurs
+	 */
+	@Override
+	public List<Transaction> takeAccountTransactions(String numberCard) throws ServiceException {
+
+		if (numberCard == null) {
+			throw new ImpossibleOperationServiceException("no card number to take account transactions");
+		}
+
+		CardDAO cardDAO = factory.getCardDAO();
+		TransactionLogDAO transactionLogDAO = factory.getTransactionLogDAO();
+
+		List<Transaction> transactionList;
+		try {
+			Optional<Card> cardOptional = cardDAO.findCardData(numberCard);
+			if (cardOptional.isEmpty()) {
+				throw new ImpossibleOperationServiceException("no such card in payment system");
+			}
+
+			Card card = cardOptional.get();
+			if (card.getStatus() == CardStatus.ADDITIONAL) {
+				throw new ImpossibleOperationServiceException(
+						"it is impossible to show account transactions for owners of additional cards");
+			}
+			transactionList = transactionLogDAO.findAccountTransactions(card.getNumberAccount());
+
+		} catch (DAOException e) {
+			throw new ServiceException("search account transactions error", e);
+		}
+		return transactionList;
+	}
+
+	/**
+	 * Take all card transactions
+	 * 
+	 * @param numberCard {@link String} number card
+	 * @return {@link List} of {@link Transaction} received from database
+	 * @throws ServiceException if numberCard is null or {@link DAOException} occurs
+	 */
+	@Override
+	public List<Transaction> takeCardTransactions(String numberCard) throws ServiceException {
+
+		if (numberCard == null) {
+			throw new ImpossibleOperationServiceException("no card number to take account transactions");
+		}
+
+		TransactionLogDAO transactionLogDAO = factory.getTransactionLogDAO();
+
+		List<Transaction> transactionList;
+		try {
+			transactionList = transactionLogDAO.findCardTransactions(numberCard);
+		} catch (DAOException e) {
+			throw new ServiceException("search account transactions error", e);
+		}
+		return transactionList;
+	}
+
+	/**
+	 * Check if the transaction is possible
+	 * 
+	 * @param card     {@link Card} data
+	 * @param currency {@link String} transaction currency
+	 * @throws ServiceException if transaction is not possible
+	 */
 	private void checkIsPossibleTransaction(Card card, String currency) throws ServiceException {
 		if (card.getIsClosed() || card.getIsBlocked() || Currency.valueOf(currency) != card.getCurrency()) {
 			throw new ImpossibleOperationServiceException("impossible transaction");
 		}
 	}
 
+	/**
+	 * Take all card data by number card
+	 * 
+	 * @param numberCard {@link String} number card
+	 * @return {@link Card}
+	 * @throws ServiceException if card number is incorrect or {@link DAOException}
+	 *                          occurs
+	 */
 	private Card takeAllCardData(String numberCard) throws ServiceException {
 		Card card;
 

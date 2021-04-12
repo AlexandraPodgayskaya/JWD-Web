@@ -103,6 +103,24 @@
     
   <hr/>
 
+<c:if test="${errorMessageList != null}">
+      <c:forEach var="errorMessageKey" items="${errorMessageList}">
+      <fmt:message bundle="${loc}" key="${errorMessageKey}" var="error"/>
+          <div class="error">
+              <h4>${error}</h4>
+          </div>
+      </c:forEach>
+      <c:remove var="errorMessageList"/>
+  </c:if>
+
+  <c:if test="${infoMessage != null}">
+      <fmt:message bundle="${loc}" key="${infoMessage}" var="message"/>
+      <div class="message">
+          <h4>${message}</h4>
+      </div>
+      <c:remove var="infoMessage"/>
+  </c:if>
+
   <p>${profile}</p>
   <form action="Controller" method="post" name="registration" class="edit clearfix">
     <input type="hidden" name="command" value="change_client_data"/>
@@ -162,13 +180,13 @@
     </div>
 
     <div class="popup" id="check-password-for-pwd-popup">
-            <div class="popup-content">
-                <p>${enter_password}:</p>
-                <input type="password" id="passwordInput2" name="password" required placeholder="${password}"/>
-                <button onclick="closePopup('passwordInput2', 'passwordCheckForPwdInput', 'edit-password-submit-input', 'edit-password-button', 'check-password-for-pwd-popup')">${continueButton}</button>
-                <button onclick="closePopupWithNoPassword('check-password-for-pwd-popup')">${cancelButton}</button>
-            </div>
+        <div class="popup-content">
+             <p>${enter_password}:</p>
+             <input type="password" id="passwordInput2" name="password" required placeholder="${password}"/>
+             <button onclick="closePopup('passwordInput2', 'passwordCheckForPwdInput', 'edit-password-submit-input', 'edit-password-button', 'check-password-for-pwd-popup')">${continueButton}</button>
+             <button onclick="closePopupWithNoPassword('check-password-for-pwd-popup')">${cancelButton}</button>
         </div>
+    </div>
 
 
 </div>

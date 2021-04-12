@@ -33,7 +33,6 @@
     <fmt:message bundle="${loc}" key="local.password" var="password"/>
     <fmt:message bundle="${loc}" key="local.confirm_operation" var="confirm_operation"/>
     <fmt:message bundle="${loc}" key="local.operation_payment" var="operation_payment"/>
-    <fmt:message bundle="${loc}" key="local.operation_payment" var="operation_payment"/>
     <fmt:message bundle="${loc}" key="local.with_card" var="with_card"/>
     <fmt:message bundle="${loc}" key="local.continue" var="continueButton"/>
     <fmt:message bundle="${loc}" key="local.cancel" var="cancelButton"/>
@@ -174,8 +173,7 @@
     
     <div class="popup" id="check-password-popup">
         <div class="popup-content">
-            <p>${confirm_operation}: <b>${operation_payment}</b> ${with_card} № <span id="сardNumberHolder"></span>.</p>
-            
+            <p>${confirm_operation}: <b>${operation_payment}</b> ${with_card} № <span id="сardNumberHolder"></span>.</p>       
             <input type="password" id="passwordInput" name="password" required placeholder="${password}"/>
             <button onclick="closePopup()">${continueButton}</button>
             <button onclick="closePopupWithNoPassword()">${cancelButton}</button>

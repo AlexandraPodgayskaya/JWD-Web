@@ -1,7 +1,13 @@
 package by.epam.payment_system.service.exception;
 
+/**
+ * Describes special exception in service
+ * 
+ * @author Aleksandra Podgayskaya
+ * @see ServiceException
+ */
 public class NotEnoughMoneyServiceException extends ServiceException {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	public NotEnoughMoneyServiceException() {
