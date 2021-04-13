@@ -59,8 +59,20 @@ public final class ConnectionPool {
 	}
 
 	private ConnectionPool() {
+	}
+
+	/**
+	 * Initialize connection pool
+	 * 
+	 * @param nameConfigurationFile {@link String} the name of the configuration
+	 *                              file for the pool
+	 * @throws ConnectionPoolException if {@link ClassNotFoundException} or
+	 *                                 {@link SQLException} occur
+	 */
+	public void init(String nameConfigurationFile) throws ConnectionPoolException {
 
 		DBResourceManager dbResourceManager = DBResourceManager.getInstance();
+		dbResourceManager.setBundle(nameConfigurationFile);
 		driverName = dbResourceManager.getValue(DBParameter.DB_DRIVER);
 		url = dbResourceManager.getValue(DBParameter.DB_URL);
 		user = dbResourceManager.getValue(DBParameter.DB_USER);
@@ -74,15 +86,6 @@ public final class ConnectionPool {
 		}
 		connectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
 		givenAwayConnectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
-	}
-
-	/**
-	 * Initialize connection pool
-	 * 
-	 * @throws ConnectionPoolException if {@link ClassNotFoundException} or
-	 *                                 {@link SQLException} occur
-	 */
-	public void init() throws ConnectionPoolException {
 
 		try {
 			Class.forName(driverName);

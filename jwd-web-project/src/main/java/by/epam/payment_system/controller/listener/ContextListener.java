@@ -18,6 +18,7 @@ import by.epam.payment_system.dao.connectionpool.ConnectionPoolException;
 public class ContextListener implements ServletContextListener {
 
 	private static final Logger logger = LogManager.getLogger();
+	private static final String NAME_CONFIGURATION_FILE = "db";
 
 	/**
 	 * Initialization connection pool
@@ -28,7 +29,7 @@ public class ContextListener implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		try {
-			ConnectionPool.getInstance().init();
+			ConnectionPool.getInstance().init(NAME_CONFIGURATION_FILE);
 		} catch (ConnectionPoolException e) {
 			logger.error("connection pool initialization error", e);
 			throw new RuntimeException("connection pool initialization error", e);

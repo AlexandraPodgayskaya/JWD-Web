@@ -8,14 +8,14 @@ import java.util.ResourceBundle;
  * @author Aleksandra Podgayskaya
  */
 public class DBResourceManager {
-	private static final String BUNDLE_NAME = "db";
+	private static final String DEFAULT_BUNDLE_NAME = "db";
 
 	/**
 	 * Instance of {@link DBResourceManager}
 	 */
 	private static final DBResourceManager instance = new DBResourceManager();
 
-	private ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME);
+	private ResourceBundle bundle;
 
 	/**
 	 * Get instance of this class
@@ -33,6 +33,18 @@ public class DBResourceManager {
 	 * @return {@link String} parameter value
 	 */
 	public String getValue(String key) {
+		if (bundle == null) {
+			setBundle(DEFAULT_BUNDLE_NAME);
+		}
 		return bundle.getString(key);
+	}
+
+	/**
+	 * Set bundle
+	 * 
+	 * @param name {@link String} properties file name
+	 */
+	public void setBundle(String nameConfigurationFile) {
+		bundle = ResourceBundle.getBundle(nameConfigurationFile);
 	}
 }

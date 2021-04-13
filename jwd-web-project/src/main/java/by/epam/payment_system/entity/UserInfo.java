@@ -31,6 +31,12 @@ public class UserInfo implements Serializable {
 		this.password = password;
 	}
 
+	public UserInfo(String login, String password, UserType userType) {
+		this.login = login;
+		this.password = password;
+		this.userType = userType;
+	}
+
 	public UserInfo(Integer id, String login, String password) {
 		this.id = id;
 		this.login = login;
