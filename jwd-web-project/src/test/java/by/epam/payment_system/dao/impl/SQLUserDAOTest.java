@@ -23,6 +23,7 @@ import by.epam.payment_system.entity.UserType;
 public class SQLUserDAOTest {
 
 	private static final String NAME_CONFIGURATION_FILE = "db_test";
+
 	private static final String USER_LOGIN = "Sane4ka";
 	private static final String WRONG_LOGIN = "Nastya";
 	private static final String NEW_LOGIN = "New User";
@@ -30,6 +31,9 @@ public class SQLUserDAOTest {
 	private static final String USER_PASSWORD = "241992";
 	private static final String NEW_PASSWORD = "123456";
 	private static final String SELECT_NEW_USER_SQL = "SELECT ID FROM USERS WHERE LOGIN='New User'";
+	private static final Integer USER_ID = 1;
+	private static final Integer UPDATED_USER_ID = 2;
+	private static final Integer WRONG_ID = 0;
 
 	private static final UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
 
@@ -63,17 +67,15 @@ public class SQLUserDAOTest {
 
 	@Test
 	public void findIdTest1() throws DAOException {
-		String login = USER_LOGIN;
-		Integer expected = 1;
-		Integer actual = userDAO.findId(login).get();
+		Integer expected = USER_ID;
+		Integer actual = userDAO.findId(USER_LOGIN).get();
 
 		Assert.assertEquals(expected, actual);
 	}
 
 	@Test
 	public void findIdTest2() throws DAOException {
-		String login = WRONG_LOGIN;
-		Optional<Integer> idOptional = userDAO.findId(login);
+		Optional<Integer> idOptional = userDAO.findId(WRONG_LOGIN);
 
 		Assert.assertTrue(idOptional.isEmpty());
 	}
@@ -81,7 +83,7 @@ public class SQLUserDAOTest {
 	@Test
 	public void findTest1() throws DAOException {
 		UserInfo loginationInfo = new UserInfo(USER_LOGIN, USER_PASSWORD);
-		User expected = new User(1, USER_LOGIN, USER_PASSWORD, UserType.CLIENT);
+		User expected = new User(USER_ID, USER_LOGIN, USER_PASSWORD, UserType.CLIENT);
 		User actual = userDAO.find(loginationInfo).get();
 
 		Assert.assertEquals(expected, actual);
@@ -105,21 +107,21 @@ public class SQLUserDAOTest {
 
 	@Test
 	public void updateUserTest1() throws DAOException {
-		UserInfo userInfo = new UserInfo(2, UPDATED_LOGIN, NEW_PASSWORD);
+		UserInfo userInfo = new UserInfo(UPDATED_USER_ID, UPDATED_LOGIN, NEW_PASSWORD);
 
 		Assert.assertTrue(userDAO.updateUser(userInfo));
 	}
 
 	@Test
 	public void updateUserNegativeTest1() throws DAOException {
-		UserInfo userInfo = new UserInfo(0, UPDATED_LOGIN, NEW_PASSWORD);
+		UserInfo userInfo = new UserInfo(WRONG_ID, UPDATED_LOGIN, NEW_PASSWORD);
 
 		Assert.assertFalse(userDAO.updateUser(userInfo));
 	}
 
 	@Test(expected = DAOException.class)
 	public void updateUserNegativeTest2() throws DAOException {
-		UserInfo userInfo = new UserInfo(2, USER_LOGIN, NEW_PASSWORD);
+		UserInfo userInfo = new UserInfo(UPDATED_USER_ID, USER_LOGIN, NEW_PASSWORD);
 		userDAO.updateUser(userInfo);
 	}
 

@@ -37,6 +37,14 @@ public class Card implements Serializable {
 		this.isClosed = isClosed;
 	}
 
+	public Card(String numberCard, String numberAccount, CardType cardType, CardStatus status, Integer ownerId) {
+		this.numberCard = numberCard;
+		this.numberAccount = numberAccount;
+		this.cardType = cardType;
+		this.status = status;
+		this.ownerId = ownerId;
+	}
+
 	public Card(String numberCard, boolean blocking) {
 		this.numberCard = numberCard;
 		this.isBlocked = blocking;
