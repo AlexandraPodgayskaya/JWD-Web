@@ -38,15 +38,39 @@ public final class ConnectionPool {
 	 * Instance of {@link ConnectionPool}
 	 */
 	private static final ConnectionPool instance = new ConnectionPool();
+	/**
+	 * Default pool size if incorrect parameter value is set in the configurations
+	 */
 	private static final int DEFAULT_POOL_SIZE = 5;
 
+	/**
+	 * Queue for storing free pool connections
+	 */
 	private BlockingQueue<Connection> connectionQueue;
+	/**
+	 * Queue for for accounting for the given pool connections
+	 */
 	private BlockingQueue<Connection> givenAwayConnectionQueue;
 
+	/**
+	 * Database driver name
+	 */
 	private String driverName;
+	/**
+	 * URL to get the database connection
+	 */
 	private String url;
+	/**
+	 * Database user name to get the database connection
+	 */
 	private String user;
+	/**
+	 * Password to get the database connection
+	 */
 	private String password;
+	/**
+	 * Number of connections to create
+	 */
 	private int poolSize;
 
 	/**

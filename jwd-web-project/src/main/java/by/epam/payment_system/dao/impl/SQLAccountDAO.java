@@ -167,7 +167,7 @@ public class SQLAccountDAO implements AccountDAO {
 	 */
 	@Override
 	public boolean doTransfer(Transfer transfer) throws DAOException {
-		boolean result;
+		boolean result = false;
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement descreaseStatement = connection.prepareStatement(DECREASE_BALANCE_SQL);
 				PreparedStatement increaseStatement = connection.prepareStatement(INCREASE_BALANCE_SQL)) {
@@ -176,14 +176,14 @@ public class SQLAccountDAO implements AccountDAO {
 			descreaseStatement.setString(1, transfer.getAmount());
 			descreaseStatement.setString(2, transfer.getSenderAccountNumber());
 
-			if (result = descreaseStatement.executeUpdate() != 0) {
+			if (descreaseStatement.executeUpdate() != 0) {
 				increaseStatement.setString(1, transfer.getAmount());
 				increaseStatement.setString(2, transfer.getRecipientAccountNumber());
-				if (result = increaseStatement.executeUpdate() != 0) {
-					connection.commit();
-				} else {
-					connection.rollback();
-				}
+				result = increaseStatement.executeUpdate() != 0;
+			}
+
+			if (result) {
+				connection.commit();
 			} else {
 				connection.rollback();
 			}

@@ -25,18 +25,20 @@ public class SQLCardDAOTest {
 
 	private static final String NAME_CONFIGURATION_FILE = "db_test";
 
-	private static final String NEW_NUMBER_CARD = "5489333344441114";
+	private static final String NEW_NUMBER_CARD = "5489333344441115";
+	private static final String CARD_TO_CLOSE = "5489333344441114";
 	private static final String NUMBER_CARD = "5489333344441111";
 	private static final String UPDATED_NUMBER_CARD = "5489333344441113";
 	private static final String OWNER_2_NUMBER_CARD = "5489333344441112";
 	private static final String NUMBER_ACCOUNT = "21081001";
 	private static final String IMAGE_PATH = "img/visa.png";
 	private static final String CARD_TYPE = "Visa Classic";
-	private static final Long LAST_CARD_NUMBER = 5489333344441114L;
+	private static final Long LAST_CARD_NUMBER = 5489333344441116L;
 	private static final Integer CARD_TYPE_ID = 1;
 	private static final Integer OWNER_ID_1 = 1;
 	private static final Integer OWNER_ID_2 = 2;
 	private static final String SELECT_NEW_CARD_SQL = "SELECT * FROM CARDS WHERE NUMBER_CARD='5489333344441114'";
+	private static final String INSERT_LAST_CARD_SQL = "INSERT INTO CARDS (NUMBER_CARD, ACCOUNT, TYPE_CARD_ID, STATUS, OWNER) VALUES(5489333344441116, 21081001, 1, 'MAIN', 1)";
 	private static final CardDAO cardDAO = DAOFactory.getInstance().getCardDAO();
 
 	@BeforeClass
@@ -64,8 +66,8 @@ public class SQLCardDAOTest {
 
 	@Test
 	public void findCardDataTest() throws DAOException {
-		Card expected = new Card(NUMBER_CARD, NUMBER_ACCOUNT, new CardType(CARD_TYPE_ID), CardStatus.MAIN, OWNER_ID_1,
-				Boolean.FALSE, Boolean.FALSE);
+		Card expected = new Card(NUMBER_CARD, NUMBER_ACCOUNT, new CardType(CARD_TYPE, IMAGE_PATH), CardStatus.MAIN,
+				OWNER_ID_1, Boolean.FALSE, Boolean.FALSE);
 		Card actual = cardDAO.findCardData(NUMBER_CARD).get();
 
 		Assert.assertEquals(expected, actual);
@@ -81,7 +83,11 @@ public class SQLCardDAOTest {
 	}
 
 	@Test
-	public void getLastCardNumberTest() throws DAOException {
+	public void getLastCardNumberTest() throws DAOException, SQLException, ConnectionPoolException {
+		try (Connection connection = ConnectionPool.getInstance().takeConnection();
+				Statement statement = connection.createStatement()) {
+			statement.executeUpdate(INSERT_LAST_CARD_SQL);
+		}
 		Long expected = LAST_CARD_NUMBER;
 		Long actual = cardDAO.getLastCardNumber().get();
 
@@ -97,6 +103,6 @@ public class SQLCardDAOTest {
 
 	@Test
 	public void setClosedTest() throws DAOException {
-		Assert.assertTrue(cardDAO.setClosed(UPDATED_NUMBER_CARD));
+		Assert.assertTrue(cardDAO.setClosed(CARD_TO_CLOSE));
 	}
 }

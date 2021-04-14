@@ -139,7 +139,7 @@ public class UserDataValidator {
 	/**
 	 * Validate password
 	 * 
-	 * @param login {@link String} password
+	 * @param password {@link String} password
 	 * @return boolean
 	 */
 	public final static boolean passwordValidation(String password) {

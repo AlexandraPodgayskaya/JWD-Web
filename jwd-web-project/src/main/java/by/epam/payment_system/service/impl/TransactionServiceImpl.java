@@ -189,8 +189,9 @@ public class TransactionServiceImpl implements TransactionService {
 				throw new ImpossibleOperationServiceException("can not make transfer");
 			}
 
-			expenseTransaction.setDateTime(new Timestamp(System.currentTimeMillis()));
-			receiptTransaction.setDateTime(new Timestamp(System.currentTimeMillis()));
+			Timestamp transactionTime = new Timestamp(System.currentTimeMillis());
+			expenseTransaction.setDateTime(transactionTime);
+			receiptTransaction.setDateTime(transactionTime);
 
 			TransactionLogDAO transactionLogDAO = factory.getTransactionLogDAO();
 			transactionLogDAO.addTransaction(expenseTransaction);
