@@ -34,10 +34,7 @@ public final class ParameterConstraint {
 	public static final String DATE_OF_BIRTH = "dateBirth";
 	public static final String PERSONAL_NUMBER_PASSPORT = "personalNumberPassport";
 	public static final String PHONE = "phone";
-	public static final String CARD_TYPE = "cardType";
 	public static final String CARD_TYPE_ID = "cardTypeId";
-	public static final String CARD_STATUS = "cardStatus";
-	public static final String IMAGE = "image";
 	public static final String INFO_MESSAGE = "infoMessage";
 	public static final String ERROR_MESSAGE = "errorMessageList";
 	public static final String LOCALE = "locale";
@@ -50,7 +47,6 @@ public final class ParameterConstraint {
 	public static final String USER_INFO = "userInfo";
 	public static final String CURRENCY_LIST = "currencyList";
 	public static final String CARD_TYPE_LIST = "cardTypeList";
-	public static final String CARD_STATUS_LIST = "cardStatusList";
 
 	private ParameterConstraint() {
 

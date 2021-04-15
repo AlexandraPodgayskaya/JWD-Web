@@ -87,7 +87,7 @@ public class SQLTransactionLogDAO implements TransactionLogDAO {
 	@Override
 	public List<Transaction> findCardTransactions(String numberCard) throws DAOException {
 
-		List<Transaction> transactionList = new ArrayList<Transaction>();
+		List<Transaction> transactionList = new ArrayList<>();
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SELECT_CARD_TRANSACTIONS_SQL)) {
 
@@ -138,7 +138,7 @@ public class SQLTransactionLogDAO implements TransactionLogDAO {
 	@Override
 	public List<Transaction> findAccountTransactions(String numberAccount) throws DAOException {
 
-		List<Transaction> transactionList = new ArrayList<Transaction>();
+		List<Transaction> transactionList = new ArrayList<>();
 
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SELECT_ACCOUNT_TRANSACTIONS_SQL)) {

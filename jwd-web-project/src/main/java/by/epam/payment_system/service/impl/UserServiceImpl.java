@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 		User user;
 		try {
 			userInfo.setPassword(PasswordEncryption.encrypt(userInfo.getPassword()));
-			Optional<User> userOptional = userDAO.find(userInfo);
+			Optional<User> userOptional = userDAO.findUser(userInfo);
 
 			if (userOptional.isEmpty()) {
 				throw new NoSuchUserServiceException("no such user");
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
 			throw new UserInfoFormatServiceException("user data format error", validator.getDescriptionList());
 		}
 
-		if (!freeLogin(userInfo.getLogin())) {
+		if (!checkIfLoginFree(userInfo.getLogin())) {
 			throw new BusyLoginServiceException("login is busy");
 		}
 
@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
 			throw new UserInfoFormatServiceException("new login format error");
 		}
 
-		if (!freeLogin(newLogin)) {
+		if (!checkIfLoginFree(newLogin)) {
 			throw new BusyLoginServiceException("login is busy");
 		}
 
@@ -195,7 +195,7 @@ public class UserServiceImpl implements UserService {
 	 * @return boolean
 	 * @throws ServiceException if {@link DAOException} occurs
 	 */
-	private boolean freeLogin(String login) throws ServiceException {
+	private boolean checkIfLoginFree(String login) throws ServiceException {
 		UserDAO userDAO = factory.getUserDAO();
 
 		Optional<Integer> idOptional;

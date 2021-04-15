@@ -18,7 +18,7 @@ public interface AdditionalClientDataService {
 	 * @throws ServiceException if client details is incorrect or
 	 *                          {@link DAOException} occurs
 	 */
-	void addData(UserInfo additionalUserClientInfo) throws ServiceException;
+	void addData(UserInfo additionalClientInfo) throws ServiceException;
 
 	/**
 	 * Take client details by user id

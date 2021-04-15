@@ -41,7 +41,7 @@ public interface UserDAO {
 	 * @throws DAOException if {@link ConnectionPoolException} or
 	 *                      {@link SQLException} occur
 	 */
-	Optional<User> find(UserInfo loginationInfo) throws DAOException;
+	Optional<User> findUser(UserInfo loginationInfo) throws DAOException;
 
 	/**
 	 * Update user data

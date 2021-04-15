@@ -7,7 +7,6 @@ package by.epam.payment_system.util;
  */
 public final class Message {
 
-	public static final String INFO_CARD_TYPE_ADDED = "local.message.card_type_added";
 	public static final String INFO_BLOCKING_OK = "local.message.blocking_ok";
 	public static final String INFO_UNBLOCKING_OK = "local.message.unblocking_ok";
 	public static final String INFO_PAYMENT_OK = "local.message.payment_ok";

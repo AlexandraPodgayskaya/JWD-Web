@@ -44,7 +44,7 @@ public final class PasswordCheck {
 
 		try {
 			userInfo.setPassword(PasswordEncryption.encrypt(userInfo.getPassword()));
-			Optional<User> userOptional = userDAO.find(userInfo);
+			Optional<User> userOptional = userDAO.findUser(userInfo);
 			if (userOptional.isEmpty()) {
 				return false;
 			}

@@ -66,9 +66,7 @@ public class LoginCommandImpl implements Command {
 			session.setAttribute(ParameterConstraint.USER_ID, user.getId());
 			session.setAttribute(ParameterConstraint.USER_LOGIN, user.getLogin());
 			session.setAttribute(ParameterConstraint.USER_TYPE, user.getType());
-
 			session.setAttribute(ParameterConstraint.PAGE, GoToPage.MAIN_PAGE);
-			session.setMaxInactiveInterval(300);
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 
 		} catch (NoSuchUserServiceException e) {

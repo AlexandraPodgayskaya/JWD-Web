@@ -124,7 +124,7 @@ public class SQLCardDAO implements CardDAO {
 	@Override
 	public List<Card> findCards(Integer userId) throws DAOException {
 
-		List<Card> cardList = new ArrayList<Card>();
+		List<Card> cardList = new ArrayList<>();
 
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SELECT_CARDS_SQL)) {

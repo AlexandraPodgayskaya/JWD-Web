@@ -108,8 +108,8 @@ public final class ConnectionPool {
 			logger.error("pool size setting error", e);
 			poolSize = DEFAULT_POOL_SIZE;
 		}
-		connectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
-		givenAwayConnectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
+		connectionQueue = new ArrayBlockingQueue<>(poolSize);
+		givenAwayConnectionQueue = new ArrayBlockingQueue<>(poolSize);
 
 		try {
 			Class.forName(driverName);

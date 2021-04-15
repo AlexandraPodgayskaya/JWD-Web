@@ -97,7 +97,7 @@ public class SQLUserDAO implements UserDAO {
 	 *                      {@link SQLException} occur
 	 */
 	@Override
-	public Optional<User> find(UserInfo loginationInfo) throws DAOException {
+	public Optional<User> findUser(UserInfo loginationInfo) throws DAOException {
 
 		Optional<User> userOptional = Optional.empty();
 

@@ -81,26 +81,26 @@ public class SQLUserDAOTest {
 	}
 
 	@Test
-	public void findTest1() throws DAOException {
+	public void findUserTest1() throws DAOException {
 		UserInfo loginationInfo = new UserInfo(USER_LOGIN, USER_PASSWORD);
 		User expected = new User(USER_ID, USER_LOGIN, USER_PASSWORD, UserType.CLIENT);
-		User actual = userDAO.find(loginationInfo).get();
+		User actual = userDAO.findUser(loginationInfo).get();
 
 		Assert.assertEquals(expected, actual);
 	}
 
 	@Test
-	public void findTest2() throws DAOException {
+	public void findUserTest2() throws DAOException {
 		UserInfo loginationInfo = new UserInfo(WRONG_LOGIN, USER_PASSWORD);
-		Optional<User> userOptional = userDAO.find(loginationInfo);
+		Optional<User> userOptional = userDAO.findUser(loginationInfo);
 
 		Assert.assertTrue(userOptional.isEmpty());
 	}
 
 	@Test
-	public void findTest3() throws DAOException {
+	public void findUserTest3() throws DAOException {
 		UserInfo loginationInfo = new UserInfo(USER_LOGIN, NEW_PASSWORD);
-		Optional<User> userOptional = userDAO.find(loginationInfo);
+		Optional<User> userOptional = userDAO.findUser(loginationInfo);
 
 		Assert.assertTrue(userOptional.isEmpty());
 	}

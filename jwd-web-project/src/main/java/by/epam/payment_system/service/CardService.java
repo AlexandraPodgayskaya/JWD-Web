@@ -70,7 +70,7 @@ public interface CardService {
 	 * @return {@link CardInfo}
 	 * @throws ServiceException if userId is null or {@link DAOException} occurs
 	 */
-	CardInfo takeAllCardOptions(Integer id) throws ServiceException;
+	CardInfo takeAllCardOptions(Integer userId) throws ServiceException;
 
 	/**
 	 * Open main card

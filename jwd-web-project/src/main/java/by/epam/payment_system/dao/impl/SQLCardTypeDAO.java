@@ -42,7 +42,7 @@ public class SQLCardTypeDAO implements CardTypeDAO {
 	@Override
 	public List<CardType> findAll() throws DAOException {
 
-		List<CardType> cardTypeList = new ArrayList<CardType>();
+		List<CardType> cardTypeList = new ArrayList<>();
 
 		try (Connection connection = connectionPool.takeConnection();
 				Statement statement = connection.createStatement()) {

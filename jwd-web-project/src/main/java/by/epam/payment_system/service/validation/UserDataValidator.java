@@ -42,7 +42,7 @@ public class UserDataValidator {
 	 */
 	private void setDescriptionList(String description) {
 		if (descriptionList == null) {
-			descriptionList = new ArrayList<String>();
+			descriptionList = new ArrayList<>();
 		}
 		descriptionList.add(description);
 	}
@@ -117,10 +117,8 @@ public class UserDataValidator {
 	 * @return boolean
 	 */
 	public final static boolean numberPassportValidation(String personalNumberPassport) {
-		if (personalNumberPassport == null) {
-			return false;
-		}
-		return personalNumberPassport.matches(PERSONAL_NUMBER_PASSPORT_PATTERN);
+		return personalNumberPassport == null ? false
+				: personalNumberPassport.matches(PERSONAL_NUMBER_PASSPORT_PATTERN);
 	}
 
 	/**
@@ -130,10 +128,7 @@ public class UserDataValidator {
 	 * @return boolean
 	 */
 	public final static boolean loginValidation(String login) {
-		if (login == null) {
-			return false;
-		}
-		return login.matches(LOGIN_PATTERN);
+		return login == null ? false : login.matches(LOGIN_PATTERN);
 	}
 
 	/**
@@ -143,10 +138,7 @@ public class UserDataValidator {
 	 * @return boolean
 	 */
 	public final static boolean passwordValidation(String password) {
-		if (password == null) {
-			return false;
-		}
-		return password.matches(PASSWORD_PATTERN);
+		return password == null ? false : password.matches(PASSWORD_PATTERN);
 	}
 
 }

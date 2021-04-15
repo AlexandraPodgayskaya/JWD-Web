@@ -48,7 +48,7 @@ public class TransactionDataValidator {
 	 */
 	private void setDescriptionList(String description) {
 		if (descriptionList == null) {
-			descriptionList = new ArrayList<String>();
+			descriptionList = new ArrayList<>();
 		}
 		descriptionList.add(description);
 	}

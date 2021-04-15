@@ -238,20 +238,13 @@ public class CardServiceImpl implements CardService {
 		AdditionalClientDataService additionalClientDataService = serviceFactory.getAdditionalClientDataService();
 		additionalClientDataService.getData(card.getOwnerId());
 
+		Account account = new Account(generateAccountNumber(), card.getCurrency(), card.getOwnerId());
 		AccountDAO accountDAO = factory.getAccountDAO();
 		CardDAO cardDAO = factory.getCardDAO();
 		try {
-			Optional<Long> lastAccountOptional = accountDAO.getLastAccountNumber();
-			Long newAccountNumber = lastAccountOptional.isEmpty() ? FIRST_ACCOUNT_NUMBER
-					: Long.sum(lastAccountOptional.get(), INCREMENT);
-			Account account = new Account(String.valueOf(newAccountNumber), card.getCurrency(), card.getOwnerId());
 			accountDAO.create(account);
-			card.setNumberAccount(String.valueOf(newAccountNumber));
-
-			Optional<Long> lastCardOptional = cardDAO.getLastCardNumber();
-			Long newCardNumber = lastCardOptional.isEmpty() ? FIRST_CARD_NUMBER
-					: Long.sum(lastCardOptional.get(), INCREMENT);
-			card.setNumberCard(String.valueOf(newCardNumber));
+			card.setNumberAccount(account.getNumberAccount());
+			card.setNumberCard(generateCardNumber());
 
 			cardDAO.create(card);
 		} catch (DAOException e) {
@@ -289,15 +282,50 @@ public class CardServiceImpl implements CardService {
 			if (accountOptional.isEmpty() || !accountOptional.get().getOwnerId().equals(userId)) {
 				throw new ImpossibleOperationServiceException("impossible operation for an account");
 			}
-
-			Optional<Long> lastCardOptional = cardDAO.getLastCardNumber();
-			Long newCardNumber = lastCardOptional.isEmpty() ? FIRST_CARD_NUMBER
-					: Long.sum(lastCardOptional.get(), INCREMENT);
-			card.setNumberCard(String.valueOf(newCardNumber));
+			card.setNumberCard(generateCardNumber());
 			cardDAO.create(card);
 		} catch (DAOException e) {
 			throw new ServiceException("card openning error", e);
 		}
+
+	}
+
+	/**
+	 * Generate account number
+	 * 
+	 * @return {@link String} new number account
+	 * @throws ServiceException if {@link DAOException} occurs
+	 */
+	private String generateAccountNumber() throws ServiceException {
+		AccountDAO accountDAO = factory.getAccountDAO();
+		Long newAccountNumber;
+		try {
+			Optional<Long> lastAccountOptional = accountDAO.getLastAccountNumber();
+			newAccountNumber = lastAccountOptional.isEmpty() ? FIRST_ACCOUNT_NUMBER
+					: Long.sum(lastAccountOptional.get(), INCREMENT);
+		} catch (DAOException e) {
+			throw new ServiceException("generate account number error", e);
+		}
+		return String.valueOf(newAccountNumber);
+	}
+
+	/**
+	 * Generate card number
+	 * 
+	 * @return {@link String} new number card
+	 * @throws ServiceException if {@link DAOException} occurs
+	 */
+	private String generateCardNumber() throws ServiceException {
+		CardDAO cardDAO = factory.getCardDAO();
+		Long newCardNumber;
+		try {
+			Optional<Long> lastCardOptional = cardDAO.getLastCardNumber();
+			newCardNumber = lastCardOptional.isEmpty() ? FIRST_CARD_NUMBER
+					: Long.sum(lastCardOptional.get(), INCREMENT);
+		} catch (DAOException e) {
+			throw new ServiceException("generate card number error", e);
+		}
+		return String.valueOf(newCardNumber);
 
 	}
 
