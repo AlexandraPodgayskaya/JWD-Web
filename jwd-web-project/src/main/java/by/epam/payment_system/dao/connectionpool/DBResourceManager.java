@@ -42,7 +42,7 @@ public class DBResourceManager {
 	/**
 	 * Set bundle
 	 * 
-	 * @param name {@link String} properties file name
+	 * @param nameConfigurationFile {@link String} configuration file name
 	 */
 	public void setBundle(String nameConfigurationFile) {
 		bundle = ResourceBundle.getBundle(nameConfigurationFile);
