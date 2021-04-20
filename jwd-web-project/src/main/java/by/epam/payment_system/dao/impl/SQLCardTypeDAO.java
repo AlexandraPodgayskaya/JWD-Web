@@ -49,13 +49,13 @@ public class SQLCardTypeDAO implements CardTypeDAO {
 
 			ResultSet resultSet = statement.executeQuery(SELECT_CARD_TYPES_SQL);
 
-			Integer id;
+			Long id;
 			String type;
 			String imagePath;
 			CardType cardType;
 
 			while (resultSet.next()) {
-				id = resultSet.getInt(COLUMN_ID);
+				id = resultSet.getLong(COLUMN_ID);
 				type = resultSet.getString(COLUMN_TYPE);
 				imagePath = resultSet.getString(COLUMN_IMAGE_PATH);
 				cardType = new CardType(id, type, imagePath);

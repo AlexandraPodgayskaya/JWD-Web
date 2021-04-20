@@ -55,7 +55,7 @@ public class ChangeLoginCommandImpl implements Command {
 		HttpSession session = request.getSession(true);
 
 		String newLogin = request.getParameter(ParameterConstraint.LOGIN);
-		Integer userId = (Integer) session.getAttribute(ParameterConstraint.USER_ID);
+		Long userId = (Long) session.getAttribute(ParameterConstraint.USER_ID);
 		String userLogin = (String) session.getAttribute(ParameterConstraint.USER_LOGIN);
 		String password = request.getParameter(ParameterConstraint.PASSWORD_CHECK);
 

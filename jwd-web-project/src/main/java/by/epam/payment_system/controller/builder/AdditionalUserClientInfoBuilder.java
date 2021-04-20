@@ -22,7 +22,7 @@ public class AdditionalUserClientInfoBuilder extends AbstractUserInfoBuilder {
 
 		String id = request.getParameter(ParameterConstraint.USER_ID);
 		if (id != null) {
-			userInfo.setId(Integer.valueOf(request.getParameter(ParameterConstraint.USER_ID)));
+			userInfo.setId(Long.valueOf(request.getParameter(ParameterConstraint.USER_ID)));
 		}
 
 		userInfo.setLogin(request.getParameter(ParameterConstraint.LOGIN));

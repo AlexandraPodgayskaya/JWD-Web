@@ -59,7 +59,7 @@ public class OpenMainCardCommandImpl implements Command {
 
 		String cardTypeId = request.getParameter(ParameterConstraint.CARD_TYPE_ID);
 		String currency = request.getParameter(ParameterConstraint.CURRENCY);
-		Integer userId = (Integer) session.getAttribute(ParameterConstraint.USER_ID);
+		Long userId = (Long) session.getAttribute(ParameterConstraint.USER_ID);
 
 		ServiceFactory factory = ServiceFactory.getInstance();
 		CardService cardService = factory.getCardService();
@@ -68,7 +68,7 @@ public class OpenMainCardCommandImpl implements Command {
 			if (cardTypeId == null || currency == null) {
 				throw new CommandException("not data for opening a card");
 			}
-			CardType cardType = new CardType(Integer.valueOf(cardTypeId));
+			CardType cardType = new CardType(Long.valueOf(cardTypeId));
 			Card card = new Card(cardType, CardStatus.MAIN, userId, Currency.valueOf(currency));
 			cardService.openMainCard(card);
 			session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_CARD_IS_OPEN);

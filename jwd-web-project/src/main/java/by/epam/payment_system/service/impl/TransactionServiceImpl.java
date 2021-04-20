@@ -274,7 +274,7 @@ public class TransactionServiceImpl implements TransactionService {
 	 * @throws ServiceException if transaction is not possible
 	 */
 	private void checkIsPossibleTransaction(Card card, String currency) throws ServiceException {
-		if (card.getIsClosed() || card.getIsBlocked() || Currency.valueOf(currency) != card.getCurrency()) {
+		if (card.isClosed() || card.isBlocked() || Currency.valueOf(currency) != card.getCurrency()) {
 			throw new ImpossibleOperationServiceException("impossible transaction");
 		}
 	}

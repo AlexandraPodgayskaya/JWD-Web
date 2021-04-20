@@ -75,21 +75,21 @@
                 </li>
                 <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <li>
-                    <form action="Controller" method="post">
+                    <form action="Controller" method="get">
                         <input type="hidden" name="command" value="go_to_edit_profile_page"/>
                         <input type="submit" value="${menu_profile}"/>
                     </form>
                 </li>
                 </c:if>
                 <li class="active">
-                    <form action="Controller" method="post">
+                    <form action="Controller" method="get">
                         <input type="hidden" name="command" value="go_to_main_page"/>
                         <input type="submit" value="${menu_cards}"/>
                     </form>
                 </li>
                 <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <li>
-                    <form action="Controller" method="post">
+                    <form action="Controller" method="get">
                         <input type="hidden" name="command" value="go_to_open_card_page"/>
                         <input type="submit" value="${menu_card_application}"/>
                     </form>
@@ -104,7 +104,7 @@
 
     <c:if test="${sessionScope.userType == 'ADMIN'}">
     <section>
-        <form action="Controller" method="post">
+        <form action="Controller" method="get">
             <label> ${enter_passport_number}:
                 <input type="text" name="clientPassportNumber" required placeholder="1111111A111PB1"/>
             </label>
@@ -142,26 +142,26 @@
         <c:remove var="infoMessage"/>
     </c:if>
 	<c:forEach var="card" items="${requestScope.cardList}">
-	  <c:if test="${card.isClosed == false}">
-        <c:if test="${card.isBlocked == false}">
+	  <c:if test="${card.closed == false}">
+        <c:if test="${card.blocked == false}">
             <div class ="cart">
                 <p>${card.numberCard}</p>
                 <img id="cart_type_img" src="${card.cardType.imagePath}"/>
                 <p>${card.balance} ${card.currency}</p>
                 <c:if test="${card.status == 'MAIN'}">
-                    <form action="Controller" method="post">
+                    <form action="Controller" method="get">
                         <input type="hidden" name="command" value="show_account_log"/>
                         <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                         <input type="submit" value="${account_transaction_log}"/>
                     </form>
                 </c:if>
-                <form action="Controller" method="post">
+                <form action="Controller" method="get">
                     <input type="hidden" name="command" value="show_card_log"/>
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="submit" value="${card_transaction_log}"/>
                 </form>
                 <c:if test="${sessionScope.userType == 'CLIENT'}">
-                <form action="Controller" method="post">
+                <form action="Controller" method="get">
                     <input type="hidden" name="command" value="go_to_payment_page"/>
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="hidden" name="currency" value="${card.currency}"/>
@@ -170,7 +170,7 @@
                 </form>
                 </c:if>
                 <c:if test="${sessionScope.userType == 'CLIENT'}">
-                <form action="Controller" method="post">
+                <form action="Controller" method="get">
                     <input type="hidden" name="command" value="go_to_transfer_page"/>
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="hidden" name="numberAccount" value="${card.numberAccount}"/>
@@ -180,7 +180,7 @@
                 </form>
                 </c:if>
                 <c:if test="${sessionScope.userType == 'CLIENT'}">
-                <form action="Controller" method="post">
+                <form action="Controller" method="get">
                     <input type="hidden" name="command" value="go_to_top_up_card_page"/>
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="hidden" name="currency" value="${card.currency}"/>
@@ -192,20 +192,20 @@
 
             </div>
         </c:if>
-		<c:if test="${card.isBlocked == true}">
+		<c:if test="${card.blocked == true}">
 		    <div class ="cart blocked">
                 <img src="img/zamok.png"/>
                 <p>${card.numberCard}</p>
                 <img id="cart_type_img" src="${card.cardType.imagePath}"/>
                 <p>${card.balance} ${card.currency}</p>
                 <c:if test="${card.status == 'MAIN'}">
-                    <form action="Controller" method="post">
+                    <form action="Controller" method="get">
                         <input type="hidden" name="command" value="show_account_log"/>
                         <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                         <input type="submit" value="${account_transaction_log}"/>
                     </form>
                 </c:if>
-                <form action="Controller" method="post">
+                <form action="Controller" method="get">
                     <input type="hidden" name="command" value="show_card_log"/>
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="submit" value="${card_transaction_log}"/>
@@ -219,7 +219,7 @@
             </div>
 		</c:if>
 		</c:if>
-		<c:if test="${card.isClosed == true}">
+		<c:if test="${card.closed == true}">
 		  <c:if test="${sessionScope.userType == 'ADMIN'}">
 		  <div class ="cart closed">
 				<img src="img/close-img.png"/>
@@ -228,13 +228,13 @@
                 <img id="cart_type_img" src="${card.cardType.imagePath}"/>
                 <p>${card.balance} ${card.currency}</p>
                 <c:if test="${card.status == 'MAIN'}">
-                    <form action="Controller" method="post">
+                    <form action="Controller" method="get">
                         <input type="hidden" name="command" value="show_account_log"/>
                         <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                         <input type="submit" value="${account_transaction_log}"/>
                     </form>
                 </c:if>
-                <form action="Controller" method="post">
+                <form action="Controller" method="get">
                     <input type="hidden" name="command" value="show_card_log"/>
                     <input type="hidden" name="numberCard" value="${card.numberCard}"/>
                     <input type="submit" value="${card_transaction_log}"/>

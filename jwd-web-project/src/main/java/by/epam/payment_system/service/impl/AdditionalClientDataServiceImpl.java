@@ -53,13 +53,13 @@ public class AdditionalClientDataServiceImpl implements AdditionalClientDataServ
 	/**
 	 * Take client details by user id
 	 * 
-	 * @param userId {@link Integer} user id
+	 * @param userId {@link Long} user id
 	 * @return {@link UserInfo}
 	 * @throws ServiceException if userId is null, data not found or
 	 *                          {@link DAOException} occurs
 	 */
 	@Override
-	public UserInfo getData(Integer userId) throws ServiceException {
+	public UserInfo getData(Long userId) throws ServiceException {
 
 		if (userId == null) {
 			throw new ImpossibleOperationServiceException("no user id to get data");

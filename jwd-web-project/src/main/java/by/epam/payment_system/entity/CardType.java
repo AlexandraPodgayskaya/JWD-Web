@@ -11,7 +11,7 @@ public class CardType implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;
+	private Long id;
 	private String type;
 	private String imagePath;
 
@@ -19,7 +19,7 @@ public class CardType implements Serializable {
 
 	}
 
-	public CardType(Integer id) {
+	public CardType(Long id) {
 		this.id = id;
 	}
 
@@ -28,17 +28,17 @@ public class CardType implements Serializable {
 		this.imagePath = imagePath;
 	}
 
-	public CardType(Integer id, String type, String imagePath) {
+	public CardType(Long id, String type, String imagePath) {
 		this.id = id;
 		this.type = type;
 		this.imagePath = imagePath;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

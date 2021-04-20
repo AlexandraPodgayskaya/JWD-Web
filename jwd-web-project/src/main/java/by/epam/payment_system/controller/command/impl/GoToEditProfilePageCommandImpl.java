@@ -53,7 +53,7 @@ public class GoToEditProfilePageCommandImpl implements Command {
 		AdditionalClientDataService additionalClientDataService = factory.getAdditionalClientDataService();
 
 		HttpSession session = request.getSession(true);
-		Integer userId = (Integer) session.getAttribute(ParameterConstraint.USER_ID);
+		Long userId = (Long) session.getAttribute(ParameterConstraint.USER_ID);
 		try {
 			UserInfo userInfo = additionalClientDataService.getData(userId);
 			request.setAttribute(ParameterConstraint.USER_INFO, userInfo);

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Optional;
 
 import by.epam.payment_system.dao.DAOException;
@@ -38,37 +39,45 @@ public class SQLUserDAO implements UserDAO {
 	 * Create new user
 	 * 
 	 * @param registrationInfo {@link UserInfo} all data to create
+	 * @return long user id
 	 * @throws DAOException if {@link ConnectionPoolException} or
 	 *                      {@link SQLException} occur
 	 */
 	@Override
-	public void create(UserInfo registrationInfo) throws DAOException {
-
+	public long create(UserInfo registrationInfo) throws DAOException {
+		long userId;
 		try (Connection connection = connectionPool.takeConnection();
-				PreparedStatement statement = connection.prepareStatement(INSERT_USER_SQL)) {
-
+				PreparedStatement statement = connection.prepareStatement(INSERT_USER_SQL,
+						Statement.RETURN_GENERATED_KEYS)) {
 			statement.setString(1, registrationInfo.getLogin());
 			statement.setString(2, registrationInfo.getPassword());
 			statement.setString(3, String.valueOf(registrationInfo.getUserType()));
 			statement.executeUpdate();
 
+			ResultSet resultSet = statement.getGeneratedKeys();
+			if (resultSet.next()) {
+				userId = resultSet.getLong(1);
+			} else {
+				throw new DAOException("database error");
+			}
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
 		}
+		return userId;
 	}
 
 	/**
 	 * Find user id
 	 * 
 	 * @param login {@link String} login to search
-	 * @return {@link Optional} of {@link Integer} user id received from database
+	 * @return {@link Optional} of {@link Long} user id received from database
 	 * @throws DAOException if {@link ConnectionPoolException} or
 	 *                      {@link SQLException} occur
 	 */
 	@Override
-	public Optional<Integer> findId(String login) throws DAOException {
+	public Optional<Long> findId(String login) throws DAOException {
 
-		Optional<Integer> idOptional = Optional.empty();
+		Optional<Long> idOptional = Optional.empty();
 
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SELECT_ID_SQL)) {
@@ -77,7 +86,7 @@ public class SQLUserDAO implements UserDAO {
 			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {
-				Integer id = resultSet.getInt(COLUMN_USER_ID);
+				Long id = resultSet.getLong(COLUMN_USER_ID);
 				idOptional = Optional.of(id);
 			}
 
@@ -109,7 +118,7 @@ public class SQLUserDAO implements UserDAO {
 			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {
-				int id = resultSet.getInt(COLUMN_USER_ID);
+				long id = resultSet.getLong(COLUMN_USER_ID);
 				String type = resultSet.getString(COLUMN_USER_TYPE);
 				UserType userType = UserType.valueOf(type.toUpperCase());
 				User user = new User(id, loginationInfo.getLogin(), loginationInfo.getPassword(), userType);
@@ -136,7 +145,7 @@ public class SQLUserDAO implements UserDAO {
 
 			statement.setString(1, userInfo.getLogin());
 			statement.setString(2, userInfo.getPassword());
-			statement.setInt(3, userInfo.getId());
+			statement.setLong(3, userInfo.getId());
 
 			return statement.executeUpdate() != 0;
 

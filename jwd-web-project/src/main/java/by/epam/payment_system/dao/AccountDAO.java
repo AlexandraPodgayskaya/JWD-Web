@@ -19,10 +19,11 @@ public interface AccountDAO {
 	 * Create account
 	 * 
 	 * @param account {@link Account} all data to create
+	 * @return {@link String} new account number
 	 * @throws DAOException if {@link ConnectionPoolException} or
 	 *                      {@link SQLException} occur
 	 */
-	void create(Account account) throws DAOException;
+	String create(Account account) throws DAOException;
 
 	/**
 	 * Get account by account number
@@ -33,15 +34,6 @@ public interface AccountDAO {
 	 *                      {@link SQLException} occur
 	 */
 	Optional<Account> getAccount(String numberAccount) throws DAOException;
-
-	/**
-	 * Get last account number
-	 * 
-	 * @return {@link Optional} of {@link Long} last account number
-	 * @throws DAOException if {@link ConnectionPoolException} or
-	 *                      {@link SQLException} occur
-	 */
-	Optional<Long> getLastAccountNumber() throws DAOException;
 
 	/**
 	 * Update balance

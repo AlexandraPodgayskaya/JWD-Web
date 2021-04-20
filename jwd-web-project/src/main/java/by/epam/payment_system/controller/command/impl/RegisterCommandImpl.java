@@ -53,7 +53,7 @@ public class RegisterCommandImpl implements Command {
 
 		HttpSession session = request.getSession(true);
 		try {
-			Integer id = userService.registration(userInfo);
+			long id = userService.registration(userInfo);
 			session.setAttribute(ParameterConstraint.INFO_MESSAGE, Message.INFO_REGISTRATION_OK);
 			session.setAttribute(ParameterConstraint.PAGE, GoToPage.CLIENT_DATA_PAGE + String.valueOf(id));
 			response.sendRedirect(GoToPage.CLIENT_DATA_PAGE + String.valueOf(id));

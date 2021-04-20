@@ -60,24 +60,28 @@
                         <input type="submit" value="${ru_button}"/>
                     </form>
                 </li>
+                <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <li>
-                    <form action="Controller" method="post">
+                    <form action="Controller" method="get">
                         <input type="hidden" name="command" value="go_to_edit_profile_page"/>
                         <input type="submit" value="${menu_profile}"/>
                     </form>
                 </li>
+                </c:if>
                 <li class="active">
-                    <form action="Controller" method="post">
+                    <form action="Controller" method="get">
                         <input type="hidden" name="command" value="go_to_main_page"/>
                         <input type="submit" value="${menu_cards}"/>
                     </form>
                 </li>
+                <c:if test="${sessionScope.userType == 'CLIENT'}">
                 <li>
-                    <form action="Controller" method="post">
+                    <form action="Controller" method="get">
                         <input type="hidden" name="command" value="go_to_open_card_page"/>
                         <input type="submit" value="${menu_card_application}"/>
                     </form>
                 </li>
+                </c:if>
             </ul>
         </nav>
     </div>

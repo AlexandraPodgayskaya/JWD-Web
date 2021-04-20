@@ -59,7 +59,7 @@ public class OpenAdditionalCardCommandImpl implements Command {
 		String cardTypeId = request.getParameter(ParameterConstraint.CARD_TYPE_ID);
 		String numberAccount = request.getParameter(ParameterConstraint.NUMBER_ACCOUNT);
 		String numberPassport = request.getParameter(ParameterConstraint.PERSONAL_NUMBER_PASSPORT);
-		Integer userId = (Integer) session.getAttribute(ParameterConstraint.USER_ID);
+		Long userId = (Long) session.getAttribute(ParameterConstraint.USER_ID);
 
 		ServiceFactory factory = ServiceFactory.getInstance();
 		CardService cardService = factory.getCardService();
@@ -69,7 +69,7 @@ public class OpenAdditionalCardCommandImpl implements Command {
 				throw new CommandException("not data for opening a card");
 			}
 
-			CardType cardType = new CardType(Integer.valueOf(cardTypeId));
+			CardType cardType = new CardType(Long.valueOf(cardTypeId));
 			Card card = new Card(numberAccount, cardType, CardStatus.ADDITIONAL);
 
 			cardService.openAdditionalCard(card, numberPassport, userId);

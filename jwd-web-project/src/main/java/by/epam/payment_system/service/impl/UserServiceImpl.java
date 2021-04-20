@@ -75,12 +75,12 @@ public class UserServiceImpl implements UserService {
 	 * Add login and password for new user
 	 * 
 	 * @param userInfo {@link UserInfo} credentials
-	 * @return {@link Integer} new user's id
+	 * @return long new user's id
 	 * @throws ServiceException if credentials is incorrect, login is busy, password
 	 *                          encryption error or {@link DAOException} occurs
 	 */
 	@Override
-	public Integer registration(UserInfo userInfo) throws ServiceException {
+	public long registration(UserInfo userInfo) throws ServiceException {
 
 		UserDataValidator validator = new UserDataValidator();
 
@@ -96,15 +96,10 @@ public class UserServiceImpl implements UserService {
 
 		UserDAO userDAO = factory.getUserDAO();
 
-		Integer id;
+		long id;
 		try {
 			userInfo.setPassword(PasswordEncryption.encrypt(userInfo.getPassword()));
-			userDAO.create(userInfo);
-			Optional<Integer> idOptional = userDAO.findId(userInfo.getLogin());
-			if (idOptional.isEmpty()) {
-				throw new ServiceException("user not created");
-			}
-			id = idOptional.get();
+			id = userDAO.create(userInfo);
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new ServiceException("password encryption error", e);
 		} catch (DAOException e) {
@@ -198,7 +193,7 @@ public class UserServiceImpl implements UserService {
 	private boolean checkIfLoginFree(String login) throws ServiceException {
 		UserDAO userDAO = factory.getUserDAO();
 
-		Optional<Integer> idOptional;
+		Optional<Long> idOptional;
 		try {
 			idOptional = userDAO.findId(login);
 		} catch (DAOException e) {

@@ -26,11 +26,11 @@ public interface UserService {
 	 * Add login and password for new user
 	 * 
 	 * @param userInfo {@link UserInfo} credentials
-	 * @return {@link Integer} new user's id
+	 * @return long new user's id
 	 * @throws ServiceException if credentials is incorrect, login is busy, password
 	 *                          encryption error or {@link DAOException} occurs
 	 */
-	Integer registration(UserInfo userInfo) throws ServiceException;
+	long registration(UserInfo userInfo) throws ServiceException;
 
 	/**
 	 * Change login

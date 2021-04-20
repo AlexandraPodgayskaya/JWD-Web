@@ -51,7 +51,7 @@ public class GoToTransferPageCommandImpl implements Command {
 		}
 
 		HttpSession session = request.getSession(true);
-		Integer id = (Integer) session.getAttribute(ParameterConstraint.USER_ID);
+		Long id = (Long) session.getAttribute(ParameterConstraint.USER_ID);
 		String numberCard = request.getParameter(ParameterConstraint.NUMBER_CARD);
 		String numberAccount = request.getParameter(ParameterConstraint.NUMBER_ACCOUNT);
 		String currency = request.getParameter(ParameterConstraint.CURRENCY);

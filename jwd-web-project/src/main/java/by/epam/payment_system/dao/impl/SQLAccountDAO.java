@@ -26,15 +26,13 @@ import by.epam.payment_system.entity.Transfer;
  */
 public class SQLAccountDAO implements AccountDAO {
 
-	private static final String INSERT_ACCOUNT_SQL = "INSERT INTO ACCOUNTS (NUMBER_ACCOUNT, CURRENCY, OWNER) VALUES(?, ?, ?)";
+	private static final String INSERT_ACCOUNT_SQL = "INSERT INTO ACCOUNTS (CURRENCY, OWNER) VALUES(?, ?)";
 	private static final String SELECT_ACCOUNT_SQL = "SELECT * FROM ACCOUNTS WHERE NUMBER_ACCOUNT=? ";
-	private static final String SELECT_LAST_ACCOUNT_NUMBER_SQL = "SELECT MAX(NUMBER_ACCOUNT) AS last_account FROM ACCOUNTS";
 	private static final String INCREASE_BALANCE_SQL = "UPDATE ACCOUNTS SET BALANCE=BALANCE + ? WHERE NUMBER_ACCOUNT=?";
 	private static final String DECREASE_BALANCE_SQL = "UPDATE ACCOUNTS SET BALANCE=BALANCE - ? WHERE NUMBER_ACCOUNT=?";
 	private static final String COLUMN_BALANCE = "balance";
 	private static final String COLUMN_CURRENCY = "currency";
 	private static final String COLUMN_OWNER = "owner";
-	private static final String COLUMN_LAST_ACCOUNT = "last_account";
 
 	/**
 	 * Instance of {@link ConnectionPool}
@@ -45,23 +43,32 @@ public class SQLAccountDAO implements AccountDAO {
 	 * Create account
 	 * 
 	 * @param account {@link Account} all data to create
+	 * @return {@link String} new account number
 	 * @throws DAOException if {@link ConnectionPoolException} or
 	 *                      {@link SQLException} occur
 	 */
 	@Override
-	public void create(Account account) throws DAOException {
+	public String create(Account account) throws DAOException {
+		String numberAccount;
 		try (Connection connection = connectionPool.takeConnection();
-				PreparedStatement statement = connection.prepareStatement(INSERT_ACCOUNT_SQL);) {
+				PreparedStatement statement = connection.prepareStatement(INSERT_ACCOUNT_SQL,
+						Statement.RETURN_GENERATED_KEYS)) {
 
-			statement.setString(1, account.getNumberAccount());
-			statement.setString(2, String.valueOf(account.getCurrency()));
-			statement.setInt(3, account.getOwnerId());
-
+			statement.setString(1, String.valueOf(account.getCurrency()));
+			statement.setLong(2, account.getOwnerId());
 			statement.executeUpdate();
+
+			ResultSet resultSet = statement.getGeneratedKeys();
+			if (resultSet.next()) {
+				numberAccount = resultSet.getString(1);
+			} else {
+				throw new DAOException("database error");
+			}
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
 		}
+		return numberAccount;
 	}
 
 	/**
@@ -86,7 +93,7 @@ public class SQLAccountDAO implements AccountDAO {
 				BigDecimal balance = resultSet.getBigDecimal(COLUMN_BALANCE);
 				String currencyAccount = resultSet.getString(COLUMN_CURRENCY);
 				Currency currency = Currency.valueOf(currencyAccount.toUpperCase());
-				int owner = resultSet.getInt(COLUMN_OWNER);
+				long owner = resultSet.getLong(COLUMN_OWNER);
 				Account account = new Account(numberAccount, balance, currency, owner);
 				accountOptional = Optional.of(account);
 			}
@@ -95,33 +102,6 @@ public class SQLAccountDAO implements AccountDAO {
 			throw new DAOException(e);
 		}
 		return accountOptional;
-	}
-
-	/**
-	 * Get last account number
-	 * 
-	 * @return {@link Optional} of {@link Long} last account number
-	 * @throws DAOException if {@link ConnectionPoolException} or
-	 *                      {@link SQLException} occur
-	 */
-	@Override
-	public Optional<Long> getLastAccountNumber() throws DAOException {
-
-		Optional<Long> lastAccountOptional = Optional.empty();
-		try (Connection connection = connectionPool.takeConnection();
-				Statement statement = connection.createStatement()) {
-
-			ResultSet resultSet = statement.executeQuery(SELECT_LAST_ACCOUNT_NUMBER_SQL);
-
-			if (resultSet.next()) {
-				Long lastAccountNumber = resultSet.getLong(COLUMN_LAST_ACCOUNT);
-				lastAccountOptional = Optional.of(lastAccountNumber);
-			}
-
-		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-		}
-		return lastAccountOptional;
 	}
 
 	/**

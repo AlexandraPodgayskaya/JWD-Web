@@ -41,20 +41,18 @@ public final class PasswordCheck {
 
 		DAOFactory factory = DAOFactory.getInstance();
 		UserDAO userDAO = factory.getUserDAO();
+		Optional<User> userOptional;
 
 		try {
 			userInfo.setPassword(PasswordEncryption.encrypt(userInfo.getPassword()));
-			Optional<User> userOptional = userDAO.findUser(userInfo);
-			if (userOptional.isEmpty()) {
-				return false;
-			}
+			userOptional = userDAO.findUser(userInfo);
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new ServiceException("password encryption error", e);
 		} catch (DAOException e) {
 			throw new ServiceException("check password error", e);
 		}
 
-		return true;
+		return userOptional.isPresent();
 	}
 
 }

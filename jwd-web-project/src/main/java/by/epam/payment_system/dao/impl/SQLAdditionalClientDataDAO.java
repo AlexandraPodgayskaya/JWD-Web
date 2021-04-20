@@ -50,7 +50,7 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(INSERT_ADDITIONAL_CLIENT_DATA_SQL)) {
 
-			statement.setInt(1, additionalClientInfo.getId());
+			statement.setLong(1, additionalClientInfo.getId());
 			statement.setString(2, additionalClientInfo.getSurname());
 			statement.setString(3, additionalClientInfo.getName());
 			statement.setString(4, additionalClientInfo.getPatronymic());
@@ -86,7 +86,7 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 
 			if (resultSet.next()) {
 				UserInfo userInfo = new UserInfo();
-				userInfo.setId(resultSet.getInt(COLUMN_USER_ID));
+				userInfo.setId(resultSet.getLong(COLUMN_USER_ID));
 				userInfo.setSurname(resultSet.getString(COLUMN_SURNAME));
 				userInfo.setName(resultSet.getString(COLUMN_NAME));
 				userInfo.setPatronymic(resultSet.getString(COLUMN_PATRONYMIC));
@@ -107,19 +107,19 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 	/**
 	 * Find client details by user id
 	 * 
-	 * @param userId {@link Integer} personal user id to search
+	 * @param userId {@link Long} personal user id to search
 	 * @return {@link Optional} of {@link UserInfo} received from database
 	 * @throws DAOException if {@link ConnectionPoolException} or
 	 *                      {@link SQLException} occur
 	 */
 	@Override
-	public Optional<UserInfo> findDataById(Integer userId) throws DAOException {
+	public Optional<UserInfo> findDataById(Long userId) throws DAOException {
 		Optional<UserInfo> userInfoOptional = Optional.empty();
 
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SELECT_CLIENT_DATA_BY_USER_ID_SQL)) {
 
-			statement.setInt(1, userId);
+			statement.setLong(1, userId);
 			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {
@@ -160,7 +160,7 @@ public class SQLAdditionalClientDataDAO implements AdditionalClientDataDAO {
 			statement.setString(4, userInfo.getDateBirth());
 			statement.setString(5, userInfo.getPersonalNumberPassport());
 			statement.setString(6, userInfo.getPhone());
-			statement.setInt(7, userInfo.getId());
+			statement.setLong(7, userInfo.getId());
 
 			return statement.executeUpdate() != 0;
 

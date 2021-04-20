@@ -16,9 +16,9 @@ public class Card implements Serializable {
 	private String numberAccount;
 	private CardType cardType;
 	private CardStatus status;
-	private Integer ownerId;
-	private boolean isBlocked;
-	private boolean isClosed;
+	private Long ownerId;
+	private boolean blocked;
+	private boolean closed;
 	private BigDecimal balance;
 	private Currency currency;
 
@@ -26,18 +26,14 @@ public class Card implements Serializable {
 
 	}
 
-	public Card(String numberCard, String numberAccount, CardType cardType, CardStatus status, Integer ownerId,
-			boolean isBlocked, boolean isClosed) {
-		this.numberCard = numberCard;
-		this.numberAccount = numberAccount;
-		this.cardType = cardType;
-		this.status = status;
-		this.ownerId = ownerId;
-		this.isBlocked = isBlocked;
-		this.isClosed = isClosed;
+	public Card(String numberCard, String numberAccount, CardType cardType, CardStatus status, Long ownerId,
+			boolean blocked, boolean closed) {
+		this(numberCard, numberAccount, cardType, status, ownerId);
+		this.blocked = blocked;
+		this.closed = closed;
 	}
 
-	public Card(String numberCard, String numberAccount, CardType cardType, CardStatus status, Integer ownerId) {
+	public Card(String numberCard, String numberAccount, CardType cardType, CardStatus status, Long ownerId) {
 		this.numberCard = numberCard;
 		this.numberAccount = numberAccount;
 		this.cardType = cardType;
@@ -47,10 +43,10 @@ public class Card implements Serializable {
 
 	public Card(String numberCard, boolean blocking) {
 		this.numberCard = numberCard;
-		this.isBlocked = blocking;
+		this.blocked = blocking;
 	}
 
-	public Card(CardType cardType, CardStatus status, Integer ownerId, Currency currency) {
+	public Card(CardType cardType, CardStatus status, long ownerId, Currency currency) {
 		this.cardType = cardType;
 		this.status = status;
 		this.ownerId = ownerId;
@@ -95,28 +91,28 @@ public class Card implements Serializable {
 		this.status = status;
 	}
 
-	public Integer getOwnerId() {
+	public Long getOwnerId() {
 		return ownerId;
 	}
 
-	public void setOwnerId(Integer ownerId) {
+	public void setOwnerId(Long ownerId) {
 		this.ownerId = ownerId;
 	}
 
-	public boolean getIsBlocked() {
-		return isBlocked;
+	public boolean isBlocked() {
+		return blocked;
 	}
 
 	public void setBlocked(boolean isBlocked) {
-		this.isBlocked = isBlocked;
+		this.blocked = isBlocked;
 	}
 
-	public boolean getIsClosed() {
-		return isClosed;
+	public boolean isClosed() {
+		return closed;
 	}
 
 	public void setClosed(boolean isClosed) {
-		this.isClosed = isClosed;
+		this.closed = isClosed;
 	}
 
 	public BigDecimal getBalance() {
@@ -140,10 +136,10 @@ public class Card implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((balance == null) ? 0 : balance.hashCode());
+		result = prime * result + (blocked ? 1231 : 1237);
 		result = prime * result + ((cardType == null) ? 0 : cardType.hashCode());
+		result = prime * result + (closed ? 1231 : 1237);
 		result = prime * result + ((currency == null) ? 0 : currency.hashCode());
-		result = prime * result + (isBlocked ? 1231 : 1237);
-		result = prime * result + (isClosed ? 1231 : 1237);
 		result = prime * result + ((numberAccount == null) ? 0 : numberAccount.hashCode());
 		result = prime * result + ((numberCard == null) ? 0 : numberCard.hashCode());
 		result = prime * result + ((ownerId == null) ? 0 : ownerId.hashCode());
@@ -165,16 +161,16 @@ public class Card implements Serializable {
 				return false;
 		} else if (!balance.equals(other.balance))
 			return false;
+		if (blocked != other.blocked)
+			return false;
 		if (cardType == null) {
 			if (other.cardType != null)
 				return false;
 		} else if (!cardType.equals(other.cardType))
 			return false;
+		if (closed != other.closed)
+			return false;
 		if (currency != other.currency)
-			return false;
-		if (isBlocked != other.isBlocked)
-			return false;
-		if (isClosed != other.isClosed)
 			return false;
 		if (numberAccount == null) {
 			if (other.numberAccount != null)
@@ -199,8 +195,7 @@ public class Card implements Serializable {
 	@Override
 	public String toString() {
 		return "Card [numberCard=" + numberCard + ", numberAccount=" + numberAccount + ", cardType=" + cardType
-				+ ", status=" + status + ", ownerId=" + ownerId + ", isBlocked=" + isBlocked + ", isClosed=" + isClosed
+				+ ", status=" + status + ", ownerId=" + ownerId + ", blocked=" + blocked + ", closed=" + closed
 				+ ", balance=" + balance + ", currency=" + currency + "]";
 	}
-
 }

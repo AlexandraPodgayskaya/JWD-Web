@@ -31,9 +31,9 @@ public class SQLUserDAOTest {
 	private static final String USER_PASSWORD = "241992";
 	private static final String NEW_PASSWORD = "123456";
 	private static final String SELECT_NEW_USER_SQL = "SELECT ID FROM USERS WHERE LOGIN='New User'";
-	private static final Integer USER_ID = 1;
-	private static final Integer UPDATED_USER_ID = 2;
-	private static final Integer WRONG_ID = 0;
+	private static final Long USER_ID = 1L;
+	private static final Long UPDATED_USER_ID = 2L;
+	private static final Long WRONG_ID = 0L;
 
 	private static final UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
 
@@ -67,15 +67,15 @@ public class SQLUserDAOTest {
 
 	@Test
 	public void findIdTest1() throws DAOException {
-		Integer expected = USER_ID;
-		Integer actual = userDAO.findId(USER_LOGIN).get();
+		Long expected = USER_ID;
+		Long actual = userDAO.findId(USER_LOGIN).get();
 
 		Assert.assertEquals(expected, actual);
 	}
 
 	@Test
 	public void findIdTest2() throws DAOException {
-		Optional<Integer> idOptional = userDAO.findId(WRONG_LOGIN);
+		Optional<Long> idOptional = userDAO.findId(WRONG_LOGIN);
 
 		Assert.assertTrue(idOptional.isEmpty());
 	}

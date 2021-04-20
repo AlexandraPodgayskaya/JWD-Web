@@ -56,7 +56,7 @@ public class ChangePasswordCommandImpl implements Command {
 		String newPassword = request.getParameter(ParameterConstraint.PASSWORD);
 		String passwordRepeat = request.getParameter(ParameterConstraint.PASSWORD_REPEAT);
 		String passwordCheck = request.getParameter(ParameterConstraint.PASSWORD_CHECK);
-		Integer userId = (Integer) session.getAttribute(ParameterConstraint.USER_ID);
+		Long userId = (Long) session.getAttribute(ParameterConstraint.USER_ID);
 		String userLogin = (String) session.getAttribute(ParameterConstraint.USER_LOGIN);
 
 		if (newPassword != null) {

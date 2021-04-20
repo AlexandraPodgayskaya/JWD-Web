@@ -18,20 +18,21 @@ public interface UserDAO {
 	 * Create new user
 	 * 
 	 * @param registrationInfo {@link UserInfo} all data to create
+	 * @return long user id
 	 * @throws DAOException if {@link ConnectionPoolException} or
 	 *                      {@link SQLException} occur
 	 */
-	void create(UserInfo registrationInfo) throws DAOException;
+	long create(UserInfo registrationInfo) throws DAOException;
 
 	/**
 	 * Find user id
 	 * 
 	 * @param login {@link String} login to search
-	 * @return {@link Optional} of {@link Integer} user id received from database
+	 * @return {@link Optional} of {@link Long} user id received from database
 	 * @throws DAOException if {@link ConnectionPoolException} or
 	 *                      {@link SQLException} occur
 	 */
-	Optional<Integer> findId(String login) throws DAOException;
+	Optional<Long> findId(String login) throws DAOException;
 
 	/**
 	 * Find user by login and password

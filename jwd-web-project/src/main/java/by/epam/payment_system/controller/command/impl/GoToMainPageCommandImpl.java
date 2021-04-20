@@ -53,7 +53,7 @@ public class GoToMainPageCommandImpl implements Command {
 		CardService cardService = factory.getCardService();
 
 		List<Card> cardList;
-		Integer id = null;
+		Long id = null;
 
 		HttpSession session = request.getSession(true);
 		if (session.getAttribute(ParameterConstraint.USER_TYPE) == UserType.ADMIN
@@ -61,7 +61,7 @@ public class GoToMainPageCommandImpl implements Command {
 			UserInfo userInfo = (UserInfo) session.getAttribute(ParameterConstraint.FOUND_CLIENT_INFO);
 			id = userInfo.getId();
 		} else if (session.getAttribute(ParameterConstraint.USER_TYPE) == UserType.CLIENT) {
-			id = (Integer) session.getAttribute(ParameterConstraint.USER_ID);
+			id = (Long) session.getAttribute(ParameterConstraint.USER_ID);
 		}
 
 		try {

@@ -23,12 +23,12 @@ public interface AdditionalClientDataService {
 	/**
 	 * Take client details by user id
 	 * 
-	 * @param userId {@link Integer} user id
+	 * @param userId {@link Long} user id
 	 * @return {@link UserInfo}
 	 * @throws ServiceException if userId is null, data not found or
 	 *                          {@link DAOException} occurs
 	 */
-	UserInfo getData(Integer userId) throws ServiceException;
+	UserInfo getData(Long userId) throws ServiceException;
 
 	/**
 	 * Take client details by personal number passport

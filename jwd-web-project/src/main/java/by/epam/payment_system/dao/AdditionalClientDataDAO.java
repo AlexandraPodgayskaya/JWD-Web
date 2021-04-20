@@ -36,12 +36,12 @@ public interface AdditionalClientDataDAO {
 	/**
 	 * Find client details by user id
 	 * 
-	 * @param userId {@link Integer} personal user id to search
+	 * @param userId {@link Long} user id to search
 	 * @return {@link Optional} of {@link UserInfo} received from database
 	 * @throws DAOException if {@link ConnectionPoolException} or
 	 *                      {@link SQLException} occur
 	 */
-	Optional<UserInfo> findDataById(Integer userId) throws DAOException;
+	Optional<UserInfo> findDataById(Long userId) throws DAOException;
 
 	/**
 	 * Update client details

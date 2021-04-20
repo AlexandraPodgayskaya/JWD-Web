@@ -11,7 +11,7 @@ public class UserInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Integer id;
+	private Long id;
 	private String login;
 	private String password;
 	private UserType userType;
@@ -37,17 +37,17 @@ public class UserInfo implements Serializable {
 		this.userType = userType;
 	}
 
-	public UserInfo(Integer id, String login, String password) {
+	public UserInfo(Long id, String login, String password) {
 		this.id = id;
 		this.login = login;
 		this.password = password;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

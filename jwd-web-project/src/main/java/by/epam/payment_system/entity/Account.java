@@ -15,18 +15,17 @@ public class Account implements Serializable {
 	private String numberAccount;
 	private BigDecimal balance;
 	private Currency currency;
-	private Integer ownerId;
+	private Long ownerId;
 
 	public Account() {
 	}
 
-	public Account(String numberAccount, Currency currency, Integer ownerId) {
-		this.numberAccount = numberAccount;
+	public Account(Currency currency, Long ownerId) {
 		this.currency = currency;
 		this.ownerId = ownerId;
 	}
 
-	public Account(String numberAccount, BigDecimal balance, Currency currency, Integer ownerId) {
+	public Account(String numberAccount, BigDecimal balance, Currency currency, Long ownerId) {
 		this.numberAccount = numberAccount;
 		this.balance = balance;
 		this.currency = currency;
@@ -57,11 +56,11 @@ public class Account implements Serializable {
 		this.currency = currency;
 	}
 
-	public Integer getOwnerId() {
+	public Long getOwnerId() {
 		return ownerId;
 	}
 
-	public void setOwnerId(Integer ownerId) {
+	public void setOwnerId(Long ownerId) {
 		this.ownerId = ownerId;
 	}
 
@@ -110,5 +109,4 @@ public class Account implements Serializable {
 		return "Account [numberAccount=" + numberAccount + ", balance=" + balance + ", currency=" + currency
 				+ ", ownerId=" + ownerId + "]";
 	}
-
 }

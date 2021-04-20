@@ -14,7 +14,7 @@ import by.epam.payment_system.util.Message;
  */
 public class UserDataValidator {
 
-	private static final String LOGIN_PATTERN = "^[a-zA-Z][a-zA-Z0-9_-]{5,15}$";
+	private static final String LOGIN_PATTERN = "^[a-zA-Z][a-zA-Z0-9_-]{4,15}$";
 	private static final String PASSWORD_PATTERN = "^[a-zA-Z0-9]{5,15}$";
 	private static final String CHARACTER_PATTERN = "^[a-zA-Zа-яА-Я]+$";
 	private static final String DATE_PATTERN = "^([0-2]\\d|3[01])\\.(0\\d|1[012])\\.(\\d{4})$";

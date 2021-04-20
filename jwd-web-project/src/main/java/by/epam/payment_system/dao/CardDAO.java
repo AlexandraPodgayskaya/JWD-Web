@@ -36,22 +36,13 @@ public interface CardDAO {
 	/**
 	 * Find all cards by user id
 	 * 
-	 * @param userId {@link Integer} user id to search
+	 * @param userId {@link Long} user id to search
 	 * @return {@link List} of {@link Card} received from database if cards are
 	 *         found, else emptyList
 	 * @throws DAOException if {@link ConnectionPoolException} or
 	 *                      {@link SQLException} occur
 	 */
-	List<Card> findCards(Integer userId) throws DAOException;
-
-	/**
-	 * Get last card number
-	 * 
-	 * @return {@link Optional} of {@link Long} last card number
-	 * @throws DAOException if {@link ConnectionPoolException} or
-	 *                      {@link SQLException} occur
-	 */
-	Optional<Long> getLastCardNumber() throws DAOException;
+	List<Card> findCards(Long userId) throws DAOException;
 
 	/**
 	 * Update blocking

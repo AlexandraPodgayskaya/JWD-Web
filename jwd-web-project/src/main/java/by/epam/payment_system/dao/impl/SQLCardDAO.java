@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +24,9 @@ import by.epam.payment_system.entity.CardType;
  */
 public class SQLCardDAO implements CardDAO {
 
-	private static final String INSERT_CARD_SQL = "INSERT INTO CARDS (NUMBER_CARD, ACCOUNT, TYPE_CARD_ID, STATUS, OWNER) VALUES(?, ?, ?, ?, ?)";
+	private static final String INSERT_CARD_SQL = "INSERT INTO CARDS (ACCOUNT, TYPE_CARD_ID, STATUS, OWNER) VALUES(?, ?, ?, ?)";
 	private static final String SELECT_CARDS_SQL = "SELECT * FROM CARDS JOIN CARD_TYPES ON CARDS.TYPE_CARD_ID=CARD_TYPES.ID WHERE OWNER=? ";
 	private static final String SELECT_CARD_DATA_SQL = "SELECT * FROM CARDS JOIN CARD_TYPES ON CARDS.TYPE_CARD_ID=CARD_TYPES.ID WHERE NUMBER_CARD=? ";
-	private static final String SELECT_LAST_CARD_NUMBER_SQL = "SELECT MAX(NUMBER_CARD) AS last_card FROM CARDS";
 	private static final String UPDATE_IS_BLOCKED_SQL = "UPDATE CARDS SET IS_BLOCKED=? WHERE NUMBER_CARD=? AND IS_CLOSED=FALSE";
 	private static final String UPDATE_IS_CLOSED_SQL = "UPDATE CARDS SET IS_CLOSED=TRUE WHERE NUMBER_CARD=? ";
 	private static final String COLUMN_NUMBER_CARD = "number_card";
@@ -39,7 +37,6 @@ public class SQLCardDAO implements CardDAO {
 	private static final String COLUMN_IMAGE = "image_path";
 	private static final String COLUMN_IS_BLOCKED = "is_blocked";
 	private static final String COLUMN_IS_CLOSED = "is_closed";
-	private static final String COLUMN_LAST_CARD = "last_card";
 
 	/**
 	 * Instance of {@link ConnectionPool}
@@ -58,11 +55,10 @@ public class SQLCardDAO implements CardDAO {
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(INSERT_CARD_SQL);) {
 
-			statement.setString(1, card.getNumberCard());
-			statement.setString(2, card.getNumberAccount());
-			statement.setInt(3, card.getCardType().getId());
-			statement.setString(4, String.valueOf(card.getStatus()));
-			statement.setInt(5, card.getOwnerId());
+			statement.setString(1, card.getNumberAccount());
+			statement.setLong(2, card.getCardType().getId());
+			statement.setString(3, String.valueOf(card.getStatus()));
+			statement.setLong(4, card.getOwnerId());
 
 			statement.executeUpdate();
 
@@ -96,7 +92,7 @@ public class SQLCardDAO implements CardDAO {
 				String imagePath = resultSet.getString(COLUMN_IMAGE);
 				String status = resultSet.getString(COLUMN_STATUS);
 				CardStatus cardStatus = CardStatus.valueOf(status.toUpperCase());
-				int owner = resultSet.getInt(COLUMN_OWNER);
+				long owner = resultSet.getLong(COLUMN_OWNER);
 				boolean isBlocked = resultSet.getBoolean(COLUMN_IS_BLOCKED);
 				boolean isClosed = resultSet.getBoolean(COLUMN_IS_CLOSED);
 				Card card = new Card(numberCard, numberAccount, new CardType(typeCard, imagePath), cardStatus, owner,
@@ -115,21 +111,21 @@ public class SQLCardDAO implements CardDAO {
 	/**
 	 * Find all cards by user id
 	 * 
-	 * @param userId {@link Integer} user id to search
+	 * @param userId {@link Long} user id to search
 	 * @return {@link List} of {@link Card} received from database if cards are
 	 *         found, else emptyList
 	 * @throws DAOException if {@link ConnectionPoolException} or
 	 *                      {@link SQLException} occur
 	 */
 	@Override
-	public List<Card> findCards(Integer userId) throws DAOException {
+	public List<Card> findCards(Long userId) throws DAOException {
 
 		List<Card> cardList = new ArrayList<>();
 
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SELECT_CARDS_SQL)) {
 
-			statement.setInt(1, userId);
+			statement.setLong(1, userId);
 			ResultSet resultSet = statement.executeQuery();
 
 			String numberCard;
@@ -164,32 +160,6 @@ public class SQLCardDAO implements CardDAO {
 	}
 
 	/**
-	 * Get last card number
-	 * 
-	 * @return {@link Optional} of {@link Long} last card number
-	 * @throws DAOException if {@link ConnectionPoolException} or
-	 *                      {@link SQLException} occur
-	 */
-	@Override
-	public Optional<Long> getLastCardNumber() throws DAOException {
-		Optional<Long> lastCardOptional = Optional.empty();
-		try (Connection connection = connectionPool.takeConnection();
-				Statement statement = connection.createStatement()) {
-
-			ResultSet resultSet = statement.executeQuery(SELECT_LAST_CARD_NUMBER_SQL);
-
-			if (resultSet.next()) {
-				Long lastCardNumber = resultSet.getLong(COLUMN_LAST_CARD);
-				lastCardOptional = Optional.of(lastCardNumber);
-			}
-
-		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-		}
-		return lastCardOptional;
-	}
-
-	/**
 	 * Update blocking
 	 * 
 	 * @param card {@link Card} data to update
@@ -203,7 +173,7 @@ public class SQLCardDAO implements CardDAO {
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement statement = connection.prepareStatement(UPDATE_IS_BLOCKED_SQL);) {
 
-			statement.setBoolean(1, card.getIsBlocked());
+			statement.setBoolean(1, card.isBlocked());
 			statement.setString(2, card.getNumberCard());
 
 			return statement.executeUpdate() != 0;

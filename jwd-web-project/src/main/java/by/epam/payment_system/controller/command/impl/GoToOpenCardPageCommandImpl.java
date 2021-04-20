@@ -52,7 +52,7 @@ public class GoToOpenCardPageCommandImpl implements Command {
 
 		ServiceFactory factory = ServiceFactory.getInstance();
 		CardService cardService = factory.getCardService();
-		Integer id = (Integer) session.getAttribute(ParameterConstraint.USER_ID);
+		Long id = (Long) session.getAttribute(ParameterConstraint.USER_ID);
 
 		try {
 			CardInfo cardInfo = cardService.takeAllCardOptions(id);

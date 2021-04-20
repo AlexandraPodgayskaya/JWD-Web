@@ -38,10 +38,10 @@ public class SQLAdditionalClientDataDAOTest {
 	private static final String USER_PHONE = "+375298136643";
 	private static final String WRONG_PERSONAL_NUMBER_PASSPORT = "1111111B111PB1";
 	private static final String PERSONAL_NUMBER_PASSPORT = "1234567B111PB1";
-	private static final Integer WRONG_ID = 0;
-	private static final Integer USER_ID = 1;
-	private static final Integer UPDATE_ID = 2;
-	private static final Integer NEW_ID = 3;
+	private static final Long WRONG_ID = 0L;
+	private static final Long USER_ID = 1L;
+	private static final Long UPDATE_ID = 2L;
+	private static final Long NEW_ID = 3L;
 
 	private static final AdditionalClientDataDAO additionalClientDataDAO = DAOFactory.getInstance()
 			.getAdditionalClientDataDAO();
