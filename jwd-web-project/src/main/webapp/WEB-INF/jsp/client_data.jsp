@@ -33,7 +33,7 @@
 <div class="main">
     <header>
         <form action="index.jsp" method="get" class="skip">
-            <input type="submit" name="skip" value="${skip}"/>
+            <input type="submit" value="${skip}"/>
         </form>
         <ul class="clearfix">
             <c:if test="${sessionScope.locale == 'en'}">
