@@ -1,7 +1,6 @@
 package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -76,7 +75,7 @@ public class MakePaymentCommandImpl implements Command {
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (WrongPasswordServiceException e) {
 			logger.error("wrong password", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_WRONG_PASSWORD));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_WRONG_PASSWORD);
 			response.sendRedirect((String) session.getAttribute(ParameterConstraint.PAGE));
 		} catch (TransactionDataServiceException e) {
 			logger.error("incorrect data for payment", e);
@@ -84,11 +83,11 @@ public class MakePaymentCommandImpl implements Command {
 			response.sendRedirect((String) session.getAttribute(ParameterConstraint.PAGE));
 		} catch (NotEnoughMoneyServiceException e) {
 			logger.error("not enough money for payment", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_NOT_ENOUGH_MONEY));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_NOT_ENOUGH_MONEY);
 			response.sendRedirect((String) session.getAttribute(ParameterConstraint.PAGE));
 		} catch (ImpossibleOperationServiceException e) {
 			logger.error("impossible operation", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_IMPOSSIBLE_OPERATION);
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);

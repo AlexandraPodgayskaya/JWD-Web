@@ -1,7 +1,6 @@
 package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -72,7 +71,7 @@ public class ShowCardTransactionLogCommandImpl implements Command {
 			requestDispatcher.forward(request, response);
 		} catch (ImpossibleOperationServiceException e) {
 			logger.error("impossible operation", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_IMPOSSIBLE_OPERATION);
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);

@@ -1,7 +1,6 @@
 package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +60,7 @@ public class ChangeLoginCommandImpl implements Command {
 
 		if (newLogin != null && newLogin.equals(userLogin)) {
 			logger.info("login not changed");
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_LOGIN_NOT_CHANGED));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_LOGIN_NOT_CHANGED);
 			response.sendRedirect(GoToPage.EDIT_PROFILE_PAGE);
 			return;
 		}
@@ -77,15 +76,15 @@ public class ChangeLoginCommandImpl implements Command {
 			response.sendRedirect(GoToPage.EDIT_PROFILE_PAGE);
 		} catch (WrongPasswordServiceException e) {
 			logger.error("wrong password", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_WRONG_PASSWORD));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_WRONG_PASSWORD);
 			response.sendRedirect(GoToPage.EDIT_PROFILE_PAGE);
 		} catch (UserInfoFormatServiceException e) {
 			logger.error("wrong login format", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_LOGIN));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_LOGIN);
 			response.sendRedirect(GoToPage.EDIT_PROFILE_PAGE);
 		} catch (BusyLoginServiceException e) {
 			logger.error("login is busy", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_BUSY_LOGIN));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_BUSY_LOGIN);
 			response.sendRedirect(GoToPage.EDIT_PROFILE_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);

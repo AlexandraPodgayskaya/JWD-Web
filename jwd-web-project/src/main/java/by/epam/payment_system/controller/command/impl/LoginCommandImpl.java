@@ -1,7 +1,6 @@
 package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +54,7 @@ public class LoginCommandImpl implements Command {
 		HttpSession session = request.getSession(true);
 
 		if (session.getAttribute(ParameterConstraint.USER_LOGIN) != null) {
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_REPEATED_LOGIN));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_REPEATED_LOGIN);
 			response.sendRedirect(GoToPage.INDEX_PAGE);
 			return;
 		}
@@ -71,7 +70,7 @@ public class LoginCommandImpl implements Command {
 
 		} catch (NoSuchUserServiceException e) {
 			logger.error("wrong login and password", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_NO_SUCH_USER));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_NO_SUCH_USER);
 			response.sendRedirect(GoToPage.INDEX_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);

@@ -1,7 +1,6 @@
 package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +57,7 @@ public class CloseCardCommandImpl implements Command {
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (ImpossibleOperationServiceException e) {
 			logger.error("impossible operation", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_IMPOSSIBLE_OPERATION);
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);

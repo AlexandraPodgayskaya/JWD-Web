@@ -30,7 +30,7 @@ public class ContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		try {
 			ConnectionPool.getInstance().init(NAME_CONFIGURATION_FILE);
-			logger.info("connection pool is initialized with configuration file name" + NAME_CONFIGURATION_FILE);
+			logger.info("connection pool is initialized with configuration file name " + NAME_CONFIGURATION_FILE);
 		} catch (ConnectionPoolException e) {
 			logger.error("connection pool initialization error", e);
 			throw new RuntimeException("connection pool initialization error", e);

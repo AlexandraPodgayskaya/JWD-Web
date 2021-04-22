@@ -1,7 +1,6 @@
 package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -62,8 +61,7 @@ public class ChangePasswordCommandImpl implements Command {
 		if (newPassword != null) {
 			if (!newPassword.equals(passwordRepeat)) {
 				logger.info("password repeat error");
-				session.setAttribute(ParameterConstraint.ERROR_MESSAGE,
-						Arrays.asList(Message.ERROR_INCORRECT_PASSWORD_REPEAT));
+				session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_INCORRECT_PASSWORD_REPEAT);
 				response.sendRedirect(GoToPage.EDIT_PROFILE_PAGE);
 				return;
 			}
@@ -79,11 +77,11 @@ public class ChangePasswordCommandImpl implements Command {
 			response.sendRedirect(GoToPage.EDIT_PROFILE_PAGE);
 		} catch (WrongPasswordServiceException e) {
 			logger.error("wrong password for confirmation", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_WRONG_PASSWORD));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_WRONG_PASSWORD);
 			response.sendRedirect(GoToPage.EDIT_PROFILE_PAGE);
 		} catch (UserInfoFormatServiceException e) {
 			logger.error("wrong new password format", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_PASSWORD));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_PASSWORD);
 			response.sendRedirect(GoToPage.EDIT_PROFILE_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);

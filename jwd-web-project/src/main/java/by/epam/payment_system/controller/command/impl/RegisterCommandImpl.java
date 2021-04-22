@@ -1,7 +1,6 @@
 package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +62,7 @@ public class RegisterCommandImpl implements Command {
 			response.sendRedirect(GoToPage.REGISTRATION_PAGE);
 		} catch (BusyLoginServiceException e) {
 			logger.error("login is busy", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_BUSY_LOGIN));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_BUSY_LOGIN);
 			response.sendRedirect(GoToPage.REGISTRATION_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);

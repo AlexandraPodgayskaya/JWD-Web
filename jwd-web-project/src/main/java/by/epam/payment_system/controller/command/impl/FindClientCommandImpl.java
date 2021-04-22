@@ -1,7 +1,6 @@
 package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -64,8 +63,7 @@ public class FindClientCommandImpl implements Command {
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (UserInfoFormatServiceException e) {
 			logger.error("incorrect data for search", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE,
-					Arrays.asList(Message.ERROR_PERSONAL_NUMBER_PASSPORT));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_PERSONAL_NUMBER_PASSPORT);
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (NoSuchUserServiceException e) {
 			logger.error("user is not found", e);

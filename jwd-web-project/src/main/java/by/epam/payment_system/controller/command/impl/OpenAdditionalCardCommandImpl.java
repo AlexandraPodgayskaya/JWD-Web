@@ -1,7 +1,6 @@
 package by.epam.payment_system.controller.command.impl;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -79,16 +78,15 @@ public class OpenAdditionalCardCommandImpl implements Command {
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 		} catch (CommandException | ImpossibleOperationServiceException e) {
 			logger.error("incorrect data for opening a card", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_INCORRECT_DATA));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_INCORRECT_DATA);
 			response.sendRedirect(GoToPage.OPEN_CARD_PAGE);
 		} catch (UserInfoFormatServiceException e) {
 			logger.error("incorrect cardholder data", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE,
-					Arrays.asList(Message.ERROR_PERSONAL_NUMBER_PASSPORT));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_PERSONAL_NUMBER_PASSPORT);
 			response.sendRedirect(GoToPage.OPEN_CARD_PAGE);
 		} catch (NoSuchUserServiceException e) {
 			logger.error("client profile is not completed", e);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_PROFILE_NOT_COMPLETED));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_PROFILE_NOT_COMPLETED);
 			response.sendRedirect(GoToPage.OPEN_CARD_PAGE);
 		} catch (ServiceException e) {
 			logger.error("general system error", e);

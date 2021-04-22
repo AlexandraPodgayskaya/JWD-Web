@@ -61,6 +61,11 @@ public class TransactionDataValidator {
 	 */
 	public final boolean topUpCardValidation(Map<String, String> transferDetails) {
 
+		if (transferDetails == null) {
+			setDescriptionList(Message.ERROR_NO_TRANSFER_DETAILS);
+			return false;
+		}
+
 		transferValidation(transferDetails);
 
 		if (transferDetails.get(ParameterConstraint.SENDER_EXPIRATION_DATE) != null

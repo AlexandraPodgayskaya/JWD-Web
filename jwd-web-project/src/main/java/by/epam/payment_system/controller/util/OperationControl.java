@@ -1,7 +1,6 @@
 package by.epam.payment_system.controller.util;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +39,7 @@ public final class OperationControl {
 		HttpSession session = request.getSession(true);
 		if (session.getAttribute(ParameterConstraint.USER_TYPE) != userType) {
 			logger.info("impossible operation for " + UserType.ADMIN);
-			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Arrays.asList(Message.ERROR_IMPOSSIBLE_OPERATION));
+			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_IMPOSSIBLE_OPERATION);
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 			return false;
 		}
