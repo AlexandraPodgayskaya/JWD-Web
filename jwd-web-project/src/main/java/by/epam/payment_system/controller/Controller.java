@@ -39,6 +39,7 @@ public class Controller extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		process(request, response);
@@ -50,6 +51,7 @@ public class Controller extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		process(request, response);
