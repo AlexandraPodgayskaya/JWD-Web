@@ -28,22 +28,22 @@ public final class OperationControl {
 	/**
 	 * Check if the operation is allowed to user
 	 * 
-	 * @param request  {@link HttpServletRequest}
-	 * @param response {@link HttpServletResponse}
-	 * @param userType {@link UserType} type for which the operation is allowed
+	 * @param request             {@link HttpServletRequest}
+	 * @param response            {@link HttpServletResponse}
+	 * @param permissibleUserType {@link UserType} type for which the operation is
+	 *                            allowed
 	 * @return boolean
 	 * @throws IOException
 	 */
-	public static boolean isAllowedToUser(HttpServletRequest request, HttpServletResponse response, UserType userType)
-			throws IOException {
+	public static boolean isAllowedToUser(HttpServletRequest request, HttpServletResponse response,
+			UserType permissibleUserType) throws IOException {
 		HttpSession session = request.getSession(true);
-		if (session.getAttribute(ParameterConstraint.USER_TYPE) != userType) {
-			logger.info("impossible operation for " + UserType.ADMIN);
+		if (session.getAttribute(ParameterConstraint.USER_TYPE) != permissibleUserType) {
+			logger.info("impossible operation for user type");
 			session.setAttribute(ParameterConstraint.ERROR_MESSAGE, Message.ERROR_IMPOSSIBLE_OPERATION);
 			response.sendRedirect(GoToPage.MAIN_PAGE);
 			return false;
 		}
-
 		return true;
 	}
 

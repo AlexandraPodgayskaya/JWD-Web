@@ -20,7 +20,7 @@ public class CopyrightTag extends TagSupport {
 	private static final Logger logger = LogManager.getLogger();
 
 	private static final long serialVersionUID = 1L;
-	private static final String FOOTER = "Copyright by Aleksandra Podgayskaya 2021 ";
+	private static final String FOOTER = "Copyright by Alexandra Podgayskaya 2021 ";
 	private static final String FOOTER_TAG_START = "<footer>";
 	private static final String P_TAG_START = "<p>";
 	private static final String FOOTER_TAG_END = "</footer>";
