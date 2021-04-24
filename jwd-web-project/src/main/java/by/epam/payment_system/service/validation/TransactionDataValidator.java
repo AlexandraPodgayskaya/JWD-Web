@@ -26,6 +26,10 @@ public class TransactionDataValidator {
 	private static final String BIC_PATTERN = "^[A-Z0-9]{8}$";
 	private static final String IBAN_PATTERN = "^BY[0-9]{2}[A-Z]{4}[0-9]{20}$";
 	private static final String DATE_FORMAT = "MM/yy";
+	private static final String START_ATTRIBUTE = "<";
+	private static final String END_ATTRIBUTE = ">";
+	private static final String START_ATTRIBUTE_NAME = "&lt";
+	private static final String END_ATTRIBUTE_NAME = "&gt";
 
 	/**
 	 * Keeps {@link List} of {@link String} error names
@@ -118,8 +122,12 @@ public class TransactionDataValidator {
 			setDescriptionList(Message.ERROR_YNP);
 		}
 
-		if (paymentDetails.get(ParameterConstraint.RECIPIENT) == null) {
+		String recipient = paymentDetails.get(ParameterConstraint.RECIPIENT);
+		if (recipient == null) {
 			setDescriptionList(Message.ERROR_RECIPIENT);
+		} else {
+			paymentDetails.put(ParameterConstraint.RECIPIENT, recipient
+					.replaceAll(START_ATTRIBUTE, START_ATTRIBUTE_NAME).replaceAll(END_ATTRIBUTE, END_ATTRIBUTE_NAME));
 		}
 
 		if (paymentDetails.get(ParameterConstraint.RECIPIENT_BANK_CODE) == null
@@ -130,6 +138,12 @@ public class TransactionDataValidator {
 		if (paymentDetails.get(ParameterConstraint.RECIPIENT_IBAN_ACCOUNT) == null
 				|| !paymentDetails.get(ParameterConstraint.RECIPIENT_IBAN_ACCOUNT).matches(IBAN_PATTERN)) {
 			setDescriptionList(Message.ERROR_IBAN);
+		}
+
+		String purposePayment = paymentDetails.get(ParameterConstraint.PURPOSE_OF_PAYMENT);
+		if (purposePayment != null) {
+			paymentDetails.put(ParameterConstraint.PURPOSE_OF_PAYMENT, purposePayment
+					.replaceAll(START_ATTRIBUTE, START_ATTRIBUTE_NAME).replaceAll(END_ATTRIBUTE, END_ATTRIBUTE_NAME));
 		}
 
 		if (paymentDetails.get(ParameterConstraint.AMOUNT) == null
@@ -189,5 +203,4 @@ public class TransactionDataValidator {
 
 		return descriptionList == null;
 	}
-
 }

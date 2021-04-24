@@ -6,16 +6,11 @@
 
     <tlib-version> 1.0 </tlib-version>
     <short-name> mytag </short-name>
-    <uri> /WEB-INF/tld/taglib.tld </uri>
+    <uri> customtag </uri>
     <tag>
         <name> copyright </name>
         <tag-class>by.epam.payment_system.view.CopyrightTag</tag-class>
         <body-content> empty </body-content>
-        <attribute>
-            <name> set </name>
-            <required> false </required>
-            <rtexprvalue> true </rtexprvalue>
-        </attribute>
     </tag>
 
 

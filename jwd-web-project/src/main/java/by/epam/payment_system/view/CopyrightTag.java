@@ -34,18 +34,18 @@ public class CopyrightTag extends TagSupport {
 			out.write(P_TAG_START);
 			out.write(FOOTER);
 			out.write(P_TAG_END);
-
 		} catch (IOException e) {
 			logger.error(e);
 			throw new JspTagException(e);
 		}
-		return EVAL_BODY_INCLUDE;
+		return SKIP_BODY;
 	}
 
 	@Override
 	public int doEndTag() throws JspTagException {
 		try {
-			pageContext.getOut().write(FOOTER_TAG_END);
+			JspWriter out = pageContext.getOut();
+			out.write(FOOTER_TAG_END);
 		} catch (IOException e) {
 			logger.error(e);
 			throw new JspTagException(e);
