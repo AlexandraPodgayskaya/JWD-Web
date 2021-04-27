@@ -26,10 +26,10 @@ public class TransactionDataValidator {
 	private static final String BIC_PATTERN = "^[A-Z0-9]{8}$";
 	private static final String IBAN_PATTERN = "^BY[0-9]{2}[A-Z]{4}[0-9]{20}$";
 	private static final String DATE_FORMAT = "MM/yy";
-	private static final String START_ATTRIBUTE = "<";
-	private static final String END_ATTRIBUTE = ">";
-	private static final String START_ATTRIBUTE_NAME = "&lt";
-	private static final String END_ATTRIBUTE_NAME = "&gt";
+	private static final String START_TAG = "<";
+	private static final String END_TAG = ">";
+	private static final String LESS_THAN_CHARACTER = "&lt";
+	private static final String GREATER_THAN_CHARACTER = "&gt";
 
 	/**
 	 * Keeps {@link List} of {@link String} error names
@@ -127,7 +127,7 @@ public class TransactionDataValidator {
 			setDescriptionList(Message.ERROR_RECIPIENT);
 		} else {
 			paymentDetails.put(ParameterConstraint.RECIPIENT, recipient
-					.replaceAll(START_ATTRIBUTE, START_ATTRIBUTE_NAME).replaceAll(END_ATTRIBUTE, END_ATTRIBUTE_NAME));
+					.replaceAll(START_TAG, LESS_THAN_CHARACTER).replaceAll(END_TAG, GREATER_THAN_CHARACTER));
 		}
 
 		if (paymentDetails.get(ParameterConstraint.RECIPIENT_BANK_CODE) == null
@@ -143,7 +143,7 @@ public class TransactionDataValidator {
 		String purposePayment = paymentDetails.get(ParameterConstraint.PURPOSE_OF_PAYMENT);
 		if (purposePayment != null) {
 			paymentDetails.put(ParameterConstraint.PURPOSE_OF_PAYMENT, purposePayment
-					.replaceAll(START_ATTRIBUTE, START_ATTRIBUTE_NAME).replaceAll(END_ATTRIBUTE, END_ATTRIBUTE_NAME));
+					.replaceAll(START_TAG, LESS_THAN_CHARACTER).replaceAll(END_TAG, GREATER_THAN_CHARACTER));
 		}
 
 		if (paymentDetails.get(ParameterConstraint.AMOUNT) == null
